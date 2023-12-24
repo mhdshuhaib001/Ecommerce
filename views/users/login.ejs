@@ -1,0 +1,237 @@
+<%- include('../layouts/user/header.ejs') -%>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--=============== REMIXICONS ===============-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css"
+            crossorigin="">
+
+        <!--=============== CSS ===============-->
+        <link rel="stylesheet" href="public/css/styles.css">
+
+        <title>Login form - Bedimcode</title>
+    </head>
+
+    <body>
+        <div class="login">
+            <img src="img/slider/12.jpg" alt="image" class="login__bg">
+            <!-- autocomplete="off" -->
+            <form action="" class="login__form" id="form" method="post">
+                <h1 class="login__title">Login</h1>
+
+                <div class="login__inputs">
+                    <div class="login__box">
+                        <!-- autocomplete="off" -->
+                        <input type="email" placeholder="Email ID" name="email" id="email" class="login__input"  >
+                        <i class="ri-mail-fill"></i>
+                    </div>
+                    <div class="error-msg">
+                        <p id="emailError"></p>
+                    </div>
+
+                    <div class="login__box">
+                        <input type="password" placeholder="Password" id="password" name="password"  class="login__input">
+                        <i class="ri-lock-2-fill"></i>
+                    </div>
+                    <div class="error-msg">
+                        <p id="passwordLengthError"></p>
+                    </div>
+
+                </div>
+
+                <div class="login__check">
+                    <div class="login__check-box">
+                        <input type="checkbox" class="login__check-input" id="user-check">
+                        <label for="user-check" class="login__check-label">Remember me</label>
+                    </div>
+
+                    <a href="#" class="login__forgot">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="login__button">Login</button>
+
+                <div class="login__register">
+                    Don't have an account? <a href="/signup">Register</a>
+                </div>
+            </form>
+        </div>
+        <section class="footer">
+            <div class="footer-top mt-120 pb-120 pt-115" style="background-color: #f5f5f5;">
+                <div class="footer-top-wrapper">
+                    <div class="newsletter ">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6">
+                                <h2 class="title m-0">Sign Up For Our Newsletter</h2>
+                                <p>Subscribe our newsletter and get discount 20% Off</p>
+                            </div>
+                            <div class="col-xl-6 col-lg-6">
+                                <div class="newsletter-form">
+                                    <form action="#" method="POST">
+                                        <input type="text" placeholder="Search for our newsletter...">
+                                        <button type="submit"
+                                            class="generic-btn red-hover-btn text-uppercase float-right">Subscribe
+                                            Now</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- /.newsletter -->
+                    <div class="service pt-57 mt-40 gray-border-top">
+                        <div class="row justify-content-center">
+                            <div class="col-xl-4 col-md-6 service-item">
+                                <div class="service-box service-box-2">
+                                    <div class="service-box-content">
+                                        <h4 class="title">Worldwide Shipping</h4>
+                                        <p class="service-desc">Duis autem vel eum iriure dolor in hendrerit velit esse
+                                            molestie consequat.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6 service-item">
+                                <div class="service-box service-box-2">
+                                    <div class="service-box-content">
+                                        <h4 class="title">Online Support 24/7</h4>
+                                        <p class="service-desc">Duis autem vel eum iriure dolor in hendrerit velit esse
+                                            molestie consequat.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-lg-6 hidden-md service-item">
+                                <div class="service-box service-box-2">
+                                    <div class="service-box-content">
+                                        <h4 class="title">Money Return Guarantee</h4>
+                                        <p class="service-desc">Duis autem vel eum iriure dolor in hendrerit velit esse
+                                            molestie consequat.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /. service -->
+                    <!-- /. footer bottom -->
+                </div>
+            </div>
+            <!-- footer top -->
+
+            <div class="footer-bottom pt-77" style="background-color: #292929;">
+                <div class="container-1180">
+                    <div class="footer-bottom-wrapper">
+                        <div class="footer-bottom-primary pb-60">
+                            <div class="row">
+                                <div class="col-xl-5 col-lg-5 col-md-9">
+                                    <div class="footer-item has-desc">
+                                        <div class="footer-logo mb-25">
+                                            <img src="img/logo/logo2.png" width="120" height="31" alt="">
+                                        </div>
+                                        <div class="footer-desc">
+                                            <p class="mb-10">Mazia store is a premium theme with advanced admin module.
+                                                It’s
+                                                extremely customizable, easy to use and fully responsive and retina
+                                                ready.
+                                            </p>
+                                        </div>
+                                        <div class="footer-img mt-65">
+                                            <img src="img/logo/paypal.png" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-7 col-lg-7 col-md-12">
+                                    <div class="row">
+                                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6">
+                                            <div class="footer-menu">
+                                                <ul>
+                                                    <li><a href="javascript:void(0)" class="title">MY ACCOUNT</a></li>
+                                                    <li><a href="login.html">My account</a></li>
+                                                    <li><a href="checkout.html">Checkout</a></li>
+                                                    <li><a href="shop2.html">Shop</a></li>
+                                                    <li><a href="wishlist.html">Wishlist</a></li>
+                                                    <li><a href="question.html">Frequently</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6">
+                                            <div class="footer-menu">
+                                                <ul>
+                                                    <li><a href="javascript:void(0)" class="title">Quick Links</a></li>
+                                                    <li><a href="shop2.html">Special Offers</a></li>
+                                                    <li><a href="shop2.html">Gift Cards</a></li>
+                                                    <li><a href="shop2.html">F21 Red</a></li>
+                                                    <li><a href="about.html">Privacy Policy</a></li>
+                                                    <li><a href="about.html">Teams of Use</a></li>
+                                                    <li><a href="portfolio.html">Portfolio</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 hidden-sm">
+                                            <div class="footer-menu">
+                                                <ul>
+                                                    <li><a href="javascript:void(0)" class="title">Company Info</a></li>
+                                                    <li><a href="about.html">About us</a></li>
+                                                    <li><a href="blog.html">Careers</a></li>
+                                                    <li><a href="portfolio2.html">Business With Us</a></li>
+                                                    <li><a href="shop2.html">Find a Store</a></li>
+                                                    <li><a href="question.html">Teams of Use</a></li>
+                                                    <li><a href="portfolio3.html">Press & Talent</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!-- footer section end -->
+    </body>
+
+    <!-- to automaticly clearing error input -->
+
+    <script>
+        const inputs = document.querySelector('input');
+        const email_message = document.getElementById('emailError');
+        const password_message = document.getElementById('passwordLengthError');
+
+        inputs.forEach(input => {
+        input.addEventListener('input',function(){
+        email_message.textContent = ""
+        password_message.textContent = ""
+      })
+        });
+        
+    </script>
+
+
+    <script src="js/formValidation.js"></script>
+    <!-- JS here -->
+    <script src="js/vendor/jquery-1.12.4.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/isotope.pkgd.min.js"></script>
+    <script src="js/one-page-nav-min.js"></script>
+    <script src="js/slick.min.js"></script>
+    <script src="js/jquery.meanmenu.min.js"></script>
+    <script src="js/ajax-form.js"></script>
+    <script src="js/fontawesome.min.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script src="js/jquery-ui.js"></script>
+    <script src="js/jquery.scrollUp.min.js"></script>
+    <script src="js/imagesloaded.pkgd.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
+
+    <%- include('../layouts/user/footer.ejs') -%>

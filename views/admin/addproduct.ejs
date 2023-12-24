@@ -1,0 +1,177 @@
+<%-include("../layouts/admin/header.ejs")%>
+  <style>
+    /* Style for the file input container */
+    .file-input-container {
+      margin-bottom: 20px;
+    }
+
+    /* Style for the file input label */
+    .image-label {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    /* Style for the file input itself */
+    .imageInput {
+      display: none;
+    }
+
+    /* Style for the custom file input button */
+    .custom-file-upload {
+      display: inline-block;
+      padding: 10px 15px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      background-color: #007bff;
+      /* Adjust the background color to your preference */
+      cursor: pointer;
+    }
+
+    /* Style for the chosen file names display */
+    .chosen-files {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    #imagePreviews {
+      margin-top: 10px;
+      /* Add some top margin for spacing */
+    }
+
+    .preview-image {
+      width: 100px;
+      /* Set a fixed width for the image previews */
+      height: auto;
+      /* Maintain the aspect ratio */
+      margin-left: 15px;
+      margin-bottom: 10px;
+      /* Add right margin for spacing between images */
+    }
+  </style>
+
+
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Add Products</h4>
+            <p class="card-description"> Give product details </p>
+            <form class="forms-sample" action="/admin/addproduct" method="post" enctype="multipart/form-data">
+              <div class="form-group">
+                <label for="exampleInputName1">Product Name</label>
+                <input type="text" class="form-control" id="Name" name="name" placeholder="Name">
+                <%if(nameAlready){ %>
+                  <h6 id="err_message2" style="  top: 100px;left: 645px;position: absolute;color: red;font-family: system-ui;
+              ">Product name is already exist.</h6>
+                  <% }%>
+
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail3">Product Price</label>
+                <input type="number" class="form-control" id="price" name="price" placeholder="Price">
+              </div>
+              <div class="form-group">
+                <label for="Catagory">Category</label>
+
+                <select class="form-select form-control" aria-label="Default select example" id="" name="category">
+                  <% if(categoryData.length> 0){
+
+                    for( let i=0;i<categoryData.length;i++){ %>
+
+                      <option value="<%= categoryData[i].name %>">
+                        <%= categoryData[i].name %>
+                      </option>
+
+                      <% } }else{ %>
+
+                        <option value="">No Categories</option>
+
+                        <% } %>
+
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword4">Quantity</label>
+                <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Quantity">
+              </div>
+
+
+              <div>
+                <div class="form-group">
+                  <label for="imageInput" class="image-label">Images</label>
+                  <div class="file-input-container">
+                    <input type="file" class="imageInput" id="imageInput" name="images" accept="image/*" multiple>
+                    <label class="custom-file-upload" for="imageInput">Choose files</label>
+                  </div>
+                  <div class="chosen-files" id="chosenFiles"></div>
+                </div>
+
+                <div class="row" id="imagePreviews">
+                  <!-- Image previews will be added here dynamically -->
+                </div>
+
+              </div>
+
+              <div class="form-group">
+                <label for="exampleTextarea1">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+              </div>
+              <button type="submit" id="addproductsubmit" class="btn btn-primary mr-2">Submit</button>
+              <button class="btn btn-inverse-danger"><a href="/admin/productmanagement">Cancel</a></button>
+              <h6 id="error-message" style="display: none; top: 100px;left: 645px;position: absolute;color: red;font-family: system-ui;
+            "></h6>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+
+      const inputs = document.querySelectorAll('input')
+
+      const message = document.getElementById('error-message');
+      const message2 = document.getElementById('err_message2');
+       
+      inputs.forEach(input=>{
+        input.addEventListener('input',function(){
+          message.textContent = ""
+          message2.textContent = ""
+          
+        })
+      })
+      
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const imageInput = document.getElementById('imageInput');
+        const imagePreviews = document.getElementById('imagePreviews');
+
+        imageInput.addEventListener('change', function () {
+          imagePreviews.innerHTML = ''; // Clear existing previews
+
+          const files = this.files;
+          for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+              const img = document.createElement('img');
+              img.src = e.target.result;
+              img.classList.add('preview-image');
+              imagePreviews.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+          }
+        });
+      });
+
+    </script>
+    <script src="/public/admin/addproductvalidation.js"></script>
+
+    <%-include("../layouts/admin/footer.ejs")%>
