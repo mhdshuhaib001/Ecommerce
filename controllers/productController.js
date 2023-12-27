@@ -45,6 +45,7 @@ const addProduct = async (req, res)=> {
 
         const details = req.body;
         const files = req.files;
+        // console.log("check file",files)
 
 
 
@@ -57,8 +58,10 @@ const addProduct = async (req, res)=> {
          // Process each uploaded image
        const img = files.map((file) => file.filename);
 
-       for (let i = 0; i < img.legth; i++){
-        await sharp("public/products/images/" + img[i]).resize(500, 500).toFile("public/products/crops/" + img[i])
+       for (let i = 0; i < img.length; i++){
+        await sharp("public/products/images/" + img[i])
+        .resize(500, 500)
+        .toFile("public/products/crops/" + img[i])
        }
        console.log('Details:', details);
 

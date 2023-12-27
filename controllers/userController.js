@@ -2,9 +2,11 @@ const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 const Product = require("../models/productsModel");
 const userOtpVerification = require('../models/userOtpModel')
+const Cart = require('../models/cartModel');
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 const { product } = require("./productController");
+const { default: mongoose } = require("mongoose");
 dotenv.config()
 
 
@@ -25,9 +27,12 @@ const loadHome = async (req, res) => {
   try {
     // const userData = await User.findOne({_id:user_id})
     // console.log("Inside loadHome function");
-    const id = req.session.user_id
-    const user = await User.findOne({ _id: id });
-    res.render('home', { user: user });
+
+    const user_id = req.session.user_id
+    const cartData =  await Cart.findOne({user:user_id}).populate("product.productId")
+    const userData = await User.findOne({_id:user_id})
+
+    res.render('home', { user: userData, cart:cartData });
   } catch (error) {
     console.log(error.message);
   }
@@ -261,9 +266,9 @@ const verifyLogin = async (req, res) => {
         }
       } else {
 
-        res.render('login', { message: "Incorrect password" });
-
+        res.redirect('login', { message: "Incorrect password" });
       }
+
 
     } else {
 
@@ -287,20 +292,15 @@ const loadShop = async (req, res) => {
   try {
     const productData = await Product.find({});
 
-    res.render("shop",{products: productData});
+    res.render("shop", { products: productData });
   } catch (error) {
     console.log(error.message);
   }
 };
 
-// Cart
-const loadCart = async (req, res) => {
-  try {
-    res.render("cart");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+
+
+
 // Wishlist
 const loadWishlist = async (req, res) => {
   try {
@@ -339,12 +339,12 @@ const loadError404 = async (req, res) => {
 // -------Logout-----
 const logout = async (req, res) => {
   try {
-  // console.log("session distroy checking ");
-      req.session.destroy();
-      res.redirect('/');
+    // console.log("session distroy checking ");
+    req.session.destroy();
+    res.redirect('/');
 
   } catch (error) {
-      console.log(error.message);
+    console.log(error.message);
   }
 }
 
@@ -354,7 +354,6 @@ module.exports = {
   loadSignup,
   loadLogin,
   verifyLogin,
-  loadCart,
   loadWishlist,
   loadContact,
   loadUserOtp,
@@ -362,6 +361,6 @@ module.exports = {
   veryfyPost,
   insertUser,
   loadError404,
-  logout ,
-  loadProduct 
+  logout,
+  loadProduct
 };

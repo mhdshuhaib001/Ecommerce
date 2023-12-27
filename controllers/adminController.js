@@ -71,7 +71,7 @@ const loadDashboard = async (req, res) => {
 
 const usermanagementload = async (req, res) => {
     try {
-        const userData = await User.find({ is_admin: 0 });
+         const userData = await User.find({ is_admin: 0 });
         res.render("usermanagement", { users: userData });
     } catch (error) {
         console.log(error.message)
@@ -245,6 +245,7 @@ module.exports = {
     loadeditCategory,
     blockCategory,
     updateCategory,
-    deleteCategory,    
+    deleteCategory,   
+    
 
 }

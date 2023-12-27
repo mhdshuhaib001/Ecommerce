@@ -10,8 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const mobileLngthErrror = document.getElementById('mobileLngthErrror')
     const nameInput = document.getElementById("name");
     const nameLengthError = document.getElementById('nameLengthError')
-    // const pincode = document.getElementById('pincode')
-    // const pincodeLngthErrror = document.getElementById('pincodeLngthErrror')
+
     const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     document.getElementById("form").addEventListener("submit", function (event) {
@@ -35,12 +34,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 mobileLngthErrror.textContent = ""
             }
 
-             if (mobile.value.length != 10) {
-                 mobileLngthErrror.textContent = "Type a  10 digit mobiel number"
-                 event.preventDefault()
-             } else {
-                 mobileLngthErrror.textContent = ""
-             }
+            if (mobile.value.length != 10) {
+                mobileLngthErrror.textContent = "Type a  10 digit mobiel number"
+                event.preventDefault()
+            } else {
+                mobileLngthErrror.textContent = ""
+            }
         }
         if (nameInput) {
             if (nameInput.value.length < 4 || nameInput.value.trim() === "") {
@@ -50,7 +49,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 nameLengthError.textContent = ""
             }
         }
-    
         if (password.value) {
             if (password && confirmpassword) {
                 if (password.value !== confirmpassword.value) {

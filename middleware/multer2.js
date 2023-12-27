@@ -8,7 +8,7 @@ const fs = require("fs");
         callback (null,path.join(__dirname,"../public/products/images"));
      },
      filename: function(req,file,callback) {
-        callback(null,file.fieldname+"-"+ Data.now()+path.extname(file.originalname));
+        callback(null,file.fieldname+"-"+ Date.now()+path.extname(file.originalname));
      }
 });
 

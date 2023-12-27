@@ -1,6 +1,6 @@
 <%- include('../layouts/user/header.ejs') -%>
-<!doctype html>
-<html class="no-js" lang="">
+    <!doctype html>
+    <html class="no-js" lang="">
 
 
     <!-- preloader -->
@@ -18,13 +18,13 @@
                             <li class="breadcrumb-item active" aria-current="page">Cart</li>
                         </ol>
                     </nav>
-                 <h2 class="cart-title mt-40">Cart</h2>
+                    <h2 class="cart-title mt-40">Cart</h2>
                 </div>
 
                 <div class="cart-body-content">
                     <div class="row">
                         <div class="col-xl-8">
-                            
+
                             <div class="product-content">
                                 <form action="#">
                                     <div class="table-responsive">
@@ -40,17 +40,20 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+
+
+
+                                                <!-- <tr>
                                                     <td>
                                                         <div class="table-data">
                                                             <button class="close-btn"><i class="fal fa-times"></i></button>
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                     <td>
                                                         <div class="table-data">
                                                             <img src="img/product/1.jpg" width="80" alt="">
                                                         </div>
-                                                    </td>
+                                                    </td> 
                                                     <td>
                                                         <div class="table-data">
                                                             <h6><a href="single-product-3.html" class="title">Blandit vel eros condimentum ulla</a></h6>
@@ -71,48 +74,77 @@
                                                             <span class="total">$90.00</span>
                                                         </div>
                                                     </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="table-data">
-                                                            <button class="close-btn"><i class="fal fa-times"></i></button>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="table-data">
-                                                            <img src="img/product/2.jpg" width="80" alt="">
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="table-data">
-                                                            <h6><a href="single-product-3.html" class="title">Blossom Porcelain Side Plates</a></h6>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="table-data">
-                                                            <span class="price">$90.00</span>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="table-data">
-                                                                    <input type="number" value="1" style="margin-right: 20px; width: 119px;">
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="table-data">
-                                                            <span class="total">$90.00</span>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                </tr> -->
+
+
+                                                <%   cartData.products.forEach((value,index)=> { %>
+
+                                                    <tr>
+                                                        <td>
+                                                            <div class="table-data">
+                                                                <button class="close-btn"><i
+                                                                        class="fal fa-times"></i></button>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data">
+                                                                <img src="/products/crops/<%= value.productId.images.image3 %>"
+                                                                    width="80" alt="">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data">
+                                                                <h6><a href="/product?id=<%= product.productId._i %> class="
+                                                                        title"><%= value.productId.name %></a></h6>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table-data">
+                                                                <span class="price">$90.00</span>
+                                                            </div>
+                                                        </td>
+
+
+                                                        <td class="quantity-col">
+                                                            <div class="cart-product-quantity">
+                                                                <input type="number" class="form-control" value="1"
+                                                                    min="1" max="10" step="1" data-decimals="0"
+                                                                    required>
+                                                            </div>
+                                                        </td>
+                                                        <!-- <td> -->
+
+                                                        <!-- <div class="table-data">
+                                                            <button  onclick="decrementValue()">-</button>
+                                                            <input type="number" value="1" id="quantityInput" style="margin-right: 20px; width: 119px;">
+                                                            <button onclick="incrementValue()">+</button>
+                                                        </div> -->
+                                                        <!-- <div class="table-data">
+                                                            <input type="number" value="1"
+                                                                style="margin-right: 20px; width: 119px;">
+                                                        </div> -->
+                                                        <!-- </td> -->
+                                                        <td>
+                                                            <div class="table-data">
+                                                                <span class="total">$90.00</span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="cupon">
-                                            <form action="#" method="POST">
-                                                <input type="text" placeholder="Cupon code" class="text-left pl-3" style="margin-right: 20px; width: 119px;">
-                                                <button class="generic-btn border-0 red-hover-btn text-uppercase">Apply Cupon</button>
-                                                <button class="generic-btn border-0 red-hover-btn text-uppercase float-right">Update Cart</button>
-                                            </form>
+                                        <form action="#" method="POST">
+                                            <input type="text" placeholder="Cupon code" class="text-left pl-3"
+                                                style="margin-right: 20px; width: 119px;">
+                                            <button class="generic-btn border-0 red-hover-btn text-uppercase">Apply
+                                                Cupon</button>
+                                            <button
+                                                class="generic-btn border-0 red-hover-btn text-uppercase float-right">Update
+                                                Cart
+                                            </button>
+                                        </form>
                                     </div>
                                 </form>
                             </div>
@@ -131,7 +163,8 @@
                                             <td>
                                                 <h6>Flat rate</h6>
                                                 <p>Shipping options will be updated during checkout.</p>
-                                                <a href="javascript:void(0)" class="price-calculate">Calculate shipping</a>
+                                                <a href="javascript:void(0)" class="price-calculate">Calculate
+                                                    shipping</a>
                                                 <div class="calculate-shipping-box">
                                                     <form action="#" method="POST">
                                                         <div class="form-group">
@@ -151,7 +184,8 @@
                                                             <input type="number" placeholder="Post Code">
                                                         </div>
                                                         <div class="form-group">
-                                                            <button class="generic-btn border-0 red-hover-btn text-uppercase ">Update</button>
+                                                            <button
+                                                                class="generic-btn border-0 red-hover-btn text-uppercase ">Update</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -163,14 +197,15 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <a href="checkout.html" class="mt-40 generic-btn red-hover-btn w-100 d-block" style="height: 50px;">Procced to checkout</a>
+                                <a href="checkout.html" class="mt-40 generic-btn red-hover-btn w-100 d-block"
+                                    style="height: 50px;">Procced to checkout</a>
                             </div>
                             <!-- /. cart widget -->
+                            <!-- </div> -->
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
     <!-- shop body section end -->
 
@@ -445,7 +480,26 @@
 
 
 
+    <script>
+        function incrementValue() {
+            // Get the input element
+            var inputElement = document.getElementById("quantityInput");
 
+            // Increment the value
+            inputElement.value = parseInt(inputElement.value) + 1;
+        }
+
+        function decrementValue() {
+            // Get the input element
+            var inputElement = document.getElementById("quantityInput");
+
+            // Ensure the value is greater than 1 before decrementing
+            if (parseInt(inputElement.value) > 1) {
+                // Decrement the value
+                inputElement.value = parseInt(inputElement.value) - 1;
+            }
+        }
+    </script>
 
 
 

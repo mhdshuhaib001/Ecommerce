@@ -20,25 +20,24 @@
             <!-- autocomplete="off" -->
             <form action="" class="login__form" id="form" method="post">
                 <h1 class="login__title">Login</h1>
-
                 <div class="login__inputs">
                     <div class="login__box">
                         <!-- autocomplete="off" -->
-                        <input type="email" placeholder="Email ID" name="email" id="email" class="login__input"  >
+                        <input type="email" placeholder="Email ID" name="email" id="email" class="login__input">
                         <i class="ri-mail-fill"></i>
                     </div>
+                    <div class="error-msg"><p id="emailError"></p></div>
                     <div class="error-msg">
                         <p id="emailError"></p>
                     </div>
-
                     <div class="login__box">
-                        <input type="password" placeholder="Password" id="password" name="password"  class="login__input">
+                        <input type="password" placeholder="Password" id="password" name="password"
+                            class="login__input">
                         <i class="ri-lock-2-fill"></i>
                     </div>
                     <div class="error-msg">
                         <p id="passwordLengthError"></p>
                     </div>
-
                 </div>
 
                 <div class="login__check">
@@ -199,7 +198,7 @@
 
     <!-- to automaticly clearing error input -->
 
-    <script>
+    <!-- <script>
         const inputs = document.querySelector('input');
         const email_message = document.getElementById('emailError');
         const password_message = document.getElementById('passwordLengthError');
@@ -211,10 +210,11 @@
       })
         });
         
-    </script>
+    </script> -->
 
 
-    <script src="js/formValidation.js"></script>
+    <script src=/public/admin/login.js"></script>
+
     <!-- JS here -->
     <script src="js/vendor/jquery-1.12.4.min.js"></script>
     <script src="js/popper.min.js"></script>
@@ -233,5 +233,7 @@
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
+
+
 
     <%- include('../layouts/user/footer.ejs') -%>
