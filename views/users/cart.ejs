@@ -97,7 +97,7 @@
                                                         </td>
                                                         <td>
                                                             <div class="table-data">
-                                                                <span class="price">$90.00</span>
+                                                                <span class="price" data-product-price="<%= product.price %>">₹<%= product.price %></span>
                                                             </div>
                                                         </td>
 
@@ -123,13 +123,14 @@
                                                         <!-- </td> -->
                                                         <td>
                                                             <div class="table-data">
-                                                                <span class="total">$90.00</span>
+                                                                <span class="total">₹<%= product.total %></span>
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="table-data">
-                                                                <button class="close-btn"><i
-                                                                        class="fal fa-times"></i></button>
+                                                                <button class="close-btn"
+                                                                onclick="removeCartItem('<%= product.productId._id %>')"><i
+                                                                        class="fal fa-trash"></i></button>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -482,29 +483,44 @@
     <!-- startup popup end -->
 
 
-
-
-
-    <script>
-        function incrementValue() {
-            // Get the input element
-            var inputElement = document.getElementById("quantityInput");
-
-            // Increment the value
-            inputElement.value = parseInt(inputElement.value) + 1;
+    <!-- <script>
+         function removeCartItem(productId) {
+            fetch('/removeCartItem', {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productId }),
+            })
+                .then(response => response.json())
+                .then(response => {
+                    if (response.success) {
+                        Swal.fire({  // Change "swal" to "Swal"
+                            title: "Item Removed!",
+                            text: "The item has been successfully removed from your cart.",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 5000,
+                        });
+                        setTimeout(() => {
+                            location.reload(); // Reload the page
+                        }, 1500);
+                    } else {
+                        // Handle error
+                        console.error('Error removing item:', response.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error removing item:', error);
+                });
         }
 
-        function decrementValue() {
-            // Get the input element
-            var inputElement = document.getElementById("quantityInput");
+    </script> -->
 
-            // Ensure the value is greater than 1 before decrementing
-            if (parseInt(inputElement.value) > 1) {
-                // Decrement the value
-                inputElement.value = parseInt(inputElement.value) - 1;
-            }
-        }
-    </script>
+
+
+
+
 
 
 
@@ -515,7 +531,42 @@
 
     <!-- JS here -->
     <script src="js/vendor/jquery-1.12.4.min.js"></script>
-    <script src="js/popper.min.js"></script>
+    <script>
+    function removeCartItem(productId) {
+        fetch('/removeCartItem', {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ productId }),
+        })
+        .then(response => response.json())
+        .then(response => {
+            if (response.success) {
+                Swal.fire({
+                    title: "Item Removed!",
+                    text: "The item has been successfully removed from your cart.",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500,  // Adjust the timer as needed
+                });
+
+                // Assuming there's an element representing the removed item, you can remove it
+                const removedItem = document.getElementById(`product-${productId}`);
+                if (removedItem) {
+                    removedItem.remove();
+                }
+            } else {
+                // Handle error
+                console.error('Error removing item:', response.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error removing item:', error);
+        });
+    }
+</script>
+<script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/isotope.pkgd.min.js"></script>

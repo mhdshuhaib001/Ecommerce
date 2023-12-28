@@ -42,6 +42,7 @@ user_Rout.get('/logout', auth.isLogin, userController.logout);
 
 user_Rout.get("/cart", cartController.loadCart);
 user_Rout.patch("/addToCart",cartController.addToCart)
+user_Rout.patch("/removeCartItem",cartController.removeCartItem)
 
 
 user_Rout.get('/product', userController.loadProduct)

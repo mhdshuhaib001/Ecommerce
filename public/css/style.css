@@ -3460,7 +3460,7 @@ div#accordionExample > div {
 
 .product-content form input[type="number"],
 .product-content form input[type="text"] {
-  height: 55px;
+  /* height: 55px;
   border: 1px solid #ddd;
   width: 100px;
   display: block;
@@ -3468,8 +3468,18 @@ div#accordionExample > div {
   float: left;
   border-radius: 30px;
   margin-right: 5px;
-  color: #777;
+  color: #777; */
+  height: 36px;
+  border: 1px solid #ddd;
+  width: 86px;
+  display: block;
+  text-align: center;
+  float: left;
+  border-radius: 4px;
+  margin-right: 1px;
+  color: #151313;
 }
+
 .product-content p,
 .product-content ul li,
 p.simple-text {

@@ -45,14 +45,14 @@ const addToCart = async (req, res) => {
             // totalPrice: productData.totalPrice
         }
 
-        console.log('checking Product or note',products)
+        console.log('checking Product or note', products)
 
         await Cart.findOneAndUpdate(
             { userId: userId },
             {
                 $addToSet: {
-                    product: products 
-                    
+                    product: products
+
 
                 }
             },
@@ -69,9 +69,49 @@ const addToCart = async (req, res) => {
 };
 
 
+const removeCartItem = async (req, res) => {
+
+    try {
+
+        const productId = req.body.productId;
+        console.log("check product idd",productId)
+        const userId = req.session.user_id;
+
+        await Cart.findOneAndUpdate(
+            { userId: userId },
+            {
+                $pull: { product: { productId: productId } }
+            }
+        );
+        res.json({ success: true });
+    } catch (error) {
+
+        console.error("Error removing cart item:", error);
+        res.status(500).json({ success: false, error: "Internal Server Error" });
+    }
+}
+
+const updateCart = async (req , res) => {
+    const productId = req.body.productId;
+    const userId = req.session.userId;
+    const count = req.body.count;
+    
+     const cartData = await Cart.findOne({ user: userId});
+
+     if (count === -1) {
+        const currentQuantity = cartData.product.find((product)=>{product.productId})
+     }
+
+
+}
+
+                              
+
+
 
 module.exports = {
     loadCart,
-    addToCart
+    addToCart,
+    removeCartItem
 
 }

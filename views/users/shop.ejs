@@ -3,10 +3,8 @@
 <!doctype html>
 <html class="no-js" lang="">
 
-    <!-- preloader -->
-    <div id="loader-wrapper">
-        <div id="loader"></div>
-    </div>
+     <!-- preloader -->
+   
 
 
     <div class="shop-body mb-90">
@@ -20,7 +18,7 @@
             <div class="shop-wrapper">
                 <div class="row">
 
-                    <div class="col-12">
+                    <!-- <div class="col-12">
                         <div class="filter-heading">
                             <div class="row">
                                 <div class="col-xl-4 col-lg-4 col-md-4 col-12">
@@ -54,6 +52,7 @@
                                         </ul>
                                     </div>
                                 </div>
+
                                 <div
                                     class="col-xl-4 col-lg-4 col-md-4 col-12 d-flex justify-content-end position-static">
                                     <div class="sorting d-inline-block">
@@ -150,7 +149,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- /. filter heading -->
                         <div class="filter-content">
                             <div class="tab-content">
@@ -1597,7 +1596,7 @@
 
 
 
-        <script>
+        <!-- <script>
             function addToCart(productId) {
                 $.ajax({
                     url: '/addtoCart',
@@ -1621,7 +1620,37 @@
                 })
             }
 
+        </script> -->
+
+        <script>
+            function addToCart(productId) {
+                $.ajax({
+                    url: '/addtoCart',
+                    method: 'patch',
+                    data: { productId },
+                    success: function (response) {
+                        if (response.failed) {
+                            Swal.fire({
+                                title: 'Out of Stock',
+                                text: 'This product is currently out of stock.',
+                                icon: 'warning',
+                                timer: 3000,  // Set the timer to 2000 milliseconds (2 seconds)
+                                showConfirmButton: false  // Hide the "OK" button
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Saved to cart!',
+                                text: 'You clicked the button!',
+                                icon: 'success',
+                                timer: 3000,  // Set the timer to 2000 milliseconds (2 seconds)
+                                showConfirmButton: false  // Hide the "OK" button
+                            });
+                        }
+                    }
+                })
+            }
         </script>
+        
 
 
 
@@ -1633,6 +1662,8 @@
 
 
         <!-- JS here -->
+        
+
         <script src="js/vendor/jquery-1.12.4.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
