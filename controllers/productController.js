@@ -10,16 +10,16 @@ const path = require("path")
 
 //--------------LOAD PRODUCT MANAGEMENT IN ADMIN SIDE------------------
 
-const product = async (req, res) => {
-    try {
+// const loadproduct = async (req, res) => {
+//     try {
 
-        const productData = await Products.find({})
-        res.render("productmanagement", { productData })
+//         const productData = await Products.find({})
+//         res.render("productmanagement", { productData })
 
-    } catch (error) {
-       console.log(error.message);
-    }
-}
+//     } catch (error) {
+//        console.log(error.message);
+//     }
+// }
 
 //--------------------LOAD ADD PRODUCT PAGE---------------------
 
@@ -235,7 +235,7 @@ const editedProduct = async (req, res) => {
 
 
 module.exports = {
-    product,
+    // loadproduct,
     loadAddProduct,
     addProduct,
     blockProduct,

@@ -321,7 +321,7 @@ const loadContact = async (req, res) => {
 // product
 const loadProduct = async (req, res) => {
   try {
-    res.render("userProduct");
+    res.render("product");
   } catch (error) {
     console.log(error.message);
   }

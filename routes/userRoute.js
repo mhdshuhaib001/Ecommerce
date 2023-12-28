@@ -44,7 +44,7 @@ user_Rout.get("/cart", cartController.loadCart);
 user_Rout.patch("/addToCart",cartController.addToCart)
 
 
-user_Rout.get('/userProduct', userController.loadProduct)
+user_Rout.get('/product', userController.loadProduct)
 
 user_Rout.get("/shop", userController.loadShop);
 

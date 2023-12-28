@@ -31,12 +31,13 @@
                                         <table class="table table-2">
                                             <thead>
                                                 <tr>
-                                                    <th class="remove-porduct"></th>
-                                                    <th class="product-image"></th>
+                                                  
+                                                    <th class="product-image">ProductImage</th>
                                                     <th class="product-title">Product</th>
                                                     <th>Price</th>
                                                     <th class="quantity">Quantity</th>
                                                     <th class="total">Total</th>
+                                                     <th class="remove-porduct"></th >
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -77,25 +78,21 @@
                                                 </tr> -->
 
 
-                                                <%   cartData.products.forEach((value,index)=> { %>
-
+                                                <% cartData.product.forEach(product=> { %>
                                                     <tr>
+
                                                         <td>
                                                             <div class="table-data">
-                                                                <button class="close-btn"><i
-                                                                        class="fal fa-times"></i></button>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="table-data">
-                                                                <img src="/products/crops/<%= value.productId.images.image3 %>"
+                                                                <img src="/products/crops/<%= product.productId.images.image1 %>"
                                                                     width="80" alt="">
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="table-data">
                                                                 <h6><a href="/product?id=<%= product.productId._i %> class="
-                                                                        title"><%= value.productId.name %></a></h6>
+                                                                        title">
+                                                                        <%= product.productId.name %>
+                                                                    </a></h6>
                                                             </div>
                                                         </td>
                                                         <td>
@@ -129,6 +126,12 @@
                                                                 <span class="total">$90.00</span>
                                                             </div>
                                                         </td>
+                                                        <td>
+                                                            <div class="table-data">
+                                                                <button class="close-btn"><i
+                                                                        class="fal fa-times"></i></button>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                     <% }) %>
                                             </tbody>
@@ -149,6 +152,8 @@
                                 </form>
                             </div>
                         </div>
+
+
                         <div class="col-xl-4">
                             <div class="cart-widget">
                                 <h4 class="title">Cart Totals</h4>
