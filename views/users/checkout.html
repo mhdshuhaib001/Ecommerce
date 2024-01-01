@@ -1081,3 +1081,30 @@
 
 <!-- Mirrored from wphix.com/template/mazia/checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 04 Dec 2023 05:38:57 GMT -->
 </html>
+
+
+
+
+
+<div class="cart-product-quantity">
+    <div class="input-group  input-spinner">
+        <!-- <input type="number" class="form-control" value="<%= element.count %>" min="1" max="10" step="1" data-decimals="0" required> -->
+        <div class="input-group-prepend">
+            <button style="min-width: 26px"
+                class="btn btn-decrement btn-spinner"
+                onclick="AddingCount(-1,'<%= element.productid._id %>')"
+                type="button" fdprocessedid="oe68nu">
+                <i class="icon-minus"></i></button>
+        </div>
+        <input type="text" style="text-align: center"
+            id="value" class="form-control " required=""
+            placeholder="" fdprocessedid="kzohym"
+            value="<%= element.count %>">
+        <div class="input-group-append">
+            <button style="min-width: 26px"
+                class="btn btn-increment btn-spinner"
+                onclick="AddingCount(1,'<%= element.productid._id %>')"
+                type="button" fdprocessedid="4dpds">
+                <i class="icon-plus"></i></button>
+        </div>
+    </div>

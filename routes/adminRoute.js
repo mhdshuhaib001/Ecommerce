@@ -46,7 +46,7 @@ admin_Rout.post("/editCategory",auth.isLogin,adminController.updateCategory)
 admin_Rout.get("/delete-category",auth.isLogin,adminController.deletdeCategory)
 
 
-// admin_Rout.get("/productmanagement",auth.isLogin,productController.loadproduct)
+admin_Rout.get("/productmanagement",auth.isLogin,productController.loadproduct)
 admin_Rout.get("/loadAddProduct",auth.isLogin,productController.loadAddProduct)
 admin_Rout.post("/addProduct",auth.isLogin,multer.productImagesUpload,productController.addProduct);
 admin_Rout.post("/block-product",auth.isLogin,productController.blockProduct);

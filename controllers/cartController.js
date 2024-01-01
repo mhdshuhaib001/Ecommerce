@@ -74,7 +74,7 @@ const removeCartItem = async (req, res) => {
     try {
 
         const productId = req.body.productId;
-        console.log("check product idd",productId)
+        console.log("check product idd", productId)
         const userId = req.session.user_id;
 
         await Cart.findOneAndUpdate(
@@ -91,27 +91,62 @@ const removeCartItem = async (req, res) => {
     }
 }
 
-const updateCart = async (req , res) => {
-    const productId = req.body.productId;
-    const userId = req.session.userId;
-    const count = req.body.count;
-    
-     const cartData = await Cart.findOne({ user: userId});
-
-     if (count === -1) {
-        const currentQuantity = cartData.product.find((product)=>{product.productId})
-     }
 
 
+const QuantityUpdate = async (req, res) => {
+    try {
+
+        const productId = req.body.productId;
+        const userId = req.session.userId;
+        const count = req.body.count;
+
+        const cartData = await Cart.findOne({ user: userId });
+
+        if (count === -1) {
+            const currentQuantity = cartData.product.find((product) => product.productId == productId).quantity;
+
+            if (currentQuantity <= 1) {
+                return res.json({ success: false, message: 'Quantity cannot be decreased' });
+            }
+        }
+
+        if (count === 1) {
+
+            if (currentQuantity + count > 5) {
+                return res.json({ success: false, message: 'Cannot add More than 5 items' })
+            }
+        }
+
+        const cartDatas = await Cart.findOneAndUpdate(
+            { user: userId, 'product.productId': productId },
+            {
+                $inc: {
+                    'product.$.quantity': count,
+                    'product.$.totalPrice': count * cartData.product.find((product) => product.productId.equals(productId)).price,
+                },
+            }
+        );
+        res.json({ success: true });
+
+
+    } catch (error) {
+
+        console.log(error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
 }
 
-                              
+
+
+
+
 
 
 
 module.exports = {
     loadCart,
     addToCart,
-    removeCartItem
+    removeCartItem,
+    QuantityUpdate
 
 }

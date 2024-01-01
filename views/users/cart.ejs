@@ -23,21 +23,22 @@
 
                 <div class="cart-body-content">
                     <div class="row">
-                        <div class="col-xl-8">
 
+
+                        <div class="col-xl-8">
                             <div class="product-content">
                                 <form action="#">
                                     <div class="table-responsive">
                                         <table class="table table-2">
                                             <thead>
                                                 <tr>
-                                                  
+
                                                     <th class="product-image">ProductImage</th>
                                                     <th class="product-title">Product</th>
                                                     <th>Price</th>
                                                     <th class="quantity">Quantity</th>
                                                     <th class="total">Total</th>
-                                                     <th class="remove-porduct"></th >
+                                                    <th class="remove-porduct"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -97,121 +98,138 @@
                                                         </td>
                                                         <td>
                                                             <div class="table-data">
-                                                                <span class="price" data-product-price="<%= product.price %>">₹<%= product.price %></span>
+                                                                <span class="price"
+                                                                    data-product-price="<%= product.price %>">₹<%=
+                                                                        product.price %></span>
                                                             </div>
                                                         </td>
 
+
+                                                        <!-- <td class="quantity-col">
+                                                            <div class="cart-product-quantity">
+                                                                <button class="quantity-control" type="button"
+                                                                    onclick="QuantityUpdate('<%= product.productId._id %>', -1)">-</button>
+                                                                <input type="number" class="form-control"
+                                                                    value="<%= product.quantity %>" min="1" max="10"
+                                                                    step="1" data-decimals="0" required>
+                                                                <button class="quantity-control" type="button"
+                                                                    onclick="QuantityUpdate('<%= product.productId._id %>', 1)">+</button>
+                                                            </div>
+                                                        </td> -->
 
                                                         <td class="quantity-col">
-                                                            <div class="cart-product-quantity">
-                                                                <input type="number" class="form-control" value="1"
-                                                                    min="1" max="10" step="1" data-decimals="0"
-                                                                    required>
-                                                            </div>
+                                                            <div class="quantity-container">
+                                                                <input style="width: 5vb"
+                                                                    class="btn-outline-primary btn-rounded"
+                                                                    type="button"
+                                                                    onclick="QuantityUpdate('<%=userId%>','<%=product.productId._id%>',-1)"
+                                                                    class="btneg" value="-" />
+                                                                <input style="width: 5vb"
+                                                                    class="btn-outline-primary btn-rounded" type="text"
+                                                                    value="<%= product.count %>" />
+                                                                <input style="width: 5vb"
+                                                                    class="btn-outline-primary btn-rounded"
+                                                                    type="button"
+                                                                    onclick="QuantityUpdate('<%=userId%>','<%=product.productId._id%>',1)"
+                                                                    class="btpos" value="+" />
+                                                                <% if(product.productId.quantity==0 ){ %>
+                                                                    <p style="color: red"><b>Out of Stock !</b></p>
+                                                                    <% } %>
                                                         </td>
-                                                        <!-- <td> -->
 
-                                                        <!-- <div class="table-data">
-                                                            <button  onclick="decrementValue()">-</button>
-                                                            <input type="number" value="1" id="quantityInput" style="margin-right: 20px; width: 119px;">
-                                                            <button onclick="incrementValue()">+</button>
-                                                        </div> -->
-                                                        <!-- <div class="table-data">
-                                                            <input type="number" value="1"
-                                                                style="margin-right: 20px; width: 119px;">
-                                                        </div> -->
-                                                        <!-- </td> -->
-                                                        <td>
-                                                            <div class="table-data">
-                                                                <span class="total">₹<%= product.total %></span>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="table-data">
-                                                                <button class="close-btn"
-                                                                onclick="removeCartItem('<%= product.productId._id %>')"><i
-                                                                        class="fal fa-trash"></i></button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <% }) %>
-                                            </tbody>
+                                    </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="table-data">
+                                            <span class="total">₹<%= product.total %></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="table-data">
+                                            <button class="close-btn"
+                                                onclick="removeCartItem('<%= product.productId._id %>')"><i
+                                                    class="fal fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                    </tr>
+                                    <% }) %>
+                                        </tbody>
                                         </table>
-                                    </div>
-                                    <div class="cupon">
-                                        <form action="#" method="POST">
-                                            <input type="text" placeholder="Cupon code" class="text-left pl-3"
-                                                style="margin-right: 20px; width: 119px;">
-                                            <button class="generic-btn border-0 red-hover-btn text-uppercase">Apply
-                                                Cupon</button>
-                                            <button
-                                                class="generic-btn border-0 red-hover-btn text-uppercase float-right">Update
-                                                Cart
-                                            </button>
-                                        </form>
-                                    </div>
+                            </div>
+                            <div class="cupon">
+                                <form action="#" method="POST">
+                                    <input type="text" placeholder="Cupon code" class="text-left pl-3"
+                                        style="margin-right: 20px; width: 119px;">
+                                    <button class="generic-btn border-0 red-hover-btn text-uppercase">Apply
+                                        Cupon</button>
+                                    <button class="generic-btn border-0 red-hover-btn text-uppercase float-right">Update
+                                        Cart
+                                    </button>
                                 </form>
                             </div>
+                            </form>
                         </div>
+                    </div>
 
 
-                        <div class="col-xl-4">
-                            <div class="cart-widget">
-                                <h4 class="title">Cart Totals</h4>
-                                <table class="table table-2 no-border">
-                                    <tbody>
-                                        <tr>
-                                            <th>Subtotal</th>
-                                            <td>$134.00</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Shipping</th>
-                                            <td>
-                                                <h6>Flat rate</h6>
-                                                <p>Shipping options will be updated during checkout.</p>
-                                                <a href="javascript:void(0)" class="price-calculate">Calculate
-                                                    shipping</a>
-                                                <div class="calculate-shipping-box">
-                                                    <form action="#" method="POST">
-                                                        <div class="form-group">
-                                                            <div class="cart-select">
-                                                                <select name="country" id="country">
-                                                                    <option value="uk">United Kingdom</option>
-                                                                </select>
-                                                            </div>
+                    <div class="col-xl-4">
+                        <div class="cart-widget">
+                            <h4 class="title">Cart Totals</h4>
+                            <table class="table table-2 no-border">
+                                <tbody>
+                                    <tr>
+                                        <th>Subtotal</th>
+                                        <td>$134.00</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Shipping</th>
+                                        <td>
+                                            <h6>Flat rate</h6>
+                                            <p>Shipping options will be updated during checkout.</p>
+                                            <a href="javascript:void(0)" class="price-calculate">Calculate
+                                                shipping</a>
+                                            <div class="calculate-shipping-box">
+                                                <form action="#" method="POST">
+                                                    <div class="form-group">
+                                                        <div class="cart-select">
+                                                            <select name="country" id="country">
+                                                                <option value="uk">United Kingdom</option>
+                                                            </select>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <input type="text" placeholder="Country">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <input type="text" placeholder="Town / City">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <input type="number" placeholder="Post Code">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <button
-                                                                class="generic-btn border-0 red-hover-btn text-uppercase ">Update</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Total</th>
-                                            <td><strong>$134.00</strong></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <a href="checkout.html" class="mt-40 generic-btn red-hover-btn w-100 d-block"
-                                    style="height: 50px;">Procced to checkout</a>
-                            </div>
-                            <!-- /. cart widget -->
-                            <!-- </div> -->
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="text" placeholder="Country">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="text" placeholder="Town / City">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="number" placeholder="Post Code">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button
+                                                            class="generic-btn border-0 red-hover-btn text-uppercase ">Update</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Total</th>
+                                        <td><strong>$134.00</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <a href="checkout.html" class="mt-40 generic-btn red-hover-btn w-100 d-block"
+                                style="height: 50px;">Procced to checkout</a>
                         </div>
+                        <!-- /. cart widget -->
+                        <!-- </div> -->
                     </div>
                 </div>
             </div>
+        </div>
     </section>
     <!-- shop body section end -->
 
@@ -532,41 +550,75 @@
     <!-- JS here -->
     <script src="js/vendor/jquery-1.12.4.min.js"></script>
     <script>
-    function removeCartItem(productId) {
-        fetch('/removeCartItem', {
-            method: "PATCH",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ productId }),
-        })
-        .then(response => response.json())
-        .then(response => {
-            if (response.success) {
-                Swal.fire({
-                    title: "Item Removed!",
-                    text: "The item has been successfully removed from your cart.",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 1500,  // Adjust the timer as needed
-                });
 
-                // Assuming there's an element representing the removed item, you can remove it
-                const removedItem = document.getElementById(`product-${productId}`);
-                if (removedItem) {
-                    removedItem.remove();
-                }
-            } else {
-                // Handle error
-                console.error('Error removing item:', response.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error removing item:', error);
-        });
-    }
-</script>
-<script src="js/popper.min.js"></script>
+        function QuantityUpdate(productId, count) {
+            const data = { productId, count };
+
+            fetch('/QuantityUpdate', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+
+                .then(response => response.json())
+                .then((response) => {
+                    if (response.success) {
+                        $("#reloadDiv").load('/cart #reloadDiv');
+                    } else {
+
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops..",
+                            text: response.message,
+                        }).catch(error => console.error('Error updating cart:', error));
+
+                    }
+
+                })
+        }
+
+        // to remove cart items 
+        function removeCartItem(productId) {
+            fetch('/removeCartItem', {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productId }),
+            })
+                .then(response => response.json())
+                .then(response => {
+                    if (response.success) {
+                        Swal.fire({
+                            title: "Item Removed!",
+                            text: "The item has been successfully removed from your cart.",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500,  // Adjust the timer as needed
+                        });
+
+                        // Assuming there's an element representing the removed item, you can remove it
+                        const removedItem = document.getElementById(`product-${productId}`);
+                        if (removedItem) {
+                            removedItem.remove();
+                        }
+                    } else {
+                        // Handle error
+                        console.error('Error removing item:', response.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error removing item:', error);
+                });
+        }
+
+
+
+
+    </script>
+    <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/isotope.pkgd.min.js"></script>

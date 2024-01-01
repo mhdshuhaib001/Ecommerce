@@ -35,7 +35,7 @@ user_Rout.post("/signup", auth.isLogout, userController.insertUser);
 user_Rout.get('/userOtpSignup', userController.verifyOTP);
 user_Rout.post('/userOtpSignup', userController.veryfyPost);
 user_Rout.get('/login', auth.isLogout, userController.loadLogin);
-user_Rout.post('/login',auth.isLogout, userController.verifyLogin);
+user_Rout.post('/login', userController.verifyLogin);
 user_Rout.get('/logout', auth.isLogin, userController.logout);
 
 
@@ -43,6 +43,7 @@ user_Rout.get('/logout', auth.isLogin, userController.logout);
 user_Rout.get("/cart", cartController.loadCart);
 user_Rout.patch("/addToCart",cartController.addToCart)
 user_Rout.patch("/removeCartItem",cartController.removeCartItem)
+user_Rout.patch("/QuantityUpdate",cartController.QuantityUpdate)
 
 
 user_Rout.get('/product', userController.loadProduct)

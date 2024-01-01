@@ -37,7 +37,7 @@ const adminVerify = async (req, res) => {
             const matchPassword = await bcrypt.compare(password, adminData.password);
 
             if (matchPassword) {
-                if (adminData.is_admin === 1) {
+                if (adminData.is_admin === true) {
                     req.session.admin_id = adminData._id;
                     console.log("Admin chck")
                     res.redirect('/admin/home');
@@ -71,7 +71,7 @@ const loadDashboard = async (req, res) => {
 
 const usermanagementload = async (req, res) => {
     try {
-         const userData = await User.find({ is_admin: 0 });
+         const userData = await User.find({ is_admin: false });
         res.render("usermanagement", { users: userData });
     } catch (error) {
         console.log(error.message)

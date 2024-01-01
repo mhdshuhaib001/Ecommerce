@@ -10,7 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const mobileLngthErrror = document.getElementById('mobileLngthErrror')
     const nameInput = document.getElementById("name");
     const nameLengthError = document.getElementById('nameLengthError')
-
+    // const pincode = document.getElementById('pincode')
+    // const pincodeLngthErrror = document.getElementById('pincodeLngthErrror')
     const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     document.getElementById("form").addEventListener("submit", function (event) {
@@ -49,28 +50,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 nameLengthError.textContent = ""
             }
         }
+
         if (password.value) {
-            if (password && confirmpassword) {
+            if (confirmpassword) {
                 if (password.value !== confirmpassword.value) {
-                    confirmpasswordError.textContent = "Password doesn't match"
-                    event.preventDefault()
+                    confirmpasswordError.textContent = "Password doesn't match";
+                    event.preventDefault();
                 } else {
-                    confirmpasswordError.textContent = ""
-                }
-                if (password.value.length < 8) {
-                    passwordLengthError.textContent = "Password must be at least 8 characters"
-                    event.preventDefault()
-                } else {
-                    passwordLengthError.textContent = ""
-                }
-            } else {
-                if (password.value.length < 8) {
-                    passwordLengthError.textContent = "Password must be at least 8 characters"
-                    event.preventDefault()
-                } else {
-                    passwordLengthError.textContent = ""
+                    confirmpasswordError.textContent = "";
                 }
             }
+
+            if (password.value.length < 8) {
+                passwordLengthError.textContent = "Password must be at least 8 characters";
+                event.preventDefault();
+            } else {
+                passwordLengthError.textContent = "";
+            }
+        } else {
+            passwordLengthError.textContent = "Password is required";
+            event.preventDefault();
         }
     });
 });

@@ -83,3 +83,14 @@ form button:hover {
   background: #0e4bf1;
 }
 /*  Otp End   */
+.button-container {
+  width: 74%;
+  display: flex;
+  justify-content: space-between; /* Adjust as needed */
+  margin-top: 10px; /* Add some margin for spacing */
+}
+
+.button-container button {
+  width: 60%; /* Slightly reduced width */
+  margin: 0 10px; /* Added margins */
+}

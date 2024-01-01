@@ -29,10 +29,10 @@ const loadHome = async (req, res) => {
     // console.log("Inside loadHome function");
 
     const user_id = req.session.user_id
-    const cartData =  await Cart.findOne({user:user_id}).populate("product.productId")
-    const userData = await User.findOne({_id:user_id})
+    const cartData = await Cart.findOne({ user: user_id }).populate("product.productId")
+    const userData = await User.findOne({ _id: user_id })
 
-    res.render('home', { user: userData, cart:cartData });
+    res.render('home', { user: userData, cart: cartData });
   } catch (error) {
     console.log(error.message);
   }
@@ -248,42 +248,134 @@ const loadLogin = async (req, res) => {
 };
 
 // Verify Login
+// const verifyLogin = async (req, res) => {
+//   try {
+//     const email = req.body.email;
+//     const password = req.body.password;
+//     const userData = await User.findOne({ email: email });
+
+//     if (userData) {
+//       const passwordMatch = await bcrypt.compare(password, userData.password);
+//       if (passwordMatch) {
+
+//         if (userData.is_blocked === false) {
+
+//           if (userData.is_verified === true) {
+
+//             req.session, user_id = userData._id;
+//             res.redirect('/');
+
+//           } else {
+//             req.session.user_id = userData._id;
+//             console.log(req.session.user_id)
+//             res.redirect('/home');
+//           }
+//         }
+//         else {
+//           res.render('login', { error: 'Admin blocked you' })
+//         }
+
+//       } else {
+//         res.render('login', { error: 'incorrect password' })
+//       }
+
+//     } else {
+//       res.render('login', { error: 'Email not found' })
+//     }
+
+
+
+
+
+
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// }
+
+//verify login
+// const verifyLogin = async (req,res)=>{
+//   try {
+
+//     const email = req.body.email
+//     const password = req.body.password
+//     const userData = await User.findOne({email:email}) 
+
+//     if (userData) {
+       
+//       const matchPassword = await bcrypt.compare(password,userData.password)
+
+//       if (matchPassword) {
+
+//         if(userData.is_blocked===false){
+
+//           if(userData.is_verified==true){
+
+//             req.session.user_id = userData._id;
+//             res.redirect('/')
+//           }else{
+
+//             sendVerifyMail(userData.name,userData.email)
+//             res.render('home',{email:userData.email})
+
+//           }
+//         }else{
+//           res.render('login',{error:'Admin blocked you'})
+//         }
+        
+//       } else {
+//         res.render('login',{error:'Incorrect password'})
+//       }
+      
+//     }else{
+//       res.render('login',{error:'Email not found'})
+//     }
+
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// }
+
 const verifyLogin = async (req, res) => {
   try {
+    console.log('Verifying login...');
     const email = req.body.email;
     const password = req.body.password;
+    console.log('Email:', email);
+
     const userData = await User.findOne({ email: email });
 
     if (userData) {
-      const passwordMatch = await bcrypt.compare(password, userData.password);
-      if (passwordMatch) {
-        if (userData.is_verified === 0) {
-          res.render('login', { message: "Please Verify Your Email" });
+      console.log('User found:', userData);
+
+      const matchPassword = await bcrypt.compare(password, userData.password);
+
+      if (matchPassword) {
+        console.log('Password matches');
+
+        if (userData.is_blocked === false) {
+          if (userData.is_verified === true) {
+            req.session.user_id = userData._id;
+            console.log('Redirecting to /');
+            res.redirect('/home');
+          } 
         } else {
-          req.session.user_id = userData._id;
-          console.log(req.session.user_id)
-          res.redirect('/home');
+          console.log('Admin blocked the user');
+          res.render('login', { error: 'Admin blocked you' });
         }
       } else {
-
-        res.redirect('login', { message: "Incorrect password" });
+        console.log('Incorrect password');
+        res.render('login', { error: 'Incorrect password' });
       }
-
-
     } else {
-
-      res.render('login', { message: "Email And Pssword Is Incorrect" });
-
+      console.log('Email not found');
+      res.render('login', { error: 'Email not found' });
     }
-
-
-
-
   } catch (error) {
-    console.log(error.message)
-
+    console.log('Error in verifyLogin:', error.message);
   }
-}
+};
+
 
 
 
