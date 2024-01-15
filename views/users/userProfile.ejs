@@ -1,0 +1,602 @@
+<%- include('../layouts/user/header.ejs') -%>
+
+    <body>
+        <div class="containerpro" id="mainContainer">
+            <div class="leftbox">
+                <nav class="pnav">
+                    <a onclick="tabs(0)" class="tab">
+                        <i class="fa-solid fa-user"></i>
+                    </a>
+                    <a onclick="tabs(1)" class="tab">
+                        <i class="fa-solid fa-key"></i>
+                    </a>
+                    <a onclick="tabs(2)" class="tab">
+                        <i class="fa-solid fa-wallet"></i>
+                    </a>
+                    <a onclick="tabs(3)" class="tab">
+                        <i class="fa-solid fa-gift"></i>
+                    </a>
+                    <a onclick="tabs(4)" class="tab">
+                        <i class="fa-solid fa-address-book"></i>
+                    </a>
+
+                </nav>
+            </div>
+
+            <div class="rightbox">
+                <div class="profile tabShow">
+                    <h4 class="custom-h4">Profile</h4>
+                    <h6 class="custom-h2"> Name</h6>
+                    <input type="text" class="input" value="<%= userData.name %>" readonly>
+                    <h6 class="custom-h2">Email</h6>
+                    <input type="text" class="input" value="<%= userData.email%>" readonly>
+                    <h6 class="custom-h2">Phone Numer</h6>
+                    <input type="text" class="input" value="<%= userData.mobile %>" readonly>
+                    <button class="btns">Edit</button>
+
+                </div>
+                <div class="changePassword tabShow" id="passForm">
+
+                    <h4 class="custom-h4">ChangePassword</h4>
+                    <h6 class="custom-h2">Current Password</h6>
+                    <input type="password" name="CurrentPass" id="password" class="input">
+                    <div id="currError" style="display: none; color: red;"></div>
+                    <h6 class="custom-h2">New Password</h6>
+                    <input type="password" name="newPass" id="newPass" class="input" value>
+                    <div id="newPassError" style="display: none; color: red;"></div>
+                    <h6 class="custom-h2">Conform Password</h6>
+                    <input type="password" name="ConformPass" id="conPass" class="input">
+                    <div id="conPassError" style="display: none; color: red;"></div>
+                    <button class="btns" type="submit" id="changePass">Submit</button>
+                </div>
+
+                <div class="wallet tabShow">
+
+                    <button class="btns">update</button>
+                </div>
+                <div class="coupen tabShow">
+                    <h4 class="custom-h4">privacy settings</h4>
+                    <h6 class="custom-h2">Manage Email notification</h6>
+                    <input type="text" class="input" value="password">
+                    <h6 class="custom-h2">Manage privacy settings</h6>
+                    <input type="text" class="input" value="password">
+                    <h6 class="custom-h2">View terms of Use</h6>
+                    <input type="text" class="input" value="password">
+                    <h6 class="custom-h2">Personalized ad Experience</h6>
+                    <input type="text" class="input" value="password">
+                    <h6 class="custom-h2">protect Account</h6>
+                    <button class="btns">update</button>
+                </div>
+                <div class="address tabShow row">
+                    <% if (addressData && addressData.address && addressData.address.length> 0) {
+                        addressData.address.forEach((address, i) => { %>
+                        <div class="col-lg-6 custom-card-container" id="addressReload">
+                            <div class="card card-dashboard shadow">
+                                <div class="card-body pr-0 py-0">
+                                    <h3 class="card-title d-inline">Address <%= i + 1 %>
+                                    </h3>
+                                    <!-- You can customize the title as needed -->
+
+                                    <div class="card-details m-0">
+                                        Full Name: <%= address.fullname %><br>
+                                            Mobile: <%= address.mobile %><br>
+                                                Email: <%= address.email %><br>
+                                                    House Name: <%= address.houseName %><br>
+                                                        City: <%= address.city %><br>
+                                                            State: <%= address.state %><br>
+                                                                Pincode: <%= address.pincode %><br>
+                                    </div>
+
+                                    <a href="#" class="edit-link">Edit <i class="fa-sharp fa-solid fa-pen"
+                                            data-target="editAddress" data-toggle="modal"
+                                            style="color: #cc9966;"></i></a>
+
+                                    <a href="#" onclick="removeAddress('<%= addressData._id %>')">remove
+                                        <i class="fa-sharp fa-solid fa-trash" style="color: #df1d1d;"></i></a>
+                                </div><!-- End .card-body -->
+                            </div><!-- End .card-dashboard -->
+                        </div><!-- End .col-lg-6 -->
+                        <% }); } %>
+
+                            <button type="button" data-toggle="modal" data-target="#addAddress"
+                                class="btns">addAddress</button>
+
+                            <!-- Add Address Modal -->
+                            <div class="modal fade" id="addAddress" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-top: 80px;">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Add
+                                                Address</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/addAddress" id="form" method="post">
+                                                <div class="form-group">
+                                                    <label for="fullname">Full Name
+                                                        *</label>
+                                                    <input type="text" class="form-control" name="fullname"
+                                                        id="fullname" required>
+                                                    <div id="fnameError" style="display: none; color: red;"></div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="email">Email *</label>
+                                                    <input type="email" class="form-control" name="email"
+                                                        id="addressEmail" required>
+                                                    <div id="addEmailError" style="display: none; color: red;"></div>
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="mobile">Mobile *</label>
+                                                    <input type="tel" class="form-control" name="mobile" id="mobile"
+                                                        autocomplete="off" required>
+                                                    <div id="phoneError" style="display: none; color: red;"></div>
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="state">State *</label>
+                                                    <input type="text" class="form-control" name="state" id="state"
+                                                        required>
+                                                    <div id="stateError" style="display: none; color: red;"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="city">City *</label>
+                                                    <input type="text" class="form-control" name="city" id="city"
+                                                        required>
+                                                    <div id="cityError" style="display: none; color: red;"></div>
+
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="pincode">Pincode *</label>
+                                                    <input type="tel" class="form-control" name="pincode" id="pincode"
+                                                        autocomplete="off" required>
+                                                    <div id="pinError" style="display: none; color: red;"></div>
+
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="house">House Name *</label>
+                                                    <input type="text" class="form-control" name="houseName"
+                                                        id="houseName" required>
+                                                    <div id="houseError" style="display: none; color: red;"></div>
+
+                                                </div>
+
+                                                <button id="addAddress" type="submit" class="btn btn-outline-primary">
+                                                    <span>Add Address</span>
+                                                    <i class="icon-long-arrow-right"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End the addAddress -->
+
+                            <div class="modal fade" id="editAddress" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-top: 80px;">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Add
+                                                Address</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/addAddress" id="form" method="post">
+                                                <div class="form-group">
+                                                    <label for="fullname">Full Name
+                                                        *</label>
+                                                    <input type="text" class="form-control" name="fullname"
+                                                        id="fullname" required>
+                                                    <div id="fnameError" style="display: none; color: red;"></div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="email">Email *</label>
+                                                    <input type="email" class="form-control" name="email"
+                                                        id="addressEmail" required>
+                                                    <div id="addEmailError" style="display: none; color: red;"></div>
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="mobile">Mobile *</label>
+                                                    <input type="tel" class="form-control" name="mobile" id="mobile"
+                                                        autocomplete="off" required>
+                                                    <div id="phoneError" style="display: none; color: red;"></div>
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="state">State *</label>
+                                                    <input type="text" class="form-control" name="state" id="state"
+                                                        required>
+                                                    <div id="stateError" style="display: none; color: red;"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="city">City *</label>
+                                                    <input type="text" class="form-control" name="city" id="city"
+                                                        required>
+                                                    <div id="cityError" style="display: none; color: red;"></div>
+
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="pincode">Pincode *</label>
+                                                    <input type="tel" class="form-control" name="pincode" id="pincode"
+                                                        autocomplete="off" required>
+                                                    <div id="pinError" style="display: none; color: red;"></div>
+
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="house">House Name *</label>
+                                                    <input type="text" class="form-control" name="houseName"
+                                                        id="houseName" required>
+                                                    <div id="houseError" style="display: none; color: red;"></div>
+
+                                                </div>
+
+                                                <button id="addAddress" type="submit" class="btn btn-outline-primary">
+                                                    <span>Add Address</span>
+                                                    <i class="icon-long-arrow-right"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <!-- footer section start -->
+        <section class="footer">
+            <div class="footer-top mt-120 pb-120 pt-115" style="background-color: #f5f5f5;">
+                <div class="footer-top-wrapper">
+                    <div class="newsletter ">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6">
+                                <h2 class="title m-0">Sign Up For Our
+                                    Newsletter</h2>
+                                <p>Subscribe our newsletter and get discount 20%
+                                    Off</p>
+                            </div>
+                            <div class="col-xl-6 col-lg-6">
+                                <div class="newsletter-form">
+                                    <form action="#" method="POST">
+                                        <input type="text" placeholder="Search for our newsletter...">
+                                        <button type="submit"
+                                            class="generic-btn red-hover-btn text-uppercase float-right">Subscribe
+                                            Now</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- /.newsletter -->
+                    <div class="service pt-57 mt-40 gray-border-top">
+                        <div class="row justify-content-center">
+                            <div class="col-xl-4 col-md-6 service-item">
+                                <div class="service-box service-box-2">
+                                    <div class="service-box-content">
+                                        <h4 class="title">Worldwide Shipping</h4>
+                                        <p class="service-desc">Duis autem vel eum
+                                            iriure dolor in hendrerit velit esse
+                                            molestie consequat.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6 service-item">
+                                <div class="service-box service-box-2">
+                                    <div class="service-box-content">
+                                        <h4 class="title">Online Support 24/7</h4>
+                                        <p class="service-desc">Duis autem vel eum
+                                            iriure dolor in hendrerit velit esse
+                                            molestie consequat.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-lg-6 hidden-md service-item">
+                                <div class="service-box service-box-2">
+                                    <div class="service-box-content">
+                                        <h4 class="title">Money Return
+                                            Guarantee</h4>
+                                        <p class="service-desc">Duis autem vel eum
+                                            iriure dolor in hendrerit velit esse
+                                            molestie consequat.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /. service -->
+                    <!-- /. footer bottom -->
+                </div>
+
+            </div>
+            <!-- footer top -->
+
+            <div class="footer-bottom pt-77" style="background-color: #292929;">
+                <div class="container-1180">
+                    <div class="footer-bottom-wrapper">
+                        <div class="footer-bottom-primary pb-60">
+                            <div class="row">
+                                <div class="col-xl-5 col-lg-5 col-md-9">
+                                    <div class="footer-item has-desc">
+                                        <div class="footer-logo mb-25">
+                                            <img src="img/logo/logo2.png" width="120" height="31" alt>
+                                        </div>
+                                        <div class="footer-desc">
+                                            <p class="mb-10">Mazia store is a
+                                                premium theme with advanced admin
+                                                module. It’s
+                                                extremely customizable, easy to use
+                                                and fully responsive and retina
+                                                ready.
+                                            </p>
+                                        </div>
+                                        <div class="footer-img mt-65">
+                                            <img src="img/logo/paypal.png" alt>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-7 col-lg-7 col-md-12">
+                                    <div class="row">
+                                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6">
+                                            <div class="footer-menu">
+                                                <ul>
+                                                    <li><a href="javascript:void(0)" class="title">MY
+                                                            ACCOUNT</a></li>
+                                                    <li><a href="login.html">My
+                                                            account</a></li>
+                                                    <li><a href="checkout.html">Checkout</a></li>
+                                                    <li><a href="shop2.html">Shop</a></li>
+                                                    <li><a href="wishlist.html">Wishlist</a></li>
+                                                    <li><a href="question.html">Frequently</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6">
+                                            <div class="footer-menu">
+                                                <ul>
+                                                    <li><a href="javascript:void(0)" class="title">Quick
+                                                            Links</a></li>
+                                                    <li><a href="shop2.html">Special
+                                                            Offers</a></li>
+                                                    <li><a href="shop2.html">Gift
+                                                            Cards</a></li>
+                                                    <li><a href="shop2.html">F21
+                                                            Red</a></li>
+                                                    <li><a href="about.html">Privacy
+                                                            Policy</a></li>
+                                                    <li><a href="about.html">Teams
+                                                            of Use</a></li>
+                                                    <li><a href="portfolio.html">Portfolio</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 hidden-sm">
+                                            <div class="footer-menu">
+                                                <ul>
+                                                    <li><a href="javascript:void(0)" class="title">Company
+                                                            Info</a></li>
+                                                    <li><a href="about.html">About
+                                                            us</a></li>
+                                                    <li><a href="blog.html">Careers</a></li>
+                                                    <li><a href="portfolio2.html">Business
+                                                            With Us</a></li>
+                                                    <li><a href="shop2.html">Find a
+                                                            Store</a></li>
+                                                    <li><a href="question.html">Teams
+                                                            of Use</a></li>
+                                                    <li><a href="portfolio3.html">Press
+                                                            & Talent</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!-- footer section end -->
+
+        <!-- product popup start -->
+        <section id="product-popup">
+            <div class="product-popup-overlay"></div>
+            <div class="product-popup-container">
+                <div class="product-inner w-100">
+                    <div class="product-inner-content">
+                        <div class="quick-close-action"><i class="fal fa-times"></i></div>
+                        <div class="row">
+                            <div class="col-xl-5 col-lg-5 col-md-5 col-sm-6">
+                                <div class="tab-content" id="pills-tabContent">
+                                    <div class="tab-pane fade show active" id="product-popup-1">
+                                        <div class="product-popup-img">
+                                            <img src="img/product/10.jpg" class="w-100" alt>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="product-popup-2">
+                                        <div class="product-popup-img">
+                                            <img src="img/product/11.jpg" class="w-100" alt>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="product-popup-3">
+                                        <div class="product-popup-img">
+                                            <img src="img/product/12.jpg" class="w-100" alt>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="nav nav-pills justify-content-center mt-10" id="pills-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="active" data-toggle="pill" href="#product-popup-1">
+                                            <img src="img/product/10.jpg" class="w-100" alt>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class data-toggle="pill" href="#product-popup-2">
+                                            <img src="img/product/11.jpg" class="w-100" alt>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class data-toggle="pill" href="#product-popup-3">
+                                            <img src="img/product/12.jpg" class="w-100" alt>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-xl-7 col-lg-7 col-md-7 col-sm-6">
+                                <div class="product-content">
+                                    <div class="product-title">
+                                        <h2>Nari Narwhal Usb...</h2>
+                                    </div>
+                                    <div class="price">$<span>44.00</span>–<span>$250.00</span></div>
+                                    <a href="single-product-4.html" class="all-feature">See all feature</a>
+                                    <div class="quick-quantity mt-30">
+                                        <form action="#" method="POST">
+                                            <input type="number" value="1">
+                                            <button type="submit" class="generic-btn red-hover-btn text-capitalize">add
+                                                to
+                                                cart</a>
+                                        </form>
+                                    </div>
+
+                                    <div class="product-desc pb-20 mt-25 gray-border-top">
+                                        <p class="mb-0">Typi non habent claritatem
+                                            insitam, est usus legentis in iis qui
+                                            facit eorum claritatem. Investigationes
+                                            demonstraverunt lectores legere me lius
+                                            quod ii legunt saepius. Claritas est
+                                            etiam processus A Capitalize on low
+                                            hanging
+                                            fruit to identify a ballpark value added
+                                            activity to beta test. Override the
+                                            digital...ditional clickthroughs from
+                                            DevOps. Nanotechnology immersion along
+                                            the
+                                            information highway will close the
+                                            […]</p>
+                                    </div>
+                                    <div class="product-list mt-25">
+                                        <ul>
+                                            <li>– Light green crewnec...t.</li>
+                                            <li>– Hand pockets.</li>
+                                            <li>– Relaxed fit.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- product popup end -->
+
+        <!-- startup popup start -->
+        <section id="startup-popup">
+            <div class="product-popup-overlay has-startup" style="opacity: 1;visibility: visible"></div>
+            <div class="startup-popup-body">
+                <div class="startup-body-content h-100">
+                    <div class="row justify-content-end h-100">
+                        <div class="col-6 h-100">
+                            <div class="startup-popup-inner h-100">
+                                <div class="close-search-popup">
+                                    <i class="fal fa-times"></i>
+                                </div>
+                                <div class="startup-popup-main-content">
+                                    <h2>Get Our Email Letter</h2>
+                                    <p class="mb-0">Subscribe to the Mazia store
+                                        mailing list to receive updates on new
+                                        arrivals, special offers
+                                        and other discount information.</p>
+                                    <div class="startup-subscribe-form">
+                                        <form action="#" method="POST">
+                                            <input type="text" placeholder="Subscribe to our newsletter" class="mb-30">
+                                            <button class="generic-btn red-hover-btn text-uppercase">Subscribe
+                                                now</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="startup-popup-sub-content">
+                                    <div class="popup-warning">
+                                        <input type="checkbox" id="startup-popup-hidden">
+                                        <label for="startup-popup-hidden">Do not
+                                            show the popup again</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- startup popup end -->
+
+        <!-- tabs  -->
+        <script>
+            const tabBtn = document.querySelectorAll(".tab");
+            const tab = document.querySelectorAll(".tabShow");
+            function tabs(panelIndex) {
+                tab.forEach(function (node) {
+                    node.style.display = "none"
+                })
+                tab[panelIndex].style.display = "block";
+
+            }
+            tabs(0)
+
+
+            // modal
+            // $('#addAddress').on('shown.bs.modal', function () {
+            //     $('#myInput').trigger('focus')
+            // });
+        </script>
+        <script>
+            $(".tab").click(function () {
+                $(this).addClass("active").siblings().removeClass("active")
+            })
+        </script>
+
+        <script src="/js/profileEdits.js"></script>
+        <script src="path/to/jquery.min.js"></script>
+        <script src="path/to/bootstrap.min.js"></script>
+
+        <!-- JS here -->
+        <script src="js/vendor/jquery-1.12.4.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/isotope.pkgd.min.js"></script>
+        <script src="js/one-page-nav-min.js"></script>
+        <script src="js/slick.min.js"></script>
+        <script src="js/jquery.meanmenu.min.js"></script>
+        <script src="js/ajax-form.js"></script>
+        <script src="js/fontawesome.min.js"></script>
+        <script src="js/wow.min.js"></script>
+        <script src="js/jquery-ui.js"></script>
+        <script src="js/jquery.scrollUp.min.js"></script>
+        <script src="js/imagesloaded.pkgd.min.js"></script>
+        <script src="js/jquery.magnific-popup.min.js"></script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+        <%- include('../layouts/user/footer.ejs') -%>
