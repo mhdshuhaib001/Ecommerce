@@ -41,18 +41,18 @@
                     <h6 class="custom-h2">Current Password</h6>
                     <input type="password" name="CurrentPass" id="password" class="input">
                     <div id="currError" style="display: none; color: red;"></div>
+
                     <h6 class="custom-h2">New Password</h6>
                     <input type="password" name="newPass" id="newPass" class="input" value>
-                    <div id="newPassError" style="display: none; color: red;"></div>
+                    <div id="newpassError" style="display: none; color: red;"></div>
                     <h6 class="custom-h2">Conform Password</h6>
                     <input type="password" name="ConformPass" id="conPass" class="input">
-                    <div id="conPassError" style="display: none; color: red;"></div>
+                    <div id="conpassError" style="display: none; color: red;"></div>
                     <button class="btns" type="submit" id="changePass">Submit</button>
                 </div>
 
                 <div class="wallet tabShow">
-
-                    <button class="btns">update</button>
+                        <button class="btns">update</button>
                 </div>
                 <div class="coupen tabShow">
                     <h4 class="custom-h4">privacy settings</h4>
@@ -67,17 +67,17 @@
                     <h6 class="custom-h2">protect Account</h6>
                     <button class="btns">update</button>
                 </div>
-                <div class="address tabShow row">
+                <div class="address tabShow row" >
                     <% if (addressData && addressData.address && addressData.address.length> 0) {
                         addressData.address.forEach((address, i) => { %>
-                        <div class="col-lg-6 custom-card-container" id="addressReload">
-                            <div class="card card-dashboard shadow">
-                                <div class="card-body pr-0 py-0">
+                        <div class="col-lg-6 custom-card-container" id="addressReload" id="reloadDiv">
+                            <div class="card card-dashboard shadow"  >
+                                <div class="card-body pr-0 py-0" >
                                     <h3 class="card-title d-inline">Address <%= i + 1 %>
                                     </h3>
                                     <!-- You can customize the title as needed -->
 
-                                    <div class="card-details m-0">
+                                    <div class="card-details m-0" >
                                         Full Name: <%= address.fullname %><br>
                                             Mobile: <%= address.mobile %><br>
                                                 Email: <%= address.email %><br>
@@ -87,9 +87,11 @@
                                                                 Pincode: <%= address.pincode %><br>
                                     </div>
 
-                                    <a href="#" class="edit-link">Edit <i class="fa-sharp fa-solid fa-pen"
-                                            data-target="editAddress" data-toggle="modal"
-                                            style="color: #cc9966;"></i></a>
+                                    <a href="#"
+                                        onclick="showEditAddressModal('<%= address.fullname %>','<%= address.mobile %>', '<%= address.email %>', '<%= address.houseName %>', '<%= address.city %>', '<%= address.state %>',  '<%= address.pincode %>','<%= address._id %>')"
+                                        class="edit-link" data-toggle="modal" data-target="#editAddressModal">
+                                        Edit <i class="fa-sharp fa-solid fa-pen" style="color: #cc9966;"></i>
+                                    </a>
 
                                     <a href="#" onclick="removeAddress('<%= addressData._id %>')">remove
                                         <i class="fa-sharp fa-solid fa-trash" style="color: #df1d1d;"></i></a>
@@ -97,7 +99,6 @@
                             </div><!-- End .card-dashboard -->
                         </div><!-- End .col-lg-6 -->
                         <% }); } %>
-
                             <button type="button" data-toggle="modal" data-target="#addAddress"
                                 class="btns">addAddress</button>
 
@@ -120,7 +121,8 @@
                                                         *</label>
                                                     <input type="text" class="form-control" name="fullname"
                                                         id="fullname" required>
-                                                    <div id="fnameError" style="display: none; color: red;"></div>
+                                                    <div id="fnameError" style="display: none; color: red;">
+                                                    </div>
                                                 </div>
 
                                                 <div class="form-group">
@@ -134,20 +136,23 @@
                                                     <label for="mobile">Mobile *</label>
                                                     <input type="tel" class="form-control" name="mobile" id="mobile"
                                                         autocomplete="off" required>
-                                                    <div id="phoneError" style="display: none; color: red;"></div>
+                                                    <div id="phoneError" style="display: none; color: red;">
+                                                    </div>
 
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="state">State *</label>
                                                     <input type="text" class="form-control" name="state" id="state"
                                                         required>
-                                                    <div id="stateError" style="display: none; color: red;"></div>
+                                                    <div id="stateError" style="display: none; color: red;">
+                                                    </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="city">City *</label>
                                                     <input type="text" class="form-control" name="city" id="city"
                                                         required>
-                                                    <div id="cityError" style="display: none; color: red;"></div>
+                                                    <div id="cityError" style="display: none; color: red;">
+                                                    </div>
 
                                                 </div>
 
@@ -155,7 +160,8 @@
                                                     <label for="pincode">Pincode *</label>
                                                     <input type="tel" class="form-control" name="pincode" id="pincode"
                                                         autocomplete="off" required>
-                                                    <div id="pinError" style="display: none; color: red;"></div>
+                                                    <div id="pinError" style="display: none; color: red;">
+                                                    </div>
 
                                                 </div>
 
@@ -163,7 +169,8 @@
                                                     <label for="house">House Name *</label>
                                                     <input type="text" class="form-control" name="houseName"
                                                         id="houseName" required>
-                                                    <div id="houseError" style="display: none; color: red;"></div>
+                                                    <div id="houseError" style="display: none; color: red;">
+                                                    </div>
 
                                                 </div>
 
@@ -178,72 +185,82 @@
                             </div>
                             <!-- End the addAddress -->
 
-                            <div class="modal fade" id="editAddress" tabindex="-1" role="dialog"
+
+                            <!-- Edit Address -->
+
+                            <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-top: 80px;">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Add
+                                            <h5 class="modal-title" id="exampleModalLabel">edit
                                                 Address</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="/addAddress" id="form" method="post">
+                                            <form action="/editAddress" id="editAddressform" method="post">
                                                 <div class="form-group">
                                                     <label for="fullname">Full Name
                                                         *</label>
                                                     <input type="text" class="form-control" name="fullname"
-                                                        id="fullname" required>
-                                                    <div id="fnameError" style="display: none; color: red;"></div>
+                                                        id="fullnames" required>
+                                                    <div id="efnameError" style="display: none; color: red;">
+                                                    </div>
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label for="email">Email *</label>
-                                                    <input type="email" class="form-control" name="email"
-                                                        id="addressEmail" required>
-                                                    <div id="addEmailError" style="display: none; color: red;"></div>
+                                                    <input type="email" class="form-control" name="email" id="emails"
+                                                        required>
+                                                    <div id="eaddEmailError" style="display: none; color: red;"></div>
 
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="mobile">Mobile *</label>
-                                                    <input type="tel" class="form-control" name="mobile" id="mobile"
-                                                        autocomplete="off" required>
-                                                    <div id="phoneError" style="display: none; color: red;"></div>
+                                                    <input type="tel" class="form-control" name="mobile" id="mobiles"
+                                                        required>
+                                                    <div id="ephoneError" style="display: none; color: red;">
+                                                    </div>
 
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="state">State *</label>
-                                                    <input type="text" class="form-control" name="state" id="state"
+                                                    <input type="text" class="form-control" name="state" id="states"
                                                         required>
-                                                    <div id="stateError" style="display: none; color: red;"></div>
+                                                    <div id="estateError" style="display: none; color: red;">
+                                                    </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="city">City *</label>
-                                                    <input type="text" class="form-control" name="city" id="city"
+                                                    <input type="text" class="form-control" name="city" id="citys"
                                                         required>
-                                                    <div id="cityError" style="display: none; color: red;"></div>
+                                                    <div id="ecityError" style="display: none; color: red;">
+                                                    </div>
 
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label for="pincode">Pincode *</label>
-                                                    <input type="tel" class="form-control" name="pincode" id="pincode"
+                                                    <input type="tel" class="form-control" name="pincode" id="pincodes"
                                                         autocomplete="off" required>
-                                                    <div id="pinError" style="display: none; color: red;"></div>
+                                                    <div id="epinError" style="display: none; color: red;">
+                                                    </div>
 
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label for="house">House Name *</label>
                                                     <input type="text" class="form-control" name="houseName"
-                                                        id="houseName" required>
-                                                    <div id="houseError" style="display: none; color: red;"></div>
-
+                                                        id="houseNames" required>
+                                                    <div id="ehouseError" style="display: none; color: red;">
+                                                    </div>
+                                                    <input type="text" class="form-control" style="display: none;"
+                                                        id="addressId" name="addressId">
                                                 </div>
 
-                                                <button id="addAddress" type="submit" class="btn btn-outline-primary">
+                                                <button id="editAddress" type="submit" class="btn btn-outline-primary">
                                                     <span>Add Address</span>
                                                     <i class="icon-long-arrow-right"></i>
                                                 </button>
@@ -253,10 +270,11 @@
                                 </div>
                             </div>
 
-
                 </div>
             </div>
         </div>
+
+        <div id="notification-container"></div>
 
         <!-- footer section start -->
         <section class="footer">
@@ -564,21 +582,33 @@
             }
             tabs(0)
 
-
-            // modal
-            // $('#addAddress').on('shown.bs.modal', function () {
-            //     $('#myInput').trigger('focus')
-            // });
-        </script>
-        <script>
             $(".tab").click(function () {
                 $(this).addClass("active").siblings().removeClass("active")
             })
+
+            // -------------------------------show notification-----------------------------------
+            function showNotification(message, success = true) {
+                const notificationContainer = document.getElementById('notification-container');
+                notificationContainer.innerHTML = message;
+
+                if (success) {
+                    notificationContainer.style.color = 'green';
+                } else {
+                    notificationContainer.style.color = 'red';
+                }
+
+                notificationContainer.style.display = 'block';
+
+                setTimeout(() => {
+                    notificationContainer.style.display = 'none';
+                }, 3000);
+            }
+
+
+
         </script>
 
         <script src="/js/profileEdits.js"></script>
-        <script src="path/to/jquery.min.js"></script>
-        <script src="path/to/bootstrap.min.js"></script>
 
         <!-- JS here -->
         <script src="js/vendor/jquery-1.12.4.min.js"></script>

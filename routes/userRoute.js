@@ -62,6 +62,7 @@ user_Rout.get('/userProfile', auth.isLogin, userController.loadprofile);
 user_Rout.post('/addAddress', addressController.addAddress);
 user_Rout.post('/removeAddress',addressController.removeAddress);
 user_Rout.post("/changePassword",auth.isLogin,userController.changePassword);
+user_Rout.post('/editAddress',auth.isLogin,addressController.editAddress)
 
 
 

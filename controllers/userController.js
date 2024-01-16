@@ -519,8 +519,7 @@ const loadprofile = async (req, res) => {
     const userData = await User.findOne({ _id: req.session.user_id });
     const addressData = await Address.findOne({ user: req.session.user_id });
     
-    console.log(userData,'vjcfsjc')
-    console.log(addressData,'cj ksdv c')
+  
 
     res.render("userProfile", { userData, addressData });
   } catch (error) {
@@ -533,15 +532,18 @@ const changePassword = async (req,res) => {
     const userData = await User.findOne({_id: req.session.user_id });
     const passwordMatch = await bcrypt.compare(req.body.currPass , userData.password);
     
-    console.log('fcjksd bc shdvc')
     if(passwordMatch) {
       const securePass = await securePassword(req.body.newPass);
-      await User.updateOne({_id:req.session.user_id},{$set: {password: securePass}});
-      res.json({change:true});
-    } else {
-      console.log("wrong Password")
-      res.json({wrongPass: true})
-    }
+      const passwordUpdate = await User.updateOne({_id:req.session.user_id},{$set: {password: securePass}});
+
+      if(passwordUpdate){
+        res.json({success:true , message: "Password changed"});
+      }else{
+        res.json({success: false , message:"someting wrong"});
+
+      }
+      
+    } 
 
   } catch (error) {
     console.log(error.message);

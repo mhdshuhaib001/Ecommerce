@@ -43,9 +43,9 @@ const addAddress = async (req, res) => {
       );
   
       if (updatedAddress) {
-        res.json({ success: true });
+        res.json({ success: true , message: "Address added!"});
       } else {
-        res.json({ failed: true });
+        res.json({ failed: true , message: "Someting went wrong!"});
       }
   
     } catch (error) {
@@ -58,8 +58,8 @@ const addAddress = async (req, res) => {
 
 const removeAddress = async (req,res)=>{
     try {
-        const addressId = req.body._id;
-        console.log(addressId,'Id')
+        const addressId = req.body.id;
+        // console.log(addressId,'Id')
         await Address.updateOne(
             {user: req.session.user_id},
             {$pull: {address: { address:addressId}}}
@@ -71,10 +71,43 @@ const removeAddress = async (req,res)=>{
     }
 }
 
+const editAddress = async (req, res) =>{
+  try {
+    const addressId = req.body.id;
+   console.log(addressId,'checking address aidd');
+   
+   console.log(req.body)
+    const updated = await Address.findOneAndUpdate(
+      { user: req.session.user_id , "address._id" : addressId },
+      {
+        $set: {
+          "address.$.fullname" : req.body.fullname,
+          "address.$.email" : req.body.email,
+          "address.$.mobile" : req.body.mobile,
+          "address.$.houseName" : req.body.houseName,
+          "address.$.city" : req.body.city,
+          "address.$.state" : req.body.state,
+          "address.$.pincode" : req.body.pincode,
+          "address.$.default" : req.body.isDefault
+        }
+      },
+      {new: true}
+    );
+
+    console.log(updated,"check updation")
+
+      res.json({success:true ,  message: 'Address edited !'});
+  
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 
 
 
 module.exports = {
   addAddress,
-  removeAddress
+  removeAddress,
+  editAddress
 };

@@ -3,6 +3,7 @@ const Products = require("../models/productsModel");
 const User = require("../models/userModel");
 
 
+
 //-------------Cart-------------------
 const loadCart = async (req, res) => {
   try {
@@ -11,14 +12,10 @@ const loadCart = async (req, res) => {
     const cartData = await Cart.findOne({ userId: userId }).populate(
       "product.productId"
     );
-    const subtotal = cartData.product.reduce(
-      (acc, val) => acc + val.totalPrice,
-      0
-    );
+
     console.log(cartData);
     res.render("cart", {
       cart: cartData,
-      subtotal,
     });
   } catch (error) {
     console.error(error.message);
@@ -31,42 +28,44 @@ const loadCart = async (req, res) => {
 const addToCart = async (req, res) => {
   try {
     const userId = req.session.user_id;
-    console.log("userId checking 123", userId);
-    const productId = req.body.productId;
-    console.log(productId);
+    console.log(userId," user Id");
+    const productId = req.body.id;
+    console.log(productId,"proid ")
+    const userData = await User.findOne({ _id: userId })
+    const productData = await Products.findById({ _id: productId });
+    console.log(userData);
+    console.log(productData,'checking product data')
+    // const productQuantity = productData.quantity;
 
-    const productData = await Products.findById(productId);
+   
+     const products = {
+       productId: productId,
+       price: productData.price,
+      totalPrice: productData.totalPrice,
+      count: productData.quantity,
+      image: productData.images.image1
+     };
 
-    if (productData.quantity > 0) {
-      const cartProduct = await Cart.findOne({ user: userId, 'product.productId': productId })
-
-      if (cartProduct) {
-        return res.status(200).json({ success: false, error: 'Product alredy in cart' })
-      }
-    }
-
-    const products = {
-      productId: productId,
-      price: productData.price,
-      totalPrice: productData.totalPrice
-    };
-    console.log(products, 'cjdcnjskd')
-
-    console.log("checking Product or note", products);
-
-    await Cart.findOneAndUpdate(
+    const cartData = await Cart.findOneAndUpdate(
       { userId: userId },
       {
-        $addToSet: {
-          product: products,
+        $set: {
+          userId: userId,
+          userName: userData.name,
+        },
+        $push: {
+          products: {
+            productId: products,
+          },
         },
       },
       { upsert: true, new: true }
     );
-
+    
+    console.log(cartData,'data entered or note')
     return res
       .status(200)
-      .json({ success: true, stock: products.quantity > 0 });
+      .json({ success: true });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -84,18 +83,18 @@ const removeCartItem = async (req, res) => {
     const cartData = await Cart.findOne({ userId: userId });
 
     console.log(userId, 'check')
-    console.log(cartData,'cartData');
-   
+    console.log(cartData, 'cartData');
+
     await Cart.findOneAndUpdate(
       { userId: userId },
       {
         $pull: { product: { productId: productId } },
       },
-     
+
     );
 
     res.json({ success: true });
-    
+
   } catch (error) {
     console.error("Error removing cart item:", error);
     res.status(500).json({ success: false, error: "Internal Server Error" });
