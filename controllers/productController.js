@@ -227,7 +227,7 @@ const editedProduct = async (req, res) => {
 
 
 module.exports = {
-     loadproduct,
+    loadproduct,
     loadAddProduct,
     addProduct,
     blockProduct,

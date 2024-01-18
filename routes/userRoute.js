@@ -32,20 +32,24 @@ user_Rout.get("/home", auth.isLogin, userController.loadHome);
 //======================= Sign Up ===========================
 user_Rout.get("/signup", auth.isLogout, userController.loadSignup);
 user_Rout.post("/signup", auth.isLogout, userController.insertUser);
-user_Rout.get('/userOtp', userController.verifyOTP);
-user_Rout.post('/userOtp', userController.veryfyPost);
+
+user_Rout.get('/userOtp',auth.isLogout,userController.loadUserOtp)
+user_Rout.post('/verifyOtp', userController.verifyOTP);
+user_Rout.get('/resendOtp ', userController.resendOtp );
+
 user_Rout.get('/login', auth.isLogout, userController.loadLogin);
 user_Rout.post('/verifylogin', userController.verifylogin);
 user_Rout.get('/logout', auth.isLogin, userController.logout);
 
 
-user_Rout.get('/resend', auth.isLogout, userController.resendOtp);
+// user_Rout.get('/resend', auth.isLogout, userController.resendOtp);
 
 //===========================Forget  Password=================================
 user_Rout.get('/forgetpassword', auth.isLogout, userController.forgetLoad);
-user_Rout.post('/forget', userController.forgetVerify);
+user_Rout.post('/forgetPassword', userController.forgetVerify);
+
 user_Rout.get('/forget-password', auth.isLogout, userController.loadForgetpage)
-user_Rout.post('/forget-password', userController.resetPassword)
+user_Rout.post('/resetPassword', userController.resetPassword)
 
 
 

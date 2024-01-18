@@ -8,17 +8,14 @@ const User = require("../models/userModel");
 const loadCart = async (req, res) => {
   try {
     const userId = req.session.user_id;
-    // console.log(userId, "checking1");
-    const cartData = await Cart.findOne({ userId: userId }).populate(
-      "product.productId"
-    );
 
-    console.log(cartData);
+    const cartData = await Cart.findOne({ userId: userId }).populate("product.productId");
     res.render("cart", {
       cart: cartData,
+      userId
     });
   } catch (error) {
-    console.error(error.message);
+    console.error(error.message); F
     res.status(500).send("Internal Server Error");
   }
 };
@@ -28,25 +25,28 @@ const loadCart = async (req, res) => {
 const addToCart = async (req, res) => {
   try {
     const userId = req.session.user_id;
-    console.log(userId," user Id");
+    // console.log(userId, " user Id");
     const productId = req.body.id;
-    console.log(productId,"proid ")
+    // console.log(productId, "proid ")
     const userData = await User.findOne({ _id: userId })
     const productData = await Products.findById({ _id: productId });
-    console.log(userData);
-    console.log(productData,'checking product data')
+    const cartData = await Cart.findOne({ userId: userId });
+
+    // console.log(userData);
+    // console.log(productData, 'checking product data')
     // const productQuantity = productData.quantity;
 
-   
-     const products = {
-       productId: productId,
-       price: productData.price,
-      totalPrice: productData.totalPrice,
-      count: productData.quantity,
-      image: productData.images.image1
-     };
 
-    const cartData = await Cart.findOneAndUpdate(
+
+    const products = {
+      productId: productId,
+      price: productData.price,
+      totalPrice: productData.totalPrice,
+      count: productData.count,
+      image: productData.images.image1
+    };
+
+    const addCart = await Cart.findOneAndUpdate(
       { userId: userId },
       {
         $set: {
@@ -54,20 +54,17 @@ const addToCart = async (req, res) => {
           userName: userData.name,
         },
         $push: {
-          products: {
-            productId: products,
-          },
+          product: products
         },
       },
       { upsert: true, new: true }
     );
-    
-    console.log(cartData,'data entered or note')
-    return res
-      .status(200)
-      .json({ success: true });
+    console.log("Server received request:", req.body);
+
+    // console.log(cartData, 'data entered or note')
+    res.json({ success: true });
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -77,23 +74,24 @@ const addToCart = async (req, res) => {
 //------------- Remove Cart ----------------//
 const removeCartItem = async (req, res) => {
   try {
+
+    console.log("remove cart")
     const userId = req.session.user_id;
-    const productId = req.body.productId;
+    const productId = req.body.product;
     console.log("check product idd", productId);
     const cartData = await Cart.findOne({ userId: userId });
 
-    console.log(userId, 'check')
+    // console.log(userId, 'check')
     console.log(cartData, 'cartData');
-
-    await Cart.findOneAndUpdate(
-      { userId: userId },
-      {
-        $pull: { product: { productId: productId } },
-      },
-
-    );
-
-    res.json({ success: true });
+    if (cartData) {
+      await Cart.findOneAndUpdate(
+        { userId: userId },
+        {
+          $pull: { product: { productId: productId } },
+        }
+      );
+      res.json({ success: true });
+    }
 
   } catch (error) {
     console.error("Error removing cart item:", error);
@@ -103,62 +101,78 @@ const removeCartItem = async (req, res) => {
 
 
 //----------- QuantityUpdate --------//
-// const quantityUpdate = async (req, res) => {
-//   try {
-//     const productId = req.body.productId;
-//     const userId = req.session.userId;
-//     const count = req.body.count;
-//     console.log(count,"count")
+const quantityUpdate = async (req, res) => {
+  try {
+    console.log("check------------------")
+    const proId = req.body.product;
+    const userData = req.session.user_id;
+    let count = parseInt(req.body.count);
 
-//     const cartData = await Cart.findOne({ user: userId });
+    console.log(proId, typeof (proId), 'product id checking')
+    // console.log(userData, 'userId checking');
+    // console.log(count, 'count checcking')
 
-//     console.log("quantityUpdate", cartData);
+    const cartData = await Cart.findOne({ userId: userData });
 
-//     let currentQuantity = 1;
-
-//     if (count === -1) {
-//       currentQuantity = cartData.product.find(
-//         product => product.productId == productId
-//       ).quantity;
-//       console.log(currentQuantity, "check current quantity");
-
-//       if (currentQuantity <= 1) {
-//         return res.json({
-//           success: false,
-//           message: "Quantity cannot be decreased",
-//         });
-//       }
-//     }
-
-//     if (count === 1) {
-//       if (currentQuantity + count > 5) {
-//         return res.json({
-//           success: false,
-//           message: "Cannot add more than 5 items",
-//         });
-//       }
-//     }
+    console.log(cartData, 'check data1 1')
+    const product = cartData.product.find(pro => pro.productId == proId);
+    console.log(product, 'product cheking');
 
 
-//     const cartDatas = await Cart.findOneAndUpdate(
-//       { user: userId, "product.productId": productId },
-//       {
-//         $inc: {
-//           "product.$.quantity": count,
-//           "product.$.totalPrice":
-//             count *
-//             cartData.product.find(product =>
-//               product.productId.equals(productId)
-//             ).price,
-//         },
-//       }
-//     );
-//     res.json({ success: true });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({ success: false, message: "Internal Server Error" });
-//   }
-// };
+    const productData = await Products.findOne({ _id: proId });
+    const productQuantity = productData.quantity;
+    const updateCartData = await Cart.findOne({ userId: userData });
+    const updateProduct = updateCartData.product.find((pro) => pro.productId == proId);
+    console.log(updateProduct, 'updateProduct');
+    // console.log(updateCartData, 'updateCartData');
+    // console.log(productData,'update productData');
+    // console.log( updateCartData,'update  updateCartData');
+    const updateQuantity = updateProduct.count;
+
+    console.log("check updateQuantity-----------------", updateQuantity)
+    if (count > 0) {
+      if (updateQuantity + count > productQuantity) {
+        res.json({ success: false, message: "Quantity limit reached!" });
+        return;
+      }
+    } else if (count < 0) {
+      // Quantity is being decreased
+      if (updateQuantity <= 1 || Math.abs(count) > updateQuantity) {
+
+        await Cart.updateOne(
+          { userId: userData },
+          { $pull: { product: { productId: proId } } }
+        );
+        res.json({ success: true });
+        return
+      }
+    }
+
+    const cartdata = await Cart.updateOne(
+      { userId: userData, "product.productId": proId },
+      { $inc: { "product.$.count": count } }
+    );
+
+    console.log(cartdata, 'chek cd----------------------')
+    const updatedCartData = await Cart.findOne({ userId: userData });
+    const updatedProduct = updatedCartData.product.find((product) => product.productId == proId);
+    const updatedQuantity = updatedProduct.count;
+    const productPrice = productData.price;
+
+    const productTotal = productPrice * updatedQuantity;
+    
+    console.log("check totoal", productPrice)
+
+    await Cart.updateOne(
+      { userId: userData, "product.productId": proId },
+      { $set: { "product.$.totalPrice": productTotal } }
+    );
+    res.json({ success: true });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
 
 
 
@@ -168,5 +182,5 @@ module.exports = {
   loadCart,
   addToCart,
   removeCartItem,
-  // quantityUpdate,
+  quantityUpdate,
 };

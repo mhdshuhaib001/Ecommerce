@@ -1,6 +1,6 @@
 <%- include('../layouts/user/header.ejs') -%>
 
-    <style>
+<style>
         .cart-product-quantity {
             display: flex;
             align-items: center;
@@ -18,197 +18,226 @@
         }
     </style>
 
+<!-- shop body section start -->
+<section class="cart-body mb-90 gray-border-top pt-35">
+    <div class="has-breadcrumb-content">
+        <div class="container container-1430">
+            <div class="breadcrumb-content" style="flex-direction: column;">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb p-0 m-0">
+                        <li class="breadcrumb-item"><a href="home">Home</a></li>
+                        <li class="breadcrumb-item active"
+                            aria-current="page">Cart</li>
+                    </ol>
+                </nav>
 
-    <!-- shop body section start -->
-    <section class="cart-body mb-90 gray-border-top pt-35">
-        <div class="has-breadcrumb-content">
-            <div class="container container-1430">
-                <div class="breadcrumb-content" style="flex-direction: column;">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb p-0 m-0">
-                            <li class="breadcrumb-item"><a href="home">Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Cart</li>
-                        </ol>
-                    </nav>
-
-                    <h2 class="cart-title mt-40">Cart</h2>
-                </div>
-                <div class="cart-body-content">
-                    <% if (!cart || !cart.product || cart.product.length===0) { %>
-                        <div class="error-content text-center">
-                            <div class="container">
-                                <h1 class="error-title">Empty Cart</h1>
-                                <!-- End .error-title -->
-                                <p>Your cart is empty.</p>
-                                <a href="/shop" class="btn btn-outline-primary-2 btn-minwidth-lg">
-                                    <span>FILL YOUR CART</span>
-                                    <i class="icon-long-arrow-right"></i>
-                                </a>
-                            </div>
-                            <!-- End .container -->
-                        </div>
-                        <% }else { %>
-                            <div class="row">
-                                <div class="col-xl-8">
-                                    <div class="product-content">
-                                        <form action="#">
-                                            <div class="table-responsive">
-                                                <table class="table table-2">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="product-image">ProductImage</th>
-                                                            <th class="product-title">Product</th>
-                                                            <th>Price</th>
-                                                            <th class="quantity">Quantity</th>
-                                                            <th class="total">Total</th>
-                                                            <th class="remove-porduct"></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-
-                                                        <% cart.product.forEach(product=> {
-                                                            %>
-                                                            <tr>
-
-                                                                <td>
-                                                                    <div class="table-data">
-                                                                        <img src="/products/crops/<%= product.productId.images.image1 %>"
-                                                                            width="80" alt>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="table-data">
-                                                                        <h6><a href="/product?id=<%= product.productId._i %> class="
-                                                                                title">
-                                                                                <%= product.productId.name %>
-                                                                            </a></h6>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="table-data">
-                                                                        <span class="price"
-                                                                            data-product-price="<%= product.price %>">₹
-                                                                            <%= product.price %>
-                                                                        </span>
-                                                                    </div>
-                                                                </td>
-
-                                                                <td>
-                                                                    <div class="cart-product-quantity">
-                                                                        <button class="btn btn-decrement"
-                                                                            onclick="quantityUpdate('<%= product.productId._id %>', -1)"
-                                                                            type="button">-</button>
-                                                                        <input type="text" class="form-control"
-                                                                            value="<%= product.quantity %>" readonly>
-                                                                        <button class="btn btn-increment"
-                                                                            onclick="quantityUpdate('<%= product.productId._id %>', 1)"
-                                                                            type="button">+</button>
-                                                                    </div>
-                                                                </td>
-
-                                                                <td>
-                                                                    <div class="table-data">
-                                                                        <span class="total">₹<%= product.Subtotal %>
-                                                                        </span>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="table-data">
-                                                                        <button class="close-btn"
-                                                                            onclick="removeCartItem('<%= product.productId._id %>')"><i
-                                                                                class="fal fa-trash"></i></button>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <% }) %>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="cupon">
-                                                <form action="#" method="POST">
-                                                    <input type="text" placeholder="Cupon code" class="text-left pl-3"
-                                                        style="margin-right: 20px; width: 119px;">
-                                                    <button
-                                                        class="generic-btn border-0 red-hover-btn text-uppercase">Apply
-                                                        Cupon</button>
-                                                    <button
-                                                        class="generic-btn border-0 red-hover-btn text-uppercase float-right">Update
-                                                        Cart
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                </div>
-
-                                <div class="col-xl-4">
-                                    <div class="cart-widget">
-                                        <h4 class="title">Cart Totals</h4>
-                                        <table class="table table-2 no-border">
-                                            <tbody>
-                                                <tr>
-                                                    <th>Subtotal</th>
-                                                    <td>$134.00</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Shipping</th>
-                                                    <td>
-                                                        <h6>Flat rate</h6>
-                                                        <p>Shipping options will be updated
-                                                            during checkout.</p>
-                                                        <a href="javascript:void(0)" class="price-calculate">Calculate
-                                                            shipping</a>
-                                                        <div class="calculate-shipping-box">
-                                                            <form action="#" method="POST">
-                                                                <div class="form-group">
-                                                                    <div class="cart-select">
-                                                                        <select name="country" id="country">
-                                                                            <option value="uk">United
-                                                                                Kingdom</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <input type="text" placeholder="Country">
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <input type="text" placeholder="Town / City">
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <input type="number" placeholder="Post Code">
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <button
-                                                                        class="generic-btn border-0 red-hover-btn text-uppercase ">Update</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Total</th>
-                                                    <td><strong>$134.00</strong></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <a href="checkout" class="mt-40 generic-btn red-hover-btn w-100 d-block"
-                                            style="height: 50px;">Procced to checkout</a>
-                                    </div>
-                                    <!-- /. cart widget -->
-                                    <!-- </div> -->
-                                </div>
-                            </div>
-                </div>
-                <% } %>
+                <h2 class="cart-title mt-40">Cart</h2>
             </div>
+            <div class="cart-body-content">
+                <% if (!cart || !cart.product || cart.product.length===0) { %>
+                <div class="error-content text-center">
+                    <div class="container">
+                        <h1 class="error-title">Empty Cart</h1>
+                        <!-- End .error-title -->
+                        <p>Your cart is empty.</p>
+                        <a href="/shop"
+                            class="btn btn-outline-primary-2 btn-minwidth-lg">
+                            <span>FILL YOUR CART</span>
+                            <i class="icon-long-arrow-right"></i>
+                        </a>
+                    </div>
+                    <!-- End .container -->
+                </div>
+                <% }else { %>
+                <div class="row" >
+                    <div class="col-xl-8">
+                        <div class="product-content" >
+                            <form action="#" >
+                                <div class="table-responsive" id="reloadDiv">
+                                    <table class="table table-2">
+                                        <thead>
+                                            <tr>
+                                                <th
+                                                    class="product-image">ProductImage</th>
+                                                <th
+                                                    class="product-title">Product</th>
+                                                <th>Price</th>
+                                                <th
+                                                    class="quantity">Quantity</th>
+                                                <th class="total">Total</th>
+                                                <th class="remove-porduct"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <% cart.product.forEach(product=>
+                                            {%>
+                                            <tr>
+                                                <td>
+                                                    <div class="table-data">
+                                                        <img
+                                                            src="/products/crops/<%= product.productId.images.image1 %>"
+                                                            width="80" alt>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="table-data">
+                                                        <h6><a
+                                                                href="/product?id=<%= product.productId._id %>"
+                                                                class="title">
+                                                                <%=
+                                                                product.productId.name
+                                                                %>
+                                                            </a></h6>
+                                                    </div>
+
+                                                </td>
+                                                <td>
+                                                    <div class="table-data">
+                                                        <span class="price"
+                                                            data-product-price="">₹
+                                                            <%= product.price %>
+                                                        </span>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div
+                                                        class="cart-product-quantity">
+                                                        <button
+                                                            class="btn btn-decrement"
+                                                            onclick="changeQuantity('<%=userId%>','<%=product.productId._id%>',-1)"
+                                                            type="button">-</button>
+                                                        <input type="text"
+                                                            id="cartProductQuantity_<%=product.productId._id%>"
+                                                            class="form-control"
+                                                            value="<%= product.count %>"
+                                                            readonly>
+                                                        <button
+                                                            class="btn btn-increment"
+                                                            onclick="changeQuantity('<%=userId%>','<%=product.productId._id%>',1)"
+                                                            type="button">+</button>
+                                                    </div>
+
+                                                </td>
+
+                                                <td>
+                                                    <div class="table-data">
+                                                        <span class="total">₹<%=product.totalPrice%>
+                                                            
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="table-data">
+                                                        <button
+                                                            class="close-btn"
+                                                            onclick="removeItem('<%= product.productId._id %>')"><i
+                                                                class="fal fa-trash"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="cupon">
+                                    <form action="#" method="POST">
+                                        <input type="text"
+                                            placeholder="Cupon code"
+                                            class="text-left pl-3"
+                                            style="margin-right: 20px; width: 119px;">
+                                        <button
+                                            class="generic-btn border-0 red-hover-btn text-uppercase">Apply
+                                            Cupon</button>
+                                        <button
+                                            class="generic-btn border-0 red-hover-btn text-uppercase float-right">Update
+                                            Cart
+                                        </button>
+                                    </form>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="cart-widget">
+                            <h4 class="title">Cart Totals</h4>
+                            <table class="table table-2 no-border">
+                                <tbody>
+                                    <tr>
+                                        <th>Subtotal</th>
+                                        <td>$134.00</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Delevery</th>
+                                        <td>
+                                            <!-- <h6>Delevery</h6> -->
+                                            <!-- <p>Shipping options will be updated
+                                                during checkout.</p> -->
+                                            <a href="javascript:void(0)"
+                                                class="price-calculate">Calculate
+                                                shipping</a>
+                                            <!-- <div class="calculate-shipping-box">
+                                                <form action="#" method="POST">
+                                                    <div class="form-group">
+                                                        <div
+                                                            class="cart-select">
+                                                            <select
+                                                                name="country"
+                                                                id="country">
+                                                                <option
+                                                                    value="uk">United
+                                                                    Kingdom</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="text"
+                                                            placeholder="Country">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="text"
+                                                            placeholder="Town / City">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="number"
+                                                            placeholder="Post Code">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button
+                                                            class="generic-btn border-0 red-hover-btn text-uppercase ">Update</button>
+                                                    </div>
+                                                </form>
+                                            </div> -->
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Total</th>
+                                        <td><strong>$134.00</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <a href="checkout"
+                                class="mt-40 generic-btn red-hover-btn w-100 d-block"
+                                style="height: 50px;">Procced to checkout</a>
+                        </div>
+                        <!-- /. cart widget -->
+                        <!-- </div> -->
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
     </section>
 
     <!-- shop body section end -->
 
     <!-- footer section start -->
     <section class="footer">
-        <div class="footer-top mt-120 pb-120 pt-115" style="background-color: #f5f5f5;">
+        <div class="footer-top mt-120 pb-120 pt-115"
+            style="background-color: #f5f5f5;">
             <div class="footer-top-wrapper">
                 <div class="newsletter ">
                     <div class="row">
@@ -221,7 +250,8 @@
                         <div class="col-xl-6 col-lg-6">
                             <div class="newsletter-form">
                                 <form action="#" method="POST">
-                                    <input type="text" placeholder="Search for our newsletter...">
+                                    <input type="text"
+                                        placeholder="Search for our newsletter...">
                                     <button type="submit"
                                         class="generic-btn red-hover-btn text-uppercase float-right">Subscribe
                                         Now</button>
@@ -284,7 +314,8 @@
                             <div class="col-xl-5 col-lg-5 col-md-9">
                                 <div class="footer-item has-desc">
                                     <div class="footer-logo mb-25">
-                                        <img src="img/logo/logo2.png" width="120" height="31" alt>
+                                        <img src="img/logo/logo2.png"
+                                            width="120" height="31" alt>
                                     </div>
                                     <div class="footer-desc">
                                         <p class="mb-10">Mazia store is a
@@ -303,25 +334,33 @@
                             </div>
                             <div class="col-xl-7 col-lg-7 col-md-12">
                                 <div class="row">
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6">
+                                    <div
+                                        class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6">
                                         <div class="footer-menu">
                                             <ul>
-                                                <li><a href="javascript:void(0)" class="title">MY
+                                                <li><a href="javascript:void(0)"
+                                                        class="title">MY
                                                         ACCOUNT</a></li>
                                                 <li><a href="login.html">My
                                                         account</a></li>
-                                                <li><a href="checkout.html">Checkout</a></li>
-                                                <li><a href="shop2.html">Shop</a></li>
-                                                <li><a href="wishlist.html">Wishlist</a></li>
-                                                <li><a href="question.html">Frequently</a></li>
+                                                <li><a
+                                                        href="checkout.html">Checkout</a></li>
+                                                <li><a
+                                                        href="shop2.html">Shop</a></li>
+                                                <li><a
+                                                        href="wishlist.html">Wishlist</a></li>
+                                                <li><a
+                                                        href="question.html">Frequently</a></li>
                                             </ul>
                                         </div>
                                     </div>
 
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6">
+                                    <div
+                                        class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6">
                                         <div class="footer-menu">
                                             <ul>
-                                                <li><a href="javascript:void(0)" class="title">Quick
+                                                <li><a href="javascript:void(0)"
+                                                        class="title">Quick
                                                         Links</a></li>
                                                 <li><a href="shop2.html">Special
                                                         Offers</a></li>
@@ -334,27 +373,34 @@
                                                 <li><a href="about.html">Teams
                                                         of
                                                         Use</a></li>
-                                                <li><a href="portfolio.html">Portfolio</a></li>
+                                                <li><a
+                                                        href="portfolio.html">Portfolio</a></li>
                                             </ul>
                                         </div>
                                     </div>
 
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 hidden-sm">
+                                    <div
+                                        class="col-xl-4 col-lg-4 col-md-4 col-sm-4 hidden-sm">
                                         <div class="footer-menu">
                                             <ul>
-                                                <li><a href="javascript:void(0)" class="title">Company
+                                                <li><a href="javascript:void(0)"
+                                                        class="title">Company
                                                         Info</a></li>
                                                 <li><a href="about.html">About
                                                         us</a></li>
-                                                <li><a href="blog.html">Careers</a></li>
-                                                <li><a href="portfolio2.html">Business
+                                                <li><a
+                                                        href="blog.html">Careers</a></li>
+                                                <li><a
+                                                        href="portfolio2.html">Business
                                                         With Us</a></li>
                                                 <li><a href="shop2.html">Find a
                                                         Store</a></li>
-                                                <li><a href="question.html">Teams
+                                                <li><a
+                                                        href="question.html">Teams
                                                         of
                                                         Use</a></li>
-                                                <li><a href="portfolio3.html">Press
+                                                <li><a
+                                                        href="portfolio3.html">Press
                                                         & Talent</a></li>
                                             </ul>
                                         </div>
@@ -533,105 +579,18 @@
     </section> -->
     <!-- startup popup end -->
 
-    <!-- <script>
-         function removeCartItem(productId) {
-            fetch('/removeCartItem', {
-                method: "PATCH",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ productId }),
-            })
-                .then(response => response.json())
-                .then(response => {
-                    if (response.success) {
-                        Swal.fire({  // Change "swal" to "Swal"
-                            title: "Item Removed!",
-                            text: "The item has been successfully removed from your cart.",
-                            icon: "success",
-                            showConfirmButton: false,
-                            timer: 5000,
-                        });
-                        setTimeout(() => {
-                            location.reload(); // Reload the page
-                        }, 1500);
-                    } else {
-                        // Handle error
-                        console.error('Error removing item:', response.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error removing item:', error);
-                });
-        }
-
-    </script> -->
-
     <!-- JS here -->
     <script>
 
-        function quantityUpdate(productId, count) {
-            const data = { productId, count };
 
-            fetch('/quantityUpdate', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            })
 
-                .then(response => response.json())
-                .then((response) => {
-                    if (response.success) {
-                        $("#reloadDiv").load('/cart #reloadDiv');
-                    } else {
 
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops..",
-                            text: response.message,
-                        }).catch(error => console.error('Error updating cart:', error));
 
-                    }
-                })
-        }
 
-        // function removeCartItem(productId) {
-        //     fetch('/removeCartItem', {
-        //         method: "POST",
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({ productId }),
-        //     })
-        //         .then(response => {
-        //             if (response.success) {
-        //                 Swal.fire({
-        //                     title: "Item Removed!",
-        //                     text: "The item has been successfully removed from your cart.",
-        //                     icon: "success",
-        //                     showConfirmButton: false,
-        //                     timer: 1500,  // Adjust the timer as needed
-        //                 });
 
-        //                 // Assuming there's an element representing the removed item, you can remove it
-        //                 const removedItem = document.getElementById(`product-${productId}`);
-        //                 if (removedItem) {
-        //                     removedItem.remove();
-        //                 }
-        //             } else {
-        //                 // Handle error
-        //                 console.error('Error removing item:', response.error);
-        //             }
-        //         })
-        //         .catch(error => {
-        //             console.error('Error removing item:', error);
-        //         });
-        // }
-
-        function removeCartItem(productId) {
-            Swal
+        function removeItem(proId) {
+            console.log(proId);
+            swal
                 .fire({
                     title: "Are You Sure?",
                     Text: " You wont be able to revert this!",
@@ -643,34 +602,75 @@
                     cancelButtonText: "cancel",
                 })
                 .then((result) => {
-                    if (response.success) {
-                        $ajax({
+                    if (result.isConfirmed) {
+                        $.ajax({
                             url: "/removeCartItem",
                             data: {
-                                product: productId
+                                product: proId,
                             },
-                            method: "POST",
+                            method: "post",
                             success: (response) => {
-                                if(response.remove=true){
-                                    location.reload();
-                                    Swal.fire({
+                                if ((response.success)) {
+                                    swal.fire({
                                         title: "Deleted!",
-                                        text: "Your item has been deleted",
-                                        icon: "sucssec",
+                                        text: "Your item has been deleted.",
+                                        icon: "success",
                                         timer: 1500,
-                                        showConformButton: false
-                                    })
+                                        showConfirmButton: false,
+                                    }).then(() => {
+                                        location.reload();
+                                    });
                                 }
-                            }
-                        })
+                            },
+                        });
                     }
-                })
+                });
         }
 
 
+        function changeQuantity(userId, proId, count) {
 
+            console.log("changeQuantity triggered");
+            console.log("userId:", userId);
+            console.log("proId:", proId);
+            console.log("count:", count); $.ajax({
+                url: "/quantityUpdate",
+                data: {
+                    user: userId,
+                    product: proId,
+                    count: count
+                },
+                method: "post",
+                success: (response) => {
+                    console.log(response, 'responce check 0--------------');
+
+                    if (response.success) {
+                        $("#reloadDiv").load("/cart #reloadDiv");
+                    } else if (response.check) {
+                        swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Out of stock",
+                        });
+                    } else {
+                        swal.fire({
+                            position: "center",
+                            icon: "warning",
+                            text: response.message,
+                            timer: 1500,
+                            showConfirmButton: false,
+                        });
+                    }
+                },
+                error: (error) => {
+                    console.log(error);
+                },
+            })
+        }
 
     </script>
+    <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>

@@ -1,5 +1,5 @@
 <%- include('../layouts/user/header.ejs') -%>
-  
+
 
     <!-- preloader -->
     <div id="loader-wrapper">
@@ -15,7 +15,7 @@
     <!--=============== CSS ===============-->
     <link rel="stylesheet" href="public/css/user/styles.css">
 
-    <title>Login form - Bedimcode</title>
+    <title>Login </title>
     </head>
 
     <!-- ======= SignUp ========== -->
@@ -23,66 +23,84 @@
     <body>
         <div class="login">
             <img src="img/slider/12.jpg" alt="image" class="login__bg">
-                                                                         <!-- autocomplete is of -->
-            <form action="" method="post" id="form"  class="login__form"  >   
+            <!-- autocomplete is of -->
+            <form action="" method="post" id="form" class="login__form">
                 <h1 class="login__title">Sign Up</h1>
 
                 <div class="login__inputs">
                     <div class="login__box">
-                        <input type="text" placeholder="Enter your name "  name="name" id="name" class="login__input" >
+                        <input type="text" placeholder="Enter your Full Name " name="name" id="name"
+                            class="login__input">
                     </div>
-                    <p class="error-msg" id="nameLengthError"></p>
+                    <div class="error-message" id="name-error" style="  display: none;
+                        color: rgb(161 17 17);
+                        font-weight: bold;
+                        font-size: 12px; "></div>
+
 
 
                     <div class="login__box">
-                        <input type="email" placeholder="Email ID"   name="email"  id="email" class="login__input"  >
+                        <input type="email" placeholder="Email ID" name="email" id="email" class="login__input">
                         <i class="ri-mail-fill"></i>
                     </div>
-                    <div class="error-msg"><p id="emailError"></p></div>
-                      <div class="login__box">
-                        <input type="number" placeholder="Phone" name="mobile" id="mobile"    class="login__input">
-                    </div> 
-                    <div class="error-msg"><p id="mobileLngthErrror"></p></div>
+                    <div class="error-message" id="email-error" style="  display: none;
+                    color: rgb(161 17 17);
+                    font-weight: bold;
+                    font-size: 12px; "></div>
+
+                    <div class="login__box">
+                        <input type="number" placeholder="Phone" name="mobile" id="mobile" class="login__input">
+                    </div>
+                    <div class="error-message" id="phone-error" style="  display: none;
+                        color: rgb(161 17 17);
+                        font-weight: bold;
+                        font-size: 12px; "></div>
 
 
 
                     <div class="login__box">
-                        <input type="password" placeholder="Password"  name="password"  id="password"   class="login__input" >
+                        <input type="password" placeholder="Password" name="password" id="password"
+                            class="login__input">
                         <i class="ri-lock-2-fill"></i>
                     </div>
-                    <div class="error-msg"><p id="passwordLengthError"></p></div>
+                    <div class="error-message" id="password-error" style="  display: none;
+                    color: rgb(161 17 17);
+                    font-weight: bold;
+                    font-size: 12px; "></div>
 
 
                     <div class="login__box">
-                        <input type="password" placeholder="Conform Password" id="confirmpassword"   class="login__input" >
+                        <input type="password" placeholder="Conform Password" id="confirmPassword" class="login__input">
                         <i class="ri-lock-2-fill"></i>
                     </div>
-                    <div class="error-msg"><p id="confirmpasswordError"></p></div>
-
-
-
+                    <div class="error-message" id="confirm-error" style="  display: none;
+                        color: rgb(161 17 17);
+                        font-weight: bold;
+                        font-size: 12px; "></div>
                 </div>
 
                 <div class="login__check">
-                    <% if(typeof message !== 'undefined'){ %>
+                    <% if(typeof message !=='undefined' ){ %>
 
-                        <h6 class="text-danger"><%= message %></h6>
-  
-                        <%  } %>
+                        <h6 class="text-danger">
+                            <%= message %>
+                        </h6>
 
-                    <a href="#" class="login__forgot">Forgot Password?</a>
+                        <% } %>
+
+                            <a href="#" class="login__forgot">Forgot Password?</a>
                 </div>
 
-                <button type="submit" class="login__button">SignUp</button>
+                <button type="submit"  id="submit" class="login__button">SignUp</button>
 
                 <div class="login__register">
-                    Don't have an account? <a href="login">login</a>
+                    Alredy have account?? <a href="login">login</a>
                 </div>
 
             </form>
 
         </div>
-    </div>
+        </div>
         <!-- ====== End ======= -->
 
 
@@ -153,7 +171,7 @@
 
         <!-- footer top -->
 
-        <!-- <div class="footer-bottom pt-77" style="background-color: #292929;">
+        <div class="footer-bottom pt-77" style="background-color: #292929;">
             <div class="container-1180">
                 <div class="footer-bottom-wrapper">
                     <div class="footer-bottom-primary pb-60">
@@ -234,7 +252,7 @@
 
 
         <!-- product popup start -->
-        <!-- <section id="product-popup">
+        <section id="product-popup">
             <div class="product-popup-overlay"></div>
             <div class="product-popup-container">
                 <div class="product-inner w-100">
@@ -321,7 +339,7 @@
         <!-- product popup end -->
 
         <!-- startup popup start -->
-         <section id="startup-popup">
+        <section id="startup-popup">
             <div class="product-popup-overlay has-startup" style="opacity: 1;visibility: visible"></div>
             <div class="startup-popup-body">
                 <div class="startup-body-content h-100">
@@ -362,6 +380,28 @@
 
 
 
+        <script>
+
+            const inputs = document.querySelectorAll('input')
+      
+            const name_message = document.getElementById('name-error');
+            const email_message = document.getElementById('email-error');
+            const phone_message = document.getElementById('phone-error');
+            const password_message = document.getElementById('password-error');
+            const confirm_message = document.getElementById('confirm-error');
+            const err_message = document.getElementById("error-message");      
+            inputs.forEach(input=>{
+              input.addEventListener('input',function(){
+                name_message.textContent = ""
+                email_message.textContent = ""
+                phone_message.textContent = ""
+                password_message.textContent = ""
+                confirm_message.textContent = ""
+                err_message.textContent = ""
+              })
+            })
+            
+          </script>
 
 
 
@@ -369,9 +409,10 @@
 
 
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
-         <script src="/js/formValidation.js"></script>
-        <!-- JS here -->    
+        <script src="/js/formValidation.js"></script>
+        <!-- JS here -->
         <script src="js/vendor/jquery-1.12.4.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>

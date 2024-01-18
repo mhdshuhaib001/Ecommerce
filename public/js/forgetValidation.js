@@ -1,44 +1,94 @@
-document.getElementById('sendEmail').addEventListener('click', function (e) {
-    e.preventDefault();
 
-    const email = document.getElementById("email");
-    const message = document.getElementById('error-message')
-  
-    $.ajax({
-      url: '/forget',   
+$(document).ready(function () {
+  $('#forgetForm').submit(function (e) {
+      e.preventDefault();
+
+      const email = $('#sendEmail').val();
+      const errorMessage = $('#error-message');
+
+      $.ajax({
+          url: '/forgetPassword',
+          data: {
+              email: email
+          },
+          method: "post",
+          success: function (response) {
+              errorMessage.hide().text(""); // Reset error message display
+
+              if (response.emailPatt || response.email_require || response.email_space || response.mailverify || response.wrong) {
+                  errorMessage.show().text(getErrorMessage(response));
+              } else {
+                  // Handle success or redirection
+                  Swal.fire({
+                    title: "Success!",
+                    html: `Check your inbox for the reset instructions sent to: <strong>${email}</strong>`,
+                    icon: "success",
+                    customClass: {
+                        popup: 'small-swal' // Custom class for a smaller Swal
+                    }
+                });
+              }
+          },
+      });
+  });
+
+  function getErrorMessage(response) {
+      if (response.emailPatt) return "Please enter a valid email address.";
+      if (response.email_require) return "Please fill in this field and submit again.";
+      if (response.email_space) return "Email cannot contain spaces.";
+      if (response.mailverify) return "Given email is not verified.";
+      if (response.wrong) return "This email is not registered.";
+      return "";
+  }
+});
+
+
+
+document.getElementById('resetPassword').addEventListener('click', function (e) {
+  e.preventDefault();
+  console.log('checkk')
+
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirm').value;
+  const password_message = document.getElementById('password_error');
+  const confirm_message = document.getElementById('confirm_error');
+
+  $.ajax({
+      url: "/resetPassword",
       data: {
-        email: email
+          password: password,
+          confirm: confirmPassword
       },
-      method: "post",
+      method: "POST",
       success: (response) => {
-  
-        if (response.emailPatt) {
-          message.style.display = "block";
-          message.textContent = "Please enter the valid email address."
-        } else if (response.email_require) {
-          message.style.display = "block";
-          message.textContent = "Please fill this field and submit again."
-        } else if (response.email_space) {
-          message.style.display = "block";
-          message.textContent = "Email cannot contain spaces."
-        } else if (response.mailverify) {
-          message.style.display = "block";
-          message.textContent = "Given mail is not verified."
-        } else if (response.wrong) {
-          message.style.display = "block";
-          message.textContent = "This email is not registered."
-        } else {
-          // window.location.href = "/forgetpage"
-          // message.style.display = "block";
-          // message.textContent = "please check your mail."
-          Swal.fire({
-            title:"success",
-            text:"Thank you for your action! We've sent an email to your registered email address. Please check your inbox for further instructions. If you don't receive the email within a few minutes, please try again.",
-            icon:"success",
-          
-          })
-        }
-  
-      },
-    })
+        if(response.required){
+          console.log("ryeyyyyyyyyyyyyyyyyyyyy")
+        } else if (response.password_space) {
+              password_message.style.display = "block";
+              password_message.textContent = "Password cannot contain space.";
+          } else if (response.paslength) {
+              password_message.style.display = "block";
+              password_message.textContent = "Password must contain 4 digits.";
+          } else if (response.password_require) {
+              password_message.style.display = "block";
+              password_message.textContent = "Please fill this field and submit again.";
+          } else if (response.confirm_require) {
+              confirm_message.style.display = "block";
+              confirm_message.textContent = "Please fill this field and submit again.";
+          } else if (response.wrong) {
+              password_message.style.display = "block";
+              confirm_message.textContent = "Confirm the correct password.";
+          } else {
+              Swal.fire({
+                  title: "success",
+                  text: "Password successfully changed.",
+                  icon: "success",
+              }).then((data) => {
+                  if (data.value) {
+                      window.location.href = "/login";
+                  }
+              });
+          }
+      }
+  });
 });

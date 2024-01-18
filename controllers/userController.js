@@ -46,90 +46,181 @@ const loadHome = async (req, res) => {
 // Signup and Storing data to database
 const insertUser = async (req, res) => {
   try {
-    const userId = req.session.user_id;
-    const { name, email, mobile, password } = req.body;
-    const check = await User.findOne({ email });
+    const { name = "", email = "", mobile = "", password = "", confirmPassword = "" } = req.body;
 
-    if (check) {
-      res.render("signup", { error: "Email alredy exist" });
+    if (name.trim() === "") {
+      console.log("check 1")
+      res.json({ name_require: true });
     } else {
-      const sPassword = await securePassword(password);
-      const data = new User({
-        name,
-        email,
-        mobile,
-        password: sPassword
-      });
-      const result = await data.save();
-      console.log(result);
+      if (name.startsWith(" ") || name.includes(" ")) {
+        res.json({ name_space: true });
+      } else {
+        if (name && name.length <= 2) {
+          res.json({ name: true });
+        } else {
+          if (email.trim() === "") {
+            res.json({ email_require: true });
+          } else {
+            if (email.startsWith(" ") || email.includes(" ")) {
+              res.json({ email_space: true });
+            } else {
+              const emailPattern = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+              if (!emailPattern.test(req.body.email)) {
+                res.json({ emailPatt: true });
+              } else {
+                if (mobile.trim() === "") {
+                  res.json({ mobile_require: true });
+                } else {
+                  if (mobile.startsWith(" ") || mobile.includes(" ")) {
+                    res.json({ mobile_space: true });
+                  } else {
+                    let mobilePattern = /^\d{10}$/;
+                    if (
+                      !mobilePattern.test(mobile) ||
+                      mobile === "0000000000"
+                    ) {
+                      res.json({ mobile: true });
+                    } else {
+                      if (password.trim() === "") {
+                        res.json({ password_require: true });
+                      } else {
+                        if (
+                          password.startsWith(" ") ||
+                          password.includes(" ")
+                        ) {
+                          res.json({ password_space: true });
+                        } else {
+                          if (password.length < 4) {
+                            res.json({ password: true });
+                          } else {
+                            const alphanumeric = /^(?=.*[a-zA-Z])(?=.*\d).+$/;
+                            if (!alphanumeric.test(password)) {
+                              res.json({ alphanumeric: true });
+                            } else {
+                              if (confirmPassword.trim() === "") {
+                                res.json({ confirm_require: true });
+                              } else {
+                                if (
+                                  confirmPassword.startsWith(" ") ||
+                                  confirmPassword.includes(" ")
+                                ) {
+                                  res.json({ confirm_space: true });
+                                } else {
+                                  const emailchek = await User.findOne({
+                                    email: req.body.email,
+                                  });
+                                  if (emailchek) {
+                                    res.json({ emailalready: true });
+                                  } else {
+                                    if (password == confirmPassword) {
+                                      const spassword = await securePassword(
+                                        req.body.password
+                                      );
+                                      const user = new User({
+                                        name: req.body.name,
+                                        email: req.body.email,
+                                        mobile: req.body.mobile,
+                                        password: spassword,
+                                        is_admin: 0,
+                                      });
 
-      // Update user information is verifide or note;
-      await User.updateOne({ _id: userId }, { $set: { is_verified: 1 } });
+                                      const userData = await user.save();
+                                      console.log("check youser ", userData)
 
-      // sendOtpVerification(result, res);
-      sendOtpVerification({ name, _id: result._id, email }, res);
+                                      if (userData) {
+                                        let randomNumber =
+                                          Math.floor(Math.random() * 9000) +
+                                          1000;
+                                        otp = randomNumber;
+                                        console.log(otp, "check otp");
+
+                                        const emaiill = req.session.email = req.body.email;
+                                        console.log(emaiill)
+                                        req.session.password = spassword;
+                                        req.session.userName = req.body.name;
+                                        req.session.mobile = req.body.mobile;
+
+                                        sendVerifyMail({
+                                          email: req.body.email,
+                                          name: req.body.name,
+                                          otp: randomNumber
+                                        });
+                                        setTimeout(() => {
+                                          otp = Math.floor(Math.random() * 9000) + 1000;
+                                        }, 60000);
+                                        req.session.otpsent = true;
+                                        res.json({ success: true });
+                                      } else {
+                                        res.json({ notsaved: true });
+                                      }
+                                    } else {
+                                      res.json({ wrongpass: true });
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
+  } catch (error) {
+    console.log(error.message)
+  }
+};
+
+
+// userOtp
+const loadUserOtp = async (req, res) => {
+  try {
+    let verifyErr = req.session.verifyErr;
+    let otpsend = req.session.otpsend;
+    console.log(otpsend, 'orpsent chek')
+    console.log("Ottpp");
+    res.render("userOtp", { verifyErr, otpsend });
   } catch (error) {
     console.log(error.message);
   }
 };
 
-
 //-------- OTP ----------
 const verifyOTP = async (req, res) => {
   try {
-    req.session.user_id = req.query.id;
-    res.render("userOtp");
-  } catch (error) {
-    console.log(error);
-  }
-};
 
-const veryfyPost = async (req, res) => {
-  try {
-    const otp =
-      req.body.a +
-      req.body.b +
-      req.body.c +
-      req.body.d +
-      req.body.e +
-      req.body.f;
-    const userId = req.session.user_id;
-    console.log(otp);
+    req.session.verifyErr = false;
+    req.session.otpsent = false;
 
-    const userOTPVerificationRecord = await userOtpVerification.find({
-      userId
-    });
-    console.log(userOTPVerificationRecord);
+    const otpInput = parseInt(req.body.otp);
+    const email = req.body.email;
+    console.log("otpInput", otpInput)
 
-    if (userOTPVerificationRecord.length == 0) {
-      res.render("userOtp", {
-        message: "record doesn't exist or has been verified already"
-      });
+    if (req.body.otp.trim() === "") {
+      res.json({ fill: true });
     } else {
-      const { expiresAt } = userOTPVerificationRecord[0];
-      const hashedOTP = userOTPVerificationRecord[0].otp;
-      console.log(hashedOTP, "hashed");
-      if (expiresAt < Date.now()) {
-        await userOTPVerificationRecord.deleteMany({ userId });
-        res.render("userOtp", { message: "your otp has been expired" });
-      } else {
-        const validOTP = await bcrypt.compare(otp, hashedOTP);
-        if (!validOTP) {
-          res.render("userOtp", { message: "Invalid code" });
+      if (otpInput == otp) {
+        const verified = await User.updateOne(
+          { email: email },
+          { $set: { is_verified: true } }
+        );
+
+        if (verified) {
+          console.log("Account verifyed");
+          req.session.reqSucces = true;
+          res.json({ success: true });
         } else {
-          const updateInfo = await User.updateOne(
-            { _id: userId },
-            { is_verified: true }
-          );
-          console.log(updateInfo);
-          await userOtpVerification.deleteMany({ userId });
-          res.json({
-            status: "VERIFIED",
-            message: "user email verified successfully"
-          });
-          res.redirect("home");
+          console.log("not verified");
+          req.json({ error: true });
         }
+      } else {
+        res.json({ wrong: true });
       }
     }
   } catch (error) {
@@ -140,12 +231,15 @@ const veryfyPost = async (req, res) => {
 
 
 
-// -------SEND-OTP-FOR-SIGNUP------
-const sendOtpVerification = async ({ name, _id, email }, res) => {
-  try {
-    const otp = `${Math.floor(1000 + Math.random() * 900000)}`;
-    console.log("SendOtp" + otp);
 
+
+let otp;
+
+// -------SEND-OTP-FOR-SIGNUP------
+const sendVerifyMail = async ({ name, email, otp }) => {
+  try {
+
+    console.log("emailcheck", email);
     // Nodemailer
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -158,6 +252,7 @@ const sendOtpVerification = async ({ name, _id, email }, res) => {
         pass: process.env.ADMIN_PASS
       }
     });
+    console.log("chking-------")
 
     // Send the OTP to the user's email
     const mailOPtions = {
@@ -167,45 +262,39 @@ const sendOtpVerification = async ({ name, _id, email }, res) => {
       html: "<h1> Hi " + name + ",please verify your email " + otp + ""
     };
 
-    // Hashing Otp
-    const hashedOtp = await bcrypt.hash(otp, 10);
-
-    const newUserOtp = new userOtpVerification({
-      userId: _id,
-      otp: hashedOtp,
-      createAt: Date.now(),
-      expiresAt: Date.now() + 3600000
-    });
-    // Save the Otp records
-
-    await newUserOtp.save(), await transporter.sendMail(mailOPtions);
-
-    console.log("heloo11111");
-    res.redirect(`/userOtp?id=${_id}`);
+    transporter.sendMail(mailOPtions, function (err, info) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Email has been sent:-", info.response);
+      }
+    })
   } catch (error) {
     console.log(error.message);
   }
 };
 
-// userOtp
-const loadUserOtp = async (req, res) => {
-  try {
-    let verifyErr = req.session.verifyErr;
-    req.session.userId = req.query.id;
-    console.log("Ottpp");
-    res.render("userOtp", { verifyErr });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+
 
 //----------To resend Otp-----------
 const resendOtp = async (req, res) => {
   try {
     const userData = await User.findOne({ email: req.session.user_email });
-    sendOtpVerification(userData.name, userData.email);
-    res.render("userOtp");
-  } catch (error) { }
+    let otpsend = req.session.otpsend;
+    let email = req.session.email;
+    let name = "User";
+    let verifyErr = req.session.verifyErr;
+    let randomNumber = Math.floor(Math.random() * 9000) + 1000;
+    otp = randomNumber;
+ 
+    sendVerifyMail(userData.name, userData.email);
+    res.render("userOtp", {
+      verifyErr,
+      otpsend,
+      resend: "Resend the otp to your email address.",
+    });
+  } catch (error) {
+  }
 };
 
 //======= Login =========
@@ -280,7 +369,7 @@ const verifylogin = async (req, res) => {
       }
     }
   } catch (error) {
-    next(error);
+    console.log(error.message)
   }
 };
 
@@ -319,7 +408,7 @@ const sendPassResetMail = async (name, email, token) => {
       }
     });
   } catch (error) {
-    next(error);
+    console.log(error.message);
   }
 };
 
@@ -335,7 +424,7 @@ const forgetLoad = async (req, res) => {
 const forgetVerify = async (req, res) => {
   try {
     const email = req.body.email;
-    console.log(email,'Email check')
+    console.log(email, 'Email check')
 
     if (email.trim() === "") {
       res.json({ email_require: true });
@@ -348,9 +437,9 @@ const forgetVerify = async (req, res) => {
           res.json({ emailPatt: true });
         } else {
           const userData = await User.findOne({ email: email });
-
+          console.log("check 1", userData)
           if (userData) {
-            if (userData.is_varified == 1) {
+            if (userData.is_verified == true) {
               const random_String = randomString.generate();
 
               await User.updateOne(
@@ -386,7 +475,9 @@ const loadForgetpage = async (req, res) => {
       req.session.email = tokenData.email;
       res.render("forget-password");
     } else {
-      res.status(404); // ADD RES RENDER 404 PAGEE
+      res
+        .status(404)
+        .render("404", { message: "Oop's.. Your token is invalid" });
     }
   } catch (error) {
     console.log(error.message);
@@ -403,28 +494,29 @@ const resetPassword = async (req, res) => {
     console.log(confirm, 'dcks djcjwdsncjsdcs')
 
     if (Password.trim() === "") {
-      req.json({ require: true });
+      console.log('ethiiiii');
+      res.json({ required: true });
     } else {
       if (Password.startsWith(" ") || Password.includes(" ")) {
-        req.json({ password_space: true });
+        res.json({ password_space: true });
       } else {
         if (Password.length < 4) {
-          req.json({ paslength: true });
+          res.json({ paslength: true });
         } else {
           if (confirm.trim() === "") {
-            req.json({ confirm_space: true });
+            res.json({ confirm_space: true });
           } else {
             if (Password !== confirm) {
-              req.json({ wrong: true });
+              res.json({ wrong: true });
             } else {
-              const email = req.body.email;
-              console.log(email, 'chcejdshsc')
-
+              const email = req.session.email;
+              console.log(email, 'emailcheck')
               const secure_password = await securePassword(Password);
               const updateData = await User.updateOne(
                 { email: email },
                 { $set: { password: secure_password, token: "" } }
               )
+              console.log(updateData, 'updateDatachcek')
               if (updateData) {
                 req.session.email = false;
                 res.json({ response: true });
@@ -437,7 +529,7 @@ const resetPassword = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error.messageFFF)
+    console.log(error.message)
   }
 };
 
@@ -518,36 +610,33 @@ const loadprofile = async (req, res) => {
 
     const userData = await User.findOne({ _id: req.session.user_id });
     const addressData = await Address.findOne({ user: req.session.user_id });
-    
-  
-
     res.render("userProfile", { userData, addressData });
   } catch (error) {
     console.log(error.message);
   }
 };
 
-const changePassword = async (req,res) => {
+const changePassword = async (req, res) => {
   try {
-    const userData = await User.findOne({_id: req.session.user_id });
-    const passwordMatch = await bcrypt.compare(req.body.currPass , userData.password);
-    
-    if(passwordMatch) {
-      const securePass = await securePassword(req.body.newPass);
-      const passwordUpdate = await User.updateOne({_id:req.session.user_id},{$set: {password: securePass}});
+    const userData = await User.findOne({ _id: req.session.user_id });
+    const passwordMatch = await bcrypt.compare(req.body.currPass, userData.password);
 
-      if(passwordUpdate){
-        res.json({success:true , message: "Password changed"});
-      }else{
-        res.json({success: false , message:"someting wrong"});
+    if (passwordMatch) {
+      const securePass = await securePassword(req.body.newPass);
+      const passwordUpdate = await User.updateOne({ _id: req.session.user_id }, { $set: { password: securePass } });
+
+      if (passwordUpdate) {
+        res.json({ success: true, message: "Password changed" });
+      } else {
+        res.json({ success: false, message: "someting wrong" });
 
       }
-      
-    } 
+
+    }
 
   } catch (error) {
     console.log(error.message);
-    
+
   }
 }
 
@@ -571,7 +660,7 @@ module.exports = {
   loadContact,
   loadUserOtp,
   verifyOTP,
-  veryfyPost,
+  // veryfyPost,
   insertUser,
   loadError404,
   logout,
