@@ -7,6 +7,7 @@
 */
 
 /* CSS Index
+Pagination
 -----------------------------------
 1. Theme default css
 2. header
@@ -219,6 +220,55 @@ img {
   margin-top: 2px;
 }
 
+
+/*===========Pagination============= */
+.pagination {
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination .page-item {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.pagination .page-link {
+  color: var(--blue);
+  border: 1px solid var(--blue);
+  padding: 8px 12px;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 200ms, color 200ms;
+
+  &:hover {
+    background-color: var(--blue);
+    color: #fff;
+  }
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--blue);
+  color: #fff;
+  border: 1px solid var(--blue);
+}
+
+.pagination .page-link-prev,
+.pagination .page-link-next {
+  padding: 8px;
+
+  &:hover {
+    background-color: var(--blue);
+    color: #fff;
+  }
+}
+
+.pagination .icon-long-arrow-left,
+.pagination .icon-long-arrow-right {
+  vertical-align: middle;
+}
+
+
+
 /*=============== BREAKPOINTS ===============*/
 /* For medium devices */
 @media screen and (min-width: 576px) {
@@ -233,6 +283,7 @@ img {
     margin-bottom: 2rem;
   }
 }
+
 
 /* ============================================ */
 #loader-wrapper {
@@ -3606,7 +3657,7 @@ p.simple-text {
   border-bottom: 1px solid #dee2e6 !important;
 }
 .table-2.no-border td {
-  padding-top: 0 !important;
+  padding-top: 13px !important;
 }
 .table-2 th {
   border-bottom: 1px solid #dee2e6 !important;
@@ -3881,8 +3932,8 @@ p.lost-password a:hover {
   border: 1px solid #eaedff;
   padding: 10px;
   border-radius: 5px;
-  width: 200px; /* Adjust the width as needed */
-  margin: 0 10px 0 0; /* Adjust the margins as needed */
+  width: 253px; 
+  margin: 3px 6px 3px 15px ; 
 }
 
 .address-form h3 {
@@ -3948,116 +3999,156 @@ p.lost-password a:hover {
   border-radius: 0;
 }
 /* Style for Your Order */
-.your-order {
-  margin-bottom: 20px;
+
+/* 
+.card-body {
+ width: 50%;
+} */
+
+
+.card-dashboard {
+  width: 73%;
+  height: 115%;
+}
+
+/* Style for the address cards */
+
+.card-dashboard:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Style for the address form */
+#addAddressForm {
+  margin-top: 20px;
+}
+
+/* Style for the "Ship to another address" button */
+
+/* Style for the order summary */
+.summary {
+  border: 1px solid #ddd;
+  border-radius: 5px;
   padding: 15px;
-  border: 1px solid #e0e0e0;
-  border-radius: 5px;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  max-width: 400px; /* Adjust the max-width as needed */
-  margin-left: auto;
-  margin-right: auto;
 }
 
-.your-order h3 {
-  border-bottom: 2px solid #3498db;
-  font-size: 18px;
-  margin: 0 0 10px;
-  padding-bottom: 8px;
-  color: #333;
+/* Style for the payment methods accordion */
+.accordion-summary {
+  margin-top: 20px;
 }
 
-.your-order-table table {
-  width: 100%;
+/* Style for the "Place Order" button */
+#placeOrderBtn {
+  margin-top: 20px;
 }
 
-.your-order-table table th,
-.your-order-table table td {
-  border-bottom: 1px solid #e0e0e0;
-  padding: 10px 0;
-  text-align: left;
-  font-size: 12px;
+
+/* Add this CSS to your existing stylesheet */
+
+.payment-methods {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0; /* Adjust the margin as needed */
 }
 
-.your-order-table table th {
-  color: #555;
-  font-weight: normal;
-  width: 40%;
-}
-
-.your-order-table table td {
-  font-weight: bold; /* Increase font weight for td */
-}
-
-.your-order-table table .shipping ul li input {
-  position: relative;
-  top: 2px;
-}
-
-.your-order-table table .shipping ul li label {
-  color: #555;
-}
-
-.your-order-table table .shipping th {
-  vertical-align: top;
-  color: #3498db; /* Change color for more attractiveness */
-  font-weight: bold; /* Increase font weight for th */
-}
-
-.your-order-table table .order-total th {
-  border-bottom: 0;
-}
-
-.your-order-table table .order-total td span {
-  color: #3498db;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-/* Style for Shipping Section */
-.shipping {
-  margin-bottom: 15px;
-}
-
-.shipping th,
-.shipping label {
-  color: #555;
-  font-size: 12px;
-}
-
-.shipping ul {
-  list-style: none;
-  padding: 0;
-}
-
-.shipping li {
-  margin-bottom: 8px;
-  font-size: 12px;
-}
-
-.shipping input[type="radio"] {
-  margin-right: 5px;
-}
-
-/* Style for Place Order Button */
-.order-button-payment input {
-  background: #3498db;
-  border: none;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-  height: 40px; /* Increase height for a more prominent look */
-  margin-top: 15px;
-  text-transform: uppercase;
-  transition: background 0.3s ease;
-  width: 100%;
+.payment-method {
+  display: flex;
+  align-items: center;
   cursor: pointer;
-  border-radius: 5px;
+  margin-bottom: 10px; /* Adjust the spacing between each payment method */
 }
 
-.order-button-payment input:hover {
-  background: #2980b9;
+.payment-method span {
+  font-size: 14px; /* Adjust the font size of the text */
+}
+
+/* Responsive styling for smaller screens */
+@media (max-width: 767px) {
+  .col-lg-9, .col-lg-3 {
+      width: 100%;
+  }
+}
+
+
+
+.accordion-summary {
+  margin-bottom: 3.2rem
+}
+
+.accordion-summary .card {
+  color: #999;
+  font-weight: 300;
+  font-size: 1.2rem;
+  line-height: 1.67;
+  border: none;
+  background-color: transparent
+}
+
+.accordion-summary .card-title {
+  font-weight: 300;
+  font-size: 1.4rem;
+  color: #333;
+  letter-spacing: 0
+}
+
+.accordion-summary .card-title a {
+  color: inherit;
+  padding: .7rem 0 .7rem 3rem
+}
+
+.accordion-summary .card-title a img {
+  margin-top: 1rem
+}
+
+.accordion-summary .card-title a:hover,
+.accordion-summary .card-title a:focus {
+  color: inherit
+}
+
+.accordion-summary .card-title a small {
+  font-size: 1.1rem;
+  color: #999
+}
+
+.accordion-summary .card-title a:before {
+  content: '';
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  border: 0.1rem solid #c96;
+  right: auto;
+  left: 0;
+  top: .7rem;
+  transform: translateY(0);
+  -ms-transform: translateY(0)
+}
+
+.accordion-summary .card-title a:after {
+  content: '';
+  display: block;
+  width: .6rem;
+  height: .6rem;
+  position: absolute;
+  left: .5rem;
+  top: 1.2rem;
+  border-radius: 50%;
+  background-color: #c96;
+  visibility: visible;
+  opacity: 1;
+  transition: all .3s
+}
+
+.accordion-summary .card-title a.collapsed:before {
+  border-color: #dadada
+}
+
+.accordion-summary .card-title a.collapsed:after {
+  opacity: 0;
+  visibility: hidden
+}
+
+.accordion-summary .card-body {
+  padding: .4rem 0 .8rem 3rem
 }
 
 /* -------------------- 18. Contact --------------------- */

@@ -30,10 +30,10 @@ const loadHome = async (req, res) => {
   try {
 
     const user_id = req.session.user_id;
-    const cartData = await Cart.findOne({ user: user_id }).populate(
-      "product.productId"
-    );
+    const cartData = await Cart.findOne({ user: user_id }).populate("product.productId");
     const userData = await User.findOne({ _id: user_id });
+    const cart = await Cart.findOne({ userId: req.session.user_id })
+
 
     res.render("home", { user: userData, cart: cartData });
   } catch (error) {
@@ -47,7 +47,7 @@ const loadHome = async (req, res) => {
 const insertUser = async (req, res) => {
   try {
     const { name = "", email = "", mobile = "", password = "", confirmPassword = "" } = req.body;
-
+    console.log(req.body)
     if (name.trim() === "") {
       console.log("check 1")
       res.json({ name_require: true });
@@ -183,8 +183,10 @@ const loadUserOtp = async (req, res) => {
   try {
     let verifyErr = req.session.verifyErr;
     let otpsend = req.session.otpsend;
-    console.log(otpsend, 'orpsent chek')
+    console.log(otpsend, 'orpsent check');
+
     console.log("Ottpp");
+    
     res.render("userOtp", { verifyErr, otpsend });
   } catch (error) {
     console.log(error.message);
@@ -198,8 +200,10 @@ const verifyOTP = async (req, res) => {
     req.session.verifyErr = false;
     req.session.otpsent = false;
 
-    const otpInput = parseInt(req.body.otp);
+    const otpInput = req.body.otp;
     const email = req.body.email;
+
+    console.log(req.body)
     console.log("otpInput", otpInput)
 
     if (req.body.otp.trim() === "") {
@@ -208,8 +212,9 @@ const verifyOTP = async (req, res) => {
       if (otpInput == otp) {
         const verified = await User.updateOne(
           { email: email },
-          { $set: { is_verified: true } }
+          { $set: { is_verified: true } }   
         );
+        console.log(verified)
 
         if (verified) {
           console.log("Account verifyed");
@@ -239,27 +244,25 @@ let otp;
 const sendVerifyMail = async ({ name, email, otp }) => {
   try {
 
-    console.log("emailcheck", email);
+    console.log("email Otp", email);
+    console.log(otp);
     // Nodemailer
     const transporter = nodemailer.createTransport({
-      service: "gmail",
       host: "smtp.gmail.com",
       port: 587,
-      secure: true,
+      secure: false,
       requireTLS: true,
       auth: {
         user: process.env.ADMIN_EMAIL,
         pass: process.env.ADMIN_PASS
       }
     });
-    console.log("chking-------")
-
     // Send the OTP to the user's email
     const mailOPtions = {
       from: process.env.ADMIN_EMAIL,
       to: email,
       subject: "OTP verification",
-      html: "<h1> Hi " + name + ",please verify your email " + otp + ""
+      html: "<h1> Hallo " + name +  ", This is your Mail veryfication message <br> This is your OTP :" + otp + ""
     };
 
     transporter.sendMail(mailOPtions, function (err, info) {
@@ -275,27 +278,32 @@ const sendVerifyMail = async ({ name, email, otp }) => {
 };
 
 
-
 //----------To resend Otp-----------
 const resendOtp = async (req, res) => {
   try {
-    const userData = await User.findOne({ email: req.session.user_email });
-    let otpsend = req.session.otpsend;
-    let email = req.session.email;
-    let name = "User";
     let verifyErr = req.session.verifyErr;
+    let email = req.session.email;
+    let name = req.session.name || "User";
     let randomNumber = Math.floor(Math.random() * 9000) + 1000;
     otp = randomNumber;
- 
-    sendVerifyMail(userData.name, userData.email);
+
+    console.log('Setting otpsend in session');
+    req.session.otpsend = true;
+    console.log('otpsend set:', req.session.otpsend);
+    setTimeout(() => {
+      otp = Math.floor(Math.random() * 9000) + 1000;
+    }, 60000);
+
+    sendVerifyMail({ name, email,  randomNumber });
     res.render("userOtp", {
       verifyErr,
-      otpsend,
+      otpsend: req.session.otpsend, 
       resend: "Resend the otp to your email address.",
     });
   } catch (error) {
-  }
-};
+    console.log(error.message);
+  }};
+
 
 //======= Login =========
 const loadLogin = async (req, res) => {
@@ -329,7 +337,8 @@ const verifylogin = async (req, res) => {
           } else {
             if (password.includes(" ") || /\s/.test(password)) {
               res.json({ password_space: true });
-            } else {
+            }
+            else {
               const userData = await User.findOne({ email: email });
               if (userData && userData.is_admin == true) {
                 if (userData.is_verified == true) {
@@ -582,18 +591,7 @@ const loadContact = async (req, res) => {
   }
 };
 
-// product
-const loadProduct = async (req, res) => {
-  try {
-    console.log("kjckjsdkcs")
-    const _id = req.query.id
-    console.log(_id, 'njsndv')
-    const product = await Product.findOne({ _id: _id })
-    res.render("product", { product });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+
 
 
 // Error404
@@ -642,13 +640,6 @@ const changePassword = async (req, res) => {
 
 
 
-const loadCheckOut = async (req, res) => {
-  try {
-    res.render("checkout");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
 
 module.exports = {
   loadHome,
@@ -664,13 +655,12 @@ module.exports = {
   insertUser,
   loadError404,
   logout,
-  loadProduct,
   resendOtp,
   forgetLoad,
   forgetVerify,
   loadForgetpage,
   resetPassword,
   loadprofile,
-  loadCheckOut,
+
   changePassword
 };

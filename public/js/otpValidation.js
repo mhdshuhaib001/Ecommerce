@@ -1,24 +1,16 @@
 
 
-document.getElementById("otpSubmit").addEventListener('click',function(e){
+document.getElementById("otpForm").addEventListener('click',function(e){
     e.preventDefault()
-    console.log("xhexk")
-    // const otp =document.getElementById("otp").value
-    const otpValues = [
-        $("input[name='a']").val(),
-        $("input[name='b']").val(),
-        $("input[name='c']").val(),
-        $("input[name='d']").val()
-      ];
-    const completeOtp = otpValues.join('');
-    $("#completeOtp").val(completeOtp);
-
+    const otp =document.getElementById("otp").value
+    console.log(otp,'chcekotp in ajax')
     const message = document.getElementById("otp-error")
+
     
     $.ajax({
         url:"/verifyOtp",
         data:{
-            otp:completeOtp
+            otp:otp
         },
         method:"post",
         success:(response)=>{
@@ -45,7 +37,7 @@ document.getElementById("otpSubmit").addEventListener('click',function(e){
                   })
     
                   setTimeout(()=>{
-                    window.location.href="/login"
+                    window.location.href="/home";
                   },3000)
             }
         }

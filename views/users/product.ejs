@@ -25,33 +25,33 @@
                                         <div class="tab-content" id="v-pills-tabContent">
                                             <div class="tab-pane fade show active" id="tab-1">
                                                 <div class="product-img">
-                                                    <a href="/products/crops/<%= product.images.image1 %>"
+                                                    <a href="/products/crops/<%= productView.images.image1 %>"
                                                         class="popup-image"><img
-                                                            src="/products/crops/<%= product.images.image1 %>"
+                                                            src="/products/crops/<%= productView.images.image1 %>"
                                                             class="w-100" alt></a>
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="tab-2">
                                                 <div class="product-img">
-                                                    <a href="/products/crops/<%= product.images.image1 %>"
+                                                    <a href="/products/crops/<%= productView.images.image1 %>"
                                                         class="popup-image"><img
-                                                            src="/products/crops/<%= product.images.image2 %>"
+                                                            src="/products/crops/<%= productView.images.image2 %>"
                                                             class="w-100" alt></a>
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="tab-3">
                                                 <div class="product-img">
-                                                    <a href="/products/crops/<%= product.images.image1 %>"
+                                                    <a href="/products/crops/<%= productView.images.image1 %>"
                                                         class="popup-image"><img
-                                                            src="/products/crops/<%= product.images.image3 %>"
+                                                            src="/products/crops/<%= productView.images.image3 %>"
                                                             class="w-100" alt></a>
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="tab-4">
                                                 <div class="product-img">
-                                                    <a href="/products/crops/<%= product.images.image1 %>"
+                                                    <a href="/products/crops/<%= productView.images.image1 %>"
                                                         class="popup-image"><img
-                                                            src="/products/crops/<%= product.images.image4 %>"
+                                                            src="/products/crops/<%= productView.images.image4 %>"
                                                             class="w-100" alt></a>
                                                 </div>
                                             </div>
@@ -61,19 +61,19 @@
                                         <div class="nav nav-pills has-border-img" id="v-pills-tab" role="tablist"
                                             aria-orientation="vertical">
                                             <a class="active" data-toggle="pill" href="#tab-1">
-                                                <img src="/products/crops/<%= product.images.image1 %>" class="w-100"
+                                                <img src="/products/crops/<%= productView.images.image1 %>" class="w-100"
                                                     alt>
                                             </a>
                                             <a data-toggle="pill" href="#tab-2">
-                                                <img src="/products/crops/<%= product.images.image2 %>"
+                                                <img src="/products/crops/<%= productView.images.image2 %>"
                                                     class="w-100 mt-5-px" alt>
                                             </a>
                                             <a data-toggle="pill" href="#tab-3">
-                                                <img src="/products/crops/<%= product.images.image3 %>"
+                                                <img src="/products/crops/<%= productView.images.image3 %>"
                                                     class="w-100 mt-5-px" alt>
                                             </a>
                                             <a data-toggle="pill" href="#tab-4">
-                                                <img src="/products/crops/<%= product.images.image4 %>"
+                                                <img src="/products/crops/<%= productView.images.image4 %>"
                                                     class="w-100 mt-5-px" alt>
                                             </a>
                                         </div>
@@ -87,11 +87,11 @@
                                 <div class="product-content">
                                     <div class="single-product-title">
                                         <h2>
-                                            <%= product.name %>
+                                            <%= productView.name %>
                                         </h2>
                                     </div>
                                     <div class="single-product-price">
-                                        <%= product.price %>
+                                        <%= productView.price %>
                                     </div>
                                     <div class="single-product-desc mb-25">
                                         <!-- <p>Typi non habent claritatem insitam, est usus legentis in iis qui
@@ -147,8 +147,8 @@
                                         </div>
                                     </div>
                                     <div class="quick-quantity mt-60">
-                                        <form action="#" method="POST">
-                                            <button onclick="addToCart('<%= product._id %>')"
+                                        <form action="/cart" >
+                                            <button onclick="addToCart('<%= productView._id %>')"
                                                 class="list-add-cart-btn red-hover-btn border-0"
                                                 style="padding-left: 80px;padding-right: 80px;transition: all .5s;">add
                                                 to
@@ -170,7 +170,7 @@
                                             <li class="mb-0"><a href="javascript:void(0)" class="title">Categories:
                                                 </a></li>
                                             <li class="mb-0"><a href="single-product-4.html">
-                                                    <%= product.category %>
+                                                    <%= productView.category %>
                                                 </a></li>
                                         </ul>
                                     </div>
@@ -215,7 +215,7 @@
                             <div class="tab-pane fade show active" id="desc-tab-1">
                                 <div class="single-product-tab-content">
                                     <h3 class="title mb-30">Description</h3>
-                                    <p><%= product.description %></p>
+                                    <p><%= productView.description %></p>
 
                                 </div>
                             </div>
@@ -945,31 +945,50 @@
 
 
     <script>
+    
         function addToCart(productId) {
+
             $.ajax({
-                url: '/addtoCart',
-                method: 'patch',
-                data: { productId },
-                success: function (response) {
-                    if (response.failed) {
-                        Swal.fire({
-                            title: 'Out of Stock',
-                            text: 'This product is currently out of stock.',
-                            icon: 'warning',
-                            timer: 3000,  // Set the timer to 2000 milliseconds (2 seconds)
-                            showConfirmButton: false  // Hide the "OK" button
+                url: "/addToCart",
+                method: "post",
+                data: {
+                    id: productId,
+                },
+                success: (response) => {
+                    if (response.login == true) {
+                        swal
+                            .fire({
+                                icon: "warning",
+                                title: "Please Login",
+                                confirmButtonColor: "#3085d6",
+                                confirmButtonText: "Login",
+                                showCancelButton: true,
+                                cancelButtonColor: "#d33",
+                                text: response.message,
+                            })
+                            .then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "/loadLogin";
+                                }
+                            });
+                    } else if (response.success) {
+                        swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: "Product added to cart",
+                            showConfirmButton: false,
+                            timer: 1500,
                         });
+                        $("#cartDiv").load("/ #cartDiv");
                     } else {
-                        Swal.fire({
-                            title: 'Saved to cart!',
-                            text: 'You clicked the button!',
-                            icon: 'success',
-                            timer: 3000,  // Set the timer to 2000 milliseconds (2 seconds)
-                            showConfirmButton: false  // Hide the "OK" button
+                        swal.fire({
+                            icon: "error",
+                            title: "Sorry ! Out of stock. ",
+                            text: response.message,
                         });
                     }
-                }
-            })
+                },
+            });
         }
     </script>
 

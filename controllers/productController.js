@@ -226,6 +226,28 @@ const editedProduct = async (req, res) => {
 }
 
 
+// product
+const loadProduct = async (req, res) => {
+    try {
+      
+      const productView = await Products.findOne({ _id: req.query.id});
+      console.log(productView,'chcek')
+      const userData = req.session.user_id;
+      const products = await Products.find({ blocked: 0 })
+      const category = await Products.find({ blocked: 0 })
+
+      
+      if(productView){
+      res.render("product", { productView ,category, products});
+      } else {
+        res.status(404).render("404");
+
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
 module.exports = {
     loadproduct,
     loadAddProduct,
@@ -233,6 +255,7 @@ module.exports = {
     blockProduct,
     deleteProduct,
     loadEditProduct,
-    editedProduct
+    editedProduct,
+    loadProduct,
 
 }

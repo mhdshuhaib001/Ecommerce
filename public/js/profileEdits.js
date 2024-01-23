@@ -1,4 +1,4 @@
-document.getElementById("addAddress").addEventListener("click", function (e) {
+document.getElementById("submitAddress").addEventListener("click", function (e) {
   e.preventDefault();
 
   const fullname = document.getElementById('fullname').value;

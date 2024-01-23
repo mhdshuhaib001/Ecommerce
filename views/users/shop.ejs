@@ -16,7 +16,7 @@
             <div class="shop-wrapper">
                 <div class="row">
 
-                    <!-- <div class="col-12">
+                    <div class="col-12">
                         <div class="filter-heading">
                             <div class="row">
                                 <div class="col-xl-4 col-lg-4 col-md-4 col-12">
@@ -27,7 +27,7 @@
                                 </div>
                                 <div class="col-xl-4 col-lg-4 col-md-4 col-12">
                                     <div class="shop-filter-tab">
-                                        <ul class="nav nav-pills">
+                                        <!-- <ul class="nav nav-pills">
                                             <li><span>Views</span></li>
                                             <li class="nav-item">
                                                 <a data-toggle="pill" href="#shop-tab-1" data-toggle="tooltip"
@@ -47,7 +47,7 @@
                                                 <a data-toggle="pill" href="#shop-tab-4" data-placement="top"
                                                     title="list view"><i class="fal fa-list"></i></a>
                                             </li>
-                                        </ul>
+                                        </ul> -->
                                     </div>
                                 </div>
 
@@ -70,23 +70,23 @@
                                                 <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
                                                     <div class="filter-popup-item">
                                                         <div class="widget">
-                                                            <h4 class="mb-30">Filter By Color</h4>
-                                                            <ul class="color-list">
-                                                                <li style="background-color: #000;"></li>
-                                                                <li style="background-color: #1E73BE;"></li>
-                                                                <li style="background-color: #FFD700;"></li>
-                                                                <li style="background-color: #C9C9C9;"></li>
-                                                                <li style="background-color: #008000;"></li>
-                                                                <li style="background-color: #FFFF00;"></li>
-                                                                <li style="background-color: #FFFFFF;"></li>
-                                                                <li style="background-color: #DD3333;"></li>
-                                                            </ul>
+                                                            <h4 class="mb-3">Filter By Color</h4>
+                                                            <div class="color-list">
+                                                                <span style="background-color: #000;"></span>
+                                                                <span style="background-color: #1E73BE;"></span>
+                                                                <span style="background-color: #FFD700;"></span>
+                                                                <span style="background-color: #C9C9C9;"></span>
+                                                                <span style="background-color: #008000;"></span>
+                                                                <span style="background-color: #FFFF00;"></span>
+                                                                <span style="background-color: #FFFFFF;"></span>
+                                                                <span style="background-color: #DD3333;"></span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
                                                     <div class="widget">
-                                                        <h4 class="mb-30">Filter By Size</h4>
+                                                        <h4 class="mb-3">Filter By Size</h4>
                                                         <div class="size-link">
                                                             <a href="shop2.html">3xl</a>
                                                             <a href="shop2.html">l</a>
@@ -99,45 +99,52 @@
                                                 </div>
                                                 <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
                                                     <div class="widget">
-                                                        <h4 class="mb-30">Filter By Price</h4>
-                                                        <form action="#">
+                                                        <h4 class="mb-3">Filter By Price</h4>
+                                                        <form action="">
                                                             <div class="price-filter">
                                                                 <div id="slider-range-2"
                                                                     class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
                                                                     <div class="ui-slider-range ui-corner-all ui-widget-header"
-                                                                        style="left: 15%; width: 46.4%;"></div><span
-                                                                        tabindex="0"
+                                                                        style="left: 15%; width: 46.4%;"></div>
+                                                                    <span tabindex="0"
                                                                         class="ui-slider-handle ui-corner-all ui-state-default"
-                                                                        style="left: 15%;"></span><span tabindex="0"
+                                                                        style="left: 15%;"></span>
+                                                                    <span tabindex="0"
                                                                         class="ui-slider-handle ui-corner-all ui-state-default"
                                                                         style="left: 60%;"></span>
                                                                     <div class="ui-slider-range ui-corner-all ui-widget-header"
                                                                         style="left: 15%; width: 45%;"></div>
                                                                 </div>
-                                                                <div class="filter-form-submit mt-35">
-                                                                    <button type="submit">Filter</button>
-                                                                    <div class="filter-price d-inline-block pl-20">
-                                                                        Price: <input type="button" id="amount-2"
-                                                                            value="$75 - $300"></div>
+                                                                <div class="filter-form-submit mt-3">
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary btn-sm">Apply
+                                                                        Filter</button>
+                                                                    <div class="filter-price d-inline-block pl-3">
+                                                                        Price: <span id="amount-2"
+                                                                            class="font-weight-bold text-secondary">$75
+                                                                            - $300</span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </form>
                                                     </div>
                                                 </div>
+
+
                                                 <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 position-static">
                                                     <div class="widget">
-                                                        <h4 class="mb-30">Popular Tags</h4>
+                                                        <h4 class="mb-3">Popular Tags</h4>
                                                         <div class="category-list">
                                                             <ul>
                                                                 <li><a href="shop2.html">Accessories</a></li>
                                                                 <li><a href="shop2.html">Clothing</a></li>
-                                                                <li><a href="shop2.html">fashion</a></li>
+                                                                <li><a href="shop2.html">Fashion</a></li>
                                                                 <li><a href="shop2.html">Fly</a></li>
                                                                 <li><a href="shop2.html">Glasses</a></li>
-                                                                <li><a href="shop2.html">men</a></li>
+                                                                <li><a href="shop2.html">Men</a></li>
                                                                 <li><a href="shop2.html">Product</a></li>
-                                                                <li><a href="shop2.html">version</a></li>
-                                                                <li><a href="shop2.html">women</a></li>
+                                                                <li><a href="shop2.html">Version</a></li>
+                                                                <li><a href="shop2.html">Women</a></li>
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -145,23 +152,29 @@
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
-                        </div> -->
-                    <!-- /. filter heading -->
-                    <div class="filter-content">
-                        <div class="tab-content">
-                            <div class="tab-pane fade" id="shop-tab-1">
-                                <div class="product-wrapper mt-55">
-                                    <div class="row">
-                                        <div class="col-6">
+                        </div>
+                        <!-- /. filter heading -->
+
+
+
+                        <!-- PRODUCT LIST  -->
+                        <div class="tab-pane fade  show active" id="shop-tab-3">
+                            <div class="product-wrapper mt-55">
+                                <div class="row">
+                                    <% products.forEach(product=> { %>
+                                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12">
                                             <div class="product-box mb-40">
                                                 <div class="product-box-wrapper">
                                                     <div class="product-img">
-                                                        <img src="img/product/5.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
+                                                        <img src="/products/crops/<%= product.images.image1 %>"
+                                                            class="w-100" alt="">
+                                                        <a href="/product?id=<%= product._id %>" class="d-block">
                                                             <div class="second-img">
-                                                                <img src="img/product/5-hover.jpg" alt="" class="w-100">
+                                                                <img src="/products/crops/<%= product.images.image2 %>"
+                                                                    alt="" class="w-100">
                                                             </div>
                                                         </a>
                                                         <a href="javascript:void(0)"
@@ -172,790 +185,77 @@
                                                     <div class="product-desc pb-20">
                                                         <div class="product-desc-top">
                                                             <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Woman</span></a>
+                                                                <a href="shop2.html" class="product-category"><span>
+                                                                        <%= product.category %>
+                                                                    </span></a>
                                                             </div>
                                                             <a href="wishlist.html"
                                                                 class="wishlist float-right"><span><i
                                                                         class="fal fa-heart"></i></span></a>
                                                         </div>
-                                                        <a href="single-product-4.html" class="product-title">Light
-                                                            green crewnec...</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$58.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/4.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/4-hover.jpg" alt="" class="w-100">
-                                                            </div>
+                                                        <a href="/product" class="product-title">
+                                                            <%= product.name %>
                                                         </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Woman</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Tassels
-                                                            Pendant
-                                                            Earrings</a>
                                                         <div class="price-switcher">
-                                                            <span class="price switcher-item">$85.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
+                                                            <span class="price switcher-item">₹<%= product.price %>
+                                                            </span>
+                                                            <a onclick="addToCart('<%= product._id %>')"
+                                                                class="add-cart text-capitalize switcher-item"
+                                                                style="cursor: pointer;">+ Add to Cart</a>
+
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/7.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/7-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                    </div>
+                                        <% }); %>
 
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Shoes</span></a>
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Sneaker</span></a>
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Women</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Leather
-                                                            Courriere duffle
-                                                            bag</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$3.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/8.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/8-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                        <span class="sale bg-red text-white">sale!</span>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Shoes</span></a>
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Sneaker</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Wood
-                                                            design bedroom
-                                                            clook</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$45-$10.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/4.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/4-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Woman</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Tassels
-                                                            Pendant
-                                                            Earrings</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$85.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/9.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/9-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                        <span class="sale bg-red text-white">sale!</span>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Woman</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Capitalize
-                                                            on low hanging
-                                                            fruit to</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$250.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="text-center mt-20">
-                                        <a href="shop.html" class="load-more">LOAD MORE...</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="shop-tab-2">
-                                <div class="product-wrapper mt-55">
-                                    <div class="row">
-                                        <div class="col-xl-4 col-md-4 col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/5.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/5-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Woman</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Light
-                                                            green crewnec...</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$58.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4 col-md-4 col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/4.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/4-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Woman</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Tassels
-                                                            Pendant
-                                                            Earrings</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$85.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4 col-md-4 col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/7.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/7-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Shoes</span></a>
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Sneaker</span></a>
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Women</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Leather
-                                                            Courriere duffle
-                                                            bag</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$3.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xl-4 col-md-4 col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/8.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/8-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                        <span class="sale bg-red text-white">sale!</span>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Shoes</span></a>
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Sneaker</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Wood
-                                                            design bedroom
-                                                            clook</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$45-$10.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4 col-md-4 col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/4.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/4-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Woman</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Tassels
-                                                            Pendant
-                                                            Earrings</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$85.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4 col-md-4 col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/9.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/9-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                        <span class="sale bg-red text-white">sale!</span>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Woman</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Capitalize
-                                                            on low hanging
-                                                            fruit to</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$250.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="col-xl-4 col-md-4 col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/4.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/4-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Woman</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Tassels
-                                                            Pendant
-                                                            Earrings</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$85.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4 col-md-4 col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/8.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/8-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                        <span class="sale bg-red text-white">sale!</span>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Shoes</span></a>
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Sneaker</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Wood
-                                                            design bedroom
-                                                            clook</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$45-$10.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4 col-md-4 col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/6.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/6-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Handbag</span></a>
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Handbag</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Coating
-                                                            design lighting
-                                                            lamp</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$7.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4 col-md-4 col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/4.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/4-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Woman</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Tassels
-                                                            Pendant
-                                                            Earrings</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$85.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-4 col-md-4 col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/7.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/7-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Shoes</span></a>
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Sneaker</span></a>
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Women</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Leather
-                                                            Courriere duffle
-                                                            bag</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$3.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xl-4 col-md-4 col-6">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="img/product/8.jpg" class="w-100" alt="">
-                                                        <a href="single-product-4.html" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="img/product/8-hover.jpg" alt="" class="w-100">
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                        <span class="sale bg-red text-white">sale!</span>
-                                                    </div>
-
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Shoes</span></a>
-                                                                <a href="shop2.html"
-                                                                    class="product-category"><span>Sneaker</span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="single-product-4.html" class="product-title">Wood
-                                                            design bedroom
-                                                            clook</a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">$45-$10.00</span>
-                                                            <a href="cart.html"
-                                                                class="add-cart text-capitalize switcher-item">+add
-                                                                to cart</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="text-center mt-20">
-                                        <a href="shop.html" class="load-more">LOAD MORE...</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade  show active" id="shop-tab-3">
-                                <div class="product-wrapper mt-55">
-                                    <div class="row">
-
-                                        <!-- PRODUCT LIST  -->
-
-
-                                        <% products.forEach(product=> { %>
-                                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12">
-                                                <div class="product-box mb-40">
-                                                    <div class="product-box-wrapper">
-                                                        <div class="product-img">
-                                                            <img src="/products/crops/<%= product.images.image1 %>"
-                                                                class="w-100" alt="">
-                                                            <a href="/product?id=<%= product._id %>" class="d-block">
-                                                                <div class="second-img">
-                                                                    <img src="/products/crops/<%= product.images.image2 %>"
-                                                                        alt="" class="w-100">
-                                                                </div>
-                                                            </a>
-                                                            <a href="javascript:void(0)"
-                                                                class="product-img-link quick-view-1 text-capitalize">Quick
-                                                                view</a>
-                                                        </div>
-
-                                                        <div class="product-desc pb-20">
-                                                            <div class="product-desc-top">
-                                                                <div class="categories">
-                                                                    <a href="shop2.html" class="product-category"><span>
-                                                                            <%= product.category %>
-                                                                        </span></a>
-                                                                </div>
-                                                                <a href="wishlist.html"
-                                                                    class="wishlist float-right"><span><i
-                                                                            class="fal fa-heart"></i></span></a>
-                                                            </div>
-                                                            <a href="/product" class="product-title">
-                                                                <%= product.name %>
-                                                            </a>
-                                                            <div class="price-switcher">
-                                                                <span class="price switcher-item">₹<%= product.price %>
-                                                                        </span>
-                                                                <a onclick="addToCart('<%= product._id %>')"
-                                                                    class="add-cart text-capitalize switcher-item"
-                                                                    style="cursor: pointer;">+ Add to Cart</a>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <% }); %>
-
-                                                <!-- 
+                                            <!-- 
                                         <div class="text-center mt-20">
                                             <a href="shop.html" class="load-more">LOAD MORE...</a>
                                         </div> -->
-                                    </div>
                                 </div>
-
                             </div>
+
                         </div>
-                        <!-- /. filter content -->
                     </div>
-                    <!-- /. shop products -->
+                    <!-- /. filter content -->
                 </div>
+                <!-- /. shop products -->
             </div>
         </div>
+    </div>
     </div>
 
 
 
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <li class="page-item active">
+                <a class="page-link" href="#">1</a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" href="#">2</a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" href="#">3</a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 
 
 
@@ -1021,6 +321,7 @@
             </div>
 
         </div>
+
         <!-- footer top -->
 
         <div class="footer-bottom pt-77" style="background-color: #292929;">

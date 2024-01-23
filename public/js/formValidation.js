@@ -14,7 +14,7 @@ document.getElementById('submit').addEventListener('click', function (e) {
   const password_message = document.getElementById('password-error');
   const confirm_message = document.getElementById('confirm-error');
   const err_message = document.getElementById("error-message");
-
+console.log(email)
   $.ajax({
     url: '/signup',
     data: {

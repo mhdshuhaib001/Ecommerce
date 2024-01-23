@@ -20,7 +20,7 @@ admin_Rout.set("view engine", "ejs")
 admin_Rout.set("views", "./views/admin")
 //-------------------------------------------
 admin_Rout.use(express.json())
-admin_Rout.use(express.urlencoded({ extended: true }))
+admin_Rout.use(express.urlencoded({ extended: true }));
 
 const adminController = require("../controllers/adminController");
 const productController = require("../controllers/productController");

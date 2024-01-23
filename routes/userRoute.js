@@ -3,6 +3,8 @@ const user_Rout = express();
 const session = require('express-session');
 const config = require('../config/config');
 const auth = require('../middleware/auth')
+require("dotenv").config()
+
 
 user_Rout.use(session({
     secret: config.sessionSecret
@@ -16,9 +18,9 @@ user_Rout.use(session({
 const userController = require("../controllers/userController");
 const addressController = require("../controllers/addressController")
 const cartController = require("../controllers/cartController");
-
+const productController = require("../controllers/productController");
+const orderControllers = require("../controllers/orderController")
 //======= View Engine ========//
-user_Rout.set("views engine", "ejs");
 user_Rout.set("views", "./views/users");
 
 
@@ -34,8 +36,8 @@ user_Rout.get("/signup", auth.isLogout, userController.loadSignup);
 user_Rout.post("/signup", auth.isLogout, userController.insertUser);
 
 user_Rout.get('/userOtp',auth.isLogout,userController.loadUserOtp)
-user_Rout.post('/verifyOtp', userController.verifyOTP);
-user_Rout.get('/resendOtp ', userController.resendOtp );
+user_Rout.post('/verifyOtp', auth.isLogout,userController.verifyOTP);
+user_Rout.get('/resendOtp', userController.resendOtp);
 
 user_Rout.get('/login', auth.isLogout, userController.loadLogin);
 user_Rout.post('/verifylogin', userController.verifylogin);
@@ -56,9 +58,9 @@ user_Rout.post('/resetPassword', userController.resetPassword)
 
 //===================Cart====================//
 user_Rout.get("/cart", auth.isLogin, cartController.loadCart);
-user_Rout.post("/addToCart", cartController.addToCart)
-user_Rout.post("/removeCartItem", cartController.removeCartItem)
-user_Rout.post("/quantityUpdate", cartController.quantityUpdate)
+user_Rout.post("/addToCart", cartController.addToCart);
+user_Rout.post("/removeCartItem", cartController.removeCartItem);
+user_Rout.post("/quantityUpdate", cartController.quantityUpdate);
 
 
 
@@ -70,12 +72,15 @@ user_Rout.post('/editAddress',auth.isLogin,addressController.editAddress)
 
 
 
-user_Rout.get('/checkout', userController.loadCheckOut)
+user_Rout.get('/checkout', auth.isLogin,cartController.loadCheckOut);
+user_Rout.post('/placeOrder',orderControllers.placeOrder)
+user_Rout.get('/orderSuccess',orderControllers.success)
 
 
-user_Rout.get('/product', userController.loadProduct)
 
-user_Rout.get("/shop", userController.loadShop);
+user_Rout.get('/product', productController.loadProduct)
+
+user_Rout.get("/shop",auth.isLogin,userController.loadShop);
 
 user_Rout.get("/wishlist", userController.loadWishlist);
 

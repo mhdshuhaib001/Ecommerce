@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 
 
@@ -15,7 +15,7 @@
 
     <!-- CSS here -->
     <link rel="stylesheet" type="text/css" href="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.css">
-    
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/mixitup@3"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -24,8 +24,8 @@
 
     <!-- For the profile -->
     <link rel="stylesheet" href="/css/profile.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/owl.carousel.min.css">
     <link rel="stylesheet" href="/css/fontawesome.min.css">
@@ -248,90 +248,122 @@
                                             <li><a href="wishlist" data-toggle="tooltip" data-placement="bottom"
                                                     title="" data-original-title="view wishlist"><i
                                                         class="fal fa-heart"><span>0</span></i></a></li>
-                                            <li><a href="cart"><i class="fal fa-shopping-bag"><span>5</span></i></a>
-                                                <div class="minicart">
-                                                    <div class="minicart-body">
-                                                        <div class="minicart-content">
-                                                            <ul class="text-left">
-                                                                <li>
-                                                                    <div class="minicart-img">
-                                                                        <a href="single-product-4.html" class="p-0"><img
-                                                                                src="img/product/1.jpg" class="w-100"
-                                                                                alt=""></a>
-                                                                    </div>
-                                                                    <div class="minicart-desc">
-                                                                        <a href="single-product-4.html"
-                                                                            class="p-0">Capitalize on
-                                                                            low hanging fruit t</a>
-                                                                        <strong>1 × $250.00</strong>
-                                                                    </div>
-                                                                    <div class="remove">
-                                                                        <i class="fal fa-times"></i>
-                                                                    </div>
-                                                                </li>
-
-                                                                <li>
-                                                                    <div class="minicart-img">
-                                                                        <a href="single-product-4.html" class="p-0"><img
-                                                                                src="img/product/2.jpg" class="w-100"
-                                                                                alt=""></a>
-                                                                    </div>
-                                                                    <div class="minicart-desc">
-                                                                        <a href="single-product-4.html"
-                                                                            class="p-0">Leather
-                                                                            Courriere duffle ba</a>
-                                                                        <strong>1 × $150.00</strong>
-                                                                    </div>
-                                                                    <div class="remove">
-                                                                        <i class="fal fa-times"></i>
-                                                                    </div>
-                                                                </li>
 
 
-                                                                <li>
-                                                                    <div class="minicart-img">
-                                                                        <a href="single-product-4.html" class="p-0"><img
-                                                                                src="img/product/3.jpg" class="w-100"
-                                                                                alt=""></a>
-                                                                    </div>
-                                                                    <div class="minicart-desc">
-                                                                        <a href="single-product-4.html"
-                                                                            class="p-0">Party Supplies
-                                                                            Around Cupcake</a>
-                                                                        <strong>1 × $150.00</strong>
-                                                                    </div>
-                                                                    <div class="remove">
-                                                                        <i class="fal fa-times"></i>
-                                                                    </div>
-                                                                </li>
+                                            <!-- Your HTML code ... -->
+
+                                            <% if (locals.user) { %>
+                                                <li>
+                                                    <a href="cart">
+                                                        <i class="fal fa-shopping-bag">
+                                                            <span>
+                                                                <%= cartCount %>
+                                                            </span>
+                                                        </i>
+                                                    </a>
+
+                                                </li>
+                                                <% } else { %>
+                                                    <li>
+                                                        <a href="cart">
+                                                            <i class="fal fa-shopping-bag">
+                                                                <span>
+                                                                    Cart
+                                                                </span>
+                                                            </i>
+                                                        </a>
+                                                        
+                                                    </li>
+                                                    <% } %>
+
+                                                        <!-- Your HTML code ... -->
+                                                        <!-- <div class="minicart">
+                                                            <div class="minicart-body">
+                                                                <div class="minicart-content">
+                                                                    <ul class="text-left">
+                                                                        <li>
+                                                                            <div class="minicart-img">
+                                                                                <a href="single-product-4.html"
+                                                                                    class="p-0"><img
+                                                                                        src="img/product/1.jpg"
+                                                                                        class="w-100" alt=""></a>
+                                                                            </div>
+                                                                            <div class="minicart-desc">
+                                                                                <a href="single-product-4.html"
+                                                                                    class="p-0">Capitalize on
+                                                                                    low hanging fruit t</a>
+                                                                                <strong>1 × $250.00</strong>
+                                                                            </div>
+                                                                            <div class="remove">
+                                                                                <i class="fal fa-times"></i>
+                                                                            </div>
+                                                                        </li>
+
+                                                                        <li>
+                                                                            <div class="minicart-img">
+                                                                                <a href="single-product-4.html"
+                                                                                    class="p-0"><img
+                                                                                        src="img/product/2.jpg"
+                                                                                        class="w-100" alt=""></a>
+                                                                            </div>
+                                                                            <div class="minicart-desc">
+                                                                                <a href="single-product-4.html"
+                                                                                    class="p-0">Leather
+                                                                                    Courriere duffle ba</a>
+                                                                                <strong>1 × $150.00</strong>
+                                                                            </div>
+                                                                            <div class="remove">
+                                                                                <i class="fal fa-times"></i>
+                                                                            </div>
+                                                                        </li>
+
+
+                                                                        <li>
+                                                                            <div class="minicart-img">
+                                                                                <a href="single-product-4.html"
+                                                                                    class="p-0"><img
+                                                                                        src="img/product/3.jpg"
+                                                                                        class="w-100" alt=""></a>
+                                                                            </div>
+                                                                            <div class="minicart-desc">
+                                                                                <a href="single-product-4.html"
+                                                                                    class="p-0">Party Supplies
+                                                                                    Around Cupcake</a>
+                                                                                <strong>1 × $150.00</strong>
+                                                                            </div>
+                                                                            <div class="remove">
+                                                                                <i class="fal fa-times"></i>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="minicart-checkout">
+                                                                <div
+                                                                    class="minicart-checkout-heading mt-8 mb-25 overflow-hidden">
+                                                                    <strong class="float-left">Subtotal:</strong>
+                                                                    <span class="price float-right">503.00</span>
+                                                                </div>
+                                                                <div class="minicart-checkout-links">
+                                                                    <a href="cart.html"
+                                                                        class="generic-btn black-hover-btn text-uppercase w-100 mb-20">View
+                                                                        cart</a>
+                                                                    <a href="checkout.html"
+                                                                        class="generic-btn black-hover-btn text-uppercase w-100 mb-20">Checkout</a>
+                                                                </div>
+                                                            </div>
+                                                        </div> -->
+                                                        </li>
+                                                        <li><a href="javascript:void(0)"><i
+                                                                    class="fal fa-align-right"></i></a>
+                                                            <ul class="submenu bold-content text-right">
+                                                                <li><a href="userProfile">My Account</a></li>
+                                                                <li><a href="checkout.html">Checkout</a></li>
+                                                                <li><a href="shop.html">Shop</a></li>
+                                                                <li><a href="wishlist.html">Wishlist</a></li>
+                                                                <li><a href="question.html">Frequently</a></li>
                                                             </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="minicart-checkout">
-                                                        <div
-                                                            class="minicart-checkout-heading mt-8 mb-25 overflow-hidden">
-                                                            <strong class="float-left">Subtotal:</strong>
-                                                            <span class="price float-right">503.00</span>
-                                                        </div>
-                                                        <div class="minicart-checkout-links">
-                                                            <a href="cart.html"
-                                                                class="generic-btn black-hover-btn text-uppercase w-100 mb-20">View
-                                                                cart</a>
-                                                            <a href="checkout.html"
-                                                                class="generic-btn black-hover-btn text-uppercase w-100 mb-20">Checkout</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li><a href="javascript:void(0)"><i class="fal fa-align-right"></i></a>
-                                                <ul class="submenu bold-content text-right">
-                                                    <li><a href="userProfile">My Account</a></li>
-                                                    <li><a href="checkout.html">Checkout</a></li>
-                                                    <li><a href="shop.html">Shop</a></li>
-                                                    <li><a href="wishlist.html">Wishlist</a></li>
-                                                    <li><a href="question.html">Frequently</a></li>
-                                                </ul>
-                                            </li>
+                                                        </li>
                             </ul>
                         </div>
                     </div>
