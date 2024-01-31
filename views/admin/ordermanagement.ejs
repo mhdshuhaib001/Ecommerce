@@ -1,0 +1,107 @@
+<%-include("../layouts/admin/header.ejs")%>
+<div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Order Management</h4>
+              <div class="table-responsive" id="reloadArea">
+                <table class="table table-hover" >
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>OrderId</th>
+                      <th>Order Date</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th>View</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (orderData ) { %>
+                        <% orderData.forEach((order, index) => { %>
+                                <tr>
+                                    <td><%= index + 1 %></td>
+                                    <td><%= order._id %></td>
+                                    <td><%= order.purchaseDate %></td>
+                                    <td><i class="fa-solid fa-indian-rupee-sign"></i><%= order.totalAmount %></td>
+                                  
+                                    <td>
+                                        <a href="/admin/orderSummery?_id=<%= order._id %>" class="btn btn-outline-primary block-button">Details</a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="6">No orders found</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+
+                
+                
+                </table>
+                
+              </div>
+            </div>
+            <div class="pagination-container">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                            <a class="page-link" href="/admin/order?page=<%= currentPage - 1 %>" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+            
+                        <% for (let i = 1; i <= totalPages; i++) { %>
+                            <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                <a class="page-link" href="/admin/order?page=<%= i %>">
+                                    <%= i %>
+                                </a>
+                            </li>
+                        <% } %>
+            
+                        <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                            <a class="page-link" href="/admin/order?page=<%= currentPage + 1 %>" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- content-wrapper ends -->
+  </div>
+
+  <script>
+
+   // Your frontend script
+function updateOrder(productId, status) {
+    const data = { productId, status };
+    $.ajax({
+    method: 'POST',
+    url: '/admin/updateOrder',
+    data: JSON.stringify(data),
+    contentType: 'application/json',
+    success: function (response) {
+        console.log(response,'gggg');
+        if (response.success === true) { 
+            $('#reloadArea').load('/admin/order #reloadArea');
+            // location.reload()
+        } else {
+            swal("Something error", "", "error")
+            $('#reloadArea').load('/cart #reloadArea');
+        }
+    }
+});
+}
+
+  </script>
+  
+<%-include("../layouts/admin/footer.ejs")%>

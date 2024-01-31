@@ -13,10 +13,6 @@ const cartSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  applied:{
-    type: String,
-    default: "not"
-  },
   product: [
     {
       productId: {
@@ -38,8 +34,15 @@ const cartSchema = new mongoose.Schema({
       },
       category: {
         type:String,
+      },
+      image:{
+        type:String,
         required:true
-      }
+      },
+      productName:{
+        type:String,
+        required:true
+      },
 
     },
   ],

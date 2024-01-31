@@ -1,9 +1,10 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 const Product = require("../models/productsModel");
-const userOtpVerification = require("../models/userOtpModel");
 const Cart = require("../models/cartModel");
 const Address = require("../models/addressModel");
+const Category = require('../models/categoryModel');
+const Order = require("../models/orderModel");
 const nodemailer = require("nodemailer");
 const randomString = require("randomstring");
 const config = require("../config/config");
@@ -33,9 +34,10 @@ const loadHome = async (req, res) => {
     const cartData = await Cart.findOne({ user: user_id }).populate("product.productId");
     const userData = await User.findOne({ _id: user_id });
     const cart = await Cart.findOne({ userId: req.session.user_id })
+    let cartCount = 0;
+    if (cart) { cartCount = cart.product.length }
 
-
-    res.render("home", { user: userData, cart: cartData });
+    res.render("home", { user: userData, cart: cartData, cartCount });
   } catch (error) {
     console.log(error.message);
   }
@@ -47,9 +49,7 @@ const loadHome = async (req, res) => {
 const insertUser = async (req, res) => {
   try {
     const { name = "", email = "", mobile = "", password = "", confirmPassword = "" } = req.body;
-    console.log(req.body)
     if (name.trim() === "") {
-      console.log("check 1")
       res.json({ name_require: true });
     } else {
       if (name.startsWith(" ") || name.includes(" ")) {
@@ -116,7 +116,7 @@ const insertUser = async (req, res) => {
                                       const spassword = await securePassword(
                                         req.body.password
                                       );
-                                      const user = new User({
+                                      const Data = new User({
                                         name: req.body.name,
                                         email: req.body.email,
                                         mobile: req.body.mobile,
@@ -124,8 +124,9 @@ const insertUser = async (req, res) => {
                                         is_admin: 0,
                                       });
 
-                                      const userData = await user.save();
-                                      console.log("check youser ", userData)
+                                      const userData = await Data.save();
+
+                                      console.log(userData);
 
                                       if (userData) {
                                         let randomNumber =
@@ -134,8 +135,8 @@ const insertUser = async (req, res) => {
                                         otp = randomNumber;
                                         console.log(otp, "check otp");
 
-                                        const emaiill = req.session.email = req.body.email;
-                                        console.log(emaiill)
+                                        req.session.email = req.body.email;
+
                                         req.session.password = spassword;
                                         req.session.userName = req.body.name;
                                         req.session.mobile = req.body.mobile;
@@ -183,10 +184,7 @@ const loadUserOtp = async (req, res) => {
   try {
     let verifyErr = req.session.verifyErr;
     let otpsend = req.session.otpsend;
-    console.log(otpsend, 'orpsent check');
 
-    console.log("Ottpp");
-    
     res.render("userOtp", { verifyErr, otpsend });
   } catch (error) {
     console.log(error.message);
@@ -201,27 +199,22 @@ const verifyOTP = async (req, res) => {
     req.session.otpsent = false;
 
     const otpInput = req.body.otp;
-    const email = req.body.email;
-
-    console.log(req.body)
-    console.log("otpInput", otpInput)
+    const email = req.session.email;
+    console.log(email, 'veryfy');
 
     if (req.body.otp.trim() === "") {
       res.json({ fill: true });
     } else {
       if (otpInput == otp) {
-        const verified = await User.updateOne(
+        const verified = await User.findOneAndUpdate(
           { email: email },
-          { $set: { is_verified: true } }   
+          { $set: { is_verified: true } },
+          { new: true }
         );
-        console.log(verified)
-
         if (verified) {
-          console.log("Account verifyed");
           req.session.reqSucces = true;
           res.json({ success: true });
         } else {
-          console.log("not verified");
           req.json({ error: true });
         }
       } else {
@@ -244,8 +237,6 @@ let otp;
 const sendVerifyMail = async ({ name, email, otp }) => {
   try {
 
-    console.log("email Otp", email);
-    console.log(otp);
     // Nodemailer
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
@@ -262,7 +253,7 @@ const sendVerifyMail = async ({ name, email, otp }) => {
       from: process.env.ADMIN_EMAIL,
       to: email,
       subject: "OTP verification",
-      html: "<h1> Hallo " + name +  ", This is your Mail veryfication message <br> This is your OTP :" + otp + ""
+      html: "<h1> Hallo " + name + ", This is your Mail veryfication message <br> This is your OTP :" + otp + ""
     };
 
     transporter.sendMail(mailOPtions, function (err, info) {
@@ -281,34 +272,40 @@ const sendVerifyMail = async ({ name, email, otp }) => {
 //----------To resend Otp-----------
 const resendOtp = async (req, res) => {
   try {
+    console.log("Resend OTP route hit");
+    let otpsend = req.session.otpsend;
     let verifyErr = req.session.verifyErr;
     let email = req.session.email;
     let name = req.session.name || "User";
     let randomNumber = Math.floor(Math.random() * 9000) + 1000;
-    otp = randomNumber;
 
-    console.log('Setting otpsend in session');
-    req.session.otpsend = true;
-    console.log('otpsend set:', req.session.otpsend);
+
+    console.log(email, '1');
+    console.log(verifyErr, '2');
+    console.log(name, '3');
+    console.log(randomNumber, '3');
     setTimeout(() => {
       otp = Math.floor(Math.random() * 9000) + 1000;
     }, 60000);
+    console.log(otp);
 
-    sendVerifyMail({ name, email,  randomNumber });
+    sendVerifyMail({ name, email, randomNumber });
     res.render("userOtp", {
       verifyErr,
-      otpsend: req.session.otpsend, 
+      otpsend,
       resend: "Resend the otp to your email address.",
     });
   } catch (error) {
     console.log(error.message);
-  }};
+  }
+};
 
 
 //======= Login =========
 const loadLogin = async (req, res) => {
   try {
-    res.render("login",);
+    const userId = req.session.user_id;
+    res.render("login", { user: userId });
   } catch (error) {
     console.log(error.message);
   }
@@ -340,7 +337,8 @@ const verifylogin = async (req, res) => {
             }
             else {
               const userData = await User.findOne({ email: email });
-              if (userData && userData.is_admin == true) {
+
+              if (userData) {
                 if (userData.is_verified == true) {
                   const passwordMatch = await bcrypt.compare(
                     password,
@@ -385,7 +383,6 @@ const verifylogin = async (req, res) => {
 //---------------FORGET PASSWORD-----------------------
 const sendPassResetMail = async (name, email, token) => {
   try {
-    console.log(email, "chcek");
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
@@ -421,6 +418,9 @@ const sendPassResetMail = async (name, email, token) => {
   }
 };
 
+
+//----------- forget passwoed load--------
+
 const forgetLoad = async (req, res) => {
   try {
     res.render("forgetpassword");
@@ -429,7 +429,8 @@ const forgetLoad = async (req, res) => {
   }
 };
 
-//----------- forget passwoed load--------
+
+
 const forgetVerify = async (req, res) => {
   try {
     const email = req.body.email;
@@ -499,11 +500,8 @@ const resetPassword = async (req, res) => {
   try {
     const Password = req.body.password;
     const confirm = req.body.confirm;
-    console.log('co jsn djfics')
-    console.log(confirm, 'dcks djcjwdsncjsdcs')
 
     if (Password.trim() === "") {
-      console.log('ethiiiii');
       res.json({ required: true });
     } else {
       if (Password.startsWith(" ") || Password.includes(" ")) {
@@ -525,7 +523,6 @@ const resetPassword = async (req, res) => {
                 { email: email },
                 { $set: { password: secure_password, token: "" } }
               )
-              console.log(updateData, 'updateDatachcek')
               if (updateData) {
                 req.session.email = false;
                 res.json({ response: true });
@@ -545,19 +542,39 @@ const resetPassword = async (req, res) => {
 //-------------Shop-------------------
 const loadShop = async (req, res) => {
   try {
-    const productData = await Product.find({});
     const userData = req.session.user_id;
+    const page = parseInt(req.query.page) || 1;
+    const limit = 8;
+    const totalProducts = await Product.countDocuments({});
+    const totalPages = Math.ceil(totalProducts / limit);
+    const skip = (page - 1) * limit;
+    const productData = await Product.find({})
+      .skip(skip)
+      .limit(limit);
+    const cart = await Cart.findOne({ userId: req.session.user_id })
+    let cartCount = 0;
+    if (cart) { cartCount = cart.product.length }
 
-    res.render("shop", { user: userData, products: productData });
+    res.render("shop", {
+      user: userData,
+      products: productData,
+      currentPage: page,
+      totalPages,
+      limit,
+      totalProducts,
+      cartCount
+    });
   } catch (error) {
     console.log(error.message);
   }
 };
 
+
 // ------------Logout------------
 const logout = async (req, res) => {
   try {
     req.session.destroy();
+    console.log(req.session);
     res.redirect("/");
   } catch (error) {
     console.log(error.message);
@@ -605,14 +622,21 @@ const loadError404 = async (req, res) => {
 
 const loadprofile = async (req, res) => {
   try {
+    const userId = req.session.user_id
+    const userData = await User.findOne({ _id: userId });
+    const addressData = await Address.findOne({ user: userId });
+    const orderData = await Order.find({ userId: userId });
+    const cart = await Cart.findOne({userId:req.session.user_id})
+    let cartCount=0; 
+    if(cart){cartCount = cart.product.length}
 
-    const userData = await User.findOne({ _id: req.session.user_id });
-    const addressData = await Address.findOne({ user: req.session.user_id });
-    res.render("userProfile", { userData, addressData });
+    res.render("userProfile", { user:userData, addressData, orderData ,cartCount});
   } catch (error) {
     console.log(error.message);
   }
 };
+
+
 
 const changePassword = async (req, res) => {
   try {
@@ -629,14 +653,19 @@ const changePassword = async (req, res) => {
         res.json({ success: false, message: "someting wrong" });
 
       }
-
+    } else {
+      res.json({ wrongpass: true });
     }
-
   } catch (error) {
     console.log(error.message);
 
   }
 }
+
+
+
+
+
 
 
 
@@ -661,6 +690,7 @@ module.exports = {
   loadForgetpage,
   resetPassword,
   loadprofile,
+  changePassword,
 
-  changePassword
+
 };

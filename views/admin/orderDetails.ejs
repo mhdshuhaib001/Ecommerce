@@ -1,0 +1,140 @@
+<%- include('../layouts/admin/header.ejs') -%>
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <% if (orderData) { %>
+            <!-- Two-Column Layout for Order Summary and Order Details -->
+            <div class="row">
+                <!-- Left Column for Order Summary -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Order Summary</h3>
+
+                            <!-- Order Summary Section -->
+                            <div>
+                                <h4>Order Summary</h4>
+                                <p>OrderId: <%= orderData._id %><br>
+                                Date: <%= orderData.purchaseDate %><br>
+                                Items: <%= orderData.orderProducts.length %><br>
+                                Shipping: <%= orderData.shippingMethod %><br>
+                                Total Amount: ₹<%= orderData.totalAmount %><br>
+                                Payment Method: <%= orderData.paymentMethod %><br>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column for Order Details -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Order Details</h3>
+
+                            <!-- Delivery Address Section -->
+                            <div>
+                                <h4>Delivery Address</h4>
+                                <p>Name: <%= orderData.deliveryDetails.fullname %><br>
+                                Email: <%= orderData.deliveryDetails.email %><br>
+                                Mobile: <%= orderData.deliveryDetails.mobile %><br>
+                                State: <%= orderData.deliveryDetails.state %><br>
+                                City: <%= orderData.deliveryDetails.city %><br>
+                                House Name: <%= orderData.deliveryDetails.houseName %><br>
+                                Pincode: <%= orderData.deliveryDetails.pincode %><br>
+                                </p>
+                            </div>
+
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- Products Table Section -->
+                <div style="width: 104%; ">
+                    <h4>Products</h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="reloadArea">
+                            <thead>
+                                <tr>
+                                    <th>No:</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Count</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% orderData.orderProducts.forEach((product, index) => { %>
+                                    <tr>
+                                        <td><%= index + 1 %></td>
+                                        <td>
+                                            <span class="pl-2"><%= product.productName %></span>
+                                        </td>
+                                        <td><%= product.category %></td>
+                                        <td><%= product.count %></td>
+                                        <td>₹<%= product.productPrice %></td>
+                                        <% if (product.status == "pending") { %>
+                                            <td style="color: yellow;">Pending</td>
+                                        <% } else if (product.status == 'delivered') { %>
+                                            <td style="color: limegreen;">Delivered</td>
+                                        <% } else if (product.status == 'cancel') { %>
+                                            <td style="color: red;">Cancelled</td>
+                                        <% } else { %>
+                                            <td >
+                                                <div class="dropdown">
+                                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                                        <%= product.status %>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                       <button class="dropdown-item" type="button" onclick="updateOrder('<%= product._id %>','Placed')">Placed</button>
+                                                       <button class="dropdown-item" type="button" onclick="updateOrder('<%= product._id %>','Shipped')">Shipped</button>
+                                                       <button class="dropdown-item" type="button" onclick="updateOrder('<%= product._id %>','Out for Delivery')">Out for Delivery</button>
+                                                       <button class="dropdown-item" type="button" onclick="updateOrder('<%= product._id %>','delivered')">Delivered</button>
+                                                       <button class="dropdown-item" type="button" onclick="updateOrder('<%= product._id %>','cancel')">Cancel</button>
+                                                  </div>
+                                                </div>
+                                            </td>
+                                        <% } %>
+                                        <td>₹<%= product.totalPrice %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        <% } else { %>
+            <!-- Handle Case where Order Details are not found -->
+            <div class="alert alert-danger" role="alert">
+                Order details not found.
+            </div>
+        <% } %>
+    </div>
+</div>
+
+
+<script>
+function updateOrder(_id, status) {
+    const data = { orderId:_id, status };
+    console.log(data);
+    $.ajax({
+        method: 'PUT',
+        url: '/admin/updateOrder',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        success: function (response) {
+            console.log(response, 'gggg');
+            if (response.success === true) {
+                $('#reloadArea').load('/admin/orderDetails #reloadArea');
+            } else {
+                swal("Something error", "", "error");
+                $('#reloadArea').load('/cart #reloadArea');
+            }
+        }
+    });
+}
+
+   </script>
+<%- include('../layouts/admin/footer.ejs') -%>

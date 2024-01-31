@@ -12,7 +12,7 @@ document.getElementById("otpForm").addEventListener('click',function(e){
         data:{
             otp:otp
         },
-        method:"post",
+        method:"POST",
         success:(response)=>{
             if(response.wrong){
             message.style.display = "block";

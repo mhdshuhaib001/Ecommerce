@@ -40,7 +40,7 @@ document.getElementById("submitAddress").addEventListener("click", function (e) 
     efnameError.style.display = "block";
     efnameError.textContent = "Full name must contain at least 3 letters.";
   } else if (pincode.trim() === "") {
-   epinError.style.display = "block";
+    epinError.style.display = "block";
     epinError.textContent = "Pincode is required.";
   } else if (!pincodePattern.test(pincode)) {
     epinError.style.display = "block";
@@ -67,7 +67,6 @@ document.getElementById("submitAddress").addEventListener("click", function (e) 
     estateError.style.display = "block";
     estateError.textContent = "State name is required.";
   } else {
-    // Ajax request for adding the address
     $.ajax({
       url: "/addAddress",
       data: {
@@ -82,7 +81,6 @@ document.getElementById("submitAddress").addEventListener("click", function (e) 
       method: "post",
       success: (response) => {
         if (response.success) {
-          // Reload the user profile page
           window.location.reload('/addAddress');
         } else {
           console.error('Failed to add address.');
@@ -94,7 +92,6 @@ document.getElementById("submitAddress").addEventListener("click", function (e) 
 
 
 //============ Remove Address============
-
 function removeAddress(addressId) {
   Swal.fire({
     title: "Are you sure?",
@@ -107,17 +104,19 @@ function removeAddress(addressId) {
     cancelButtonText: "Cancel",
   }).then((result) => {
     if (result.isConfirmed) {
-      console.log("check")
       $.ajax({
         url: "/removeAddress",
         data: {
           id: addressId,
         },
-        method: "post",
+        method: "POST", 
         success: (response) => {
-          if ((response.remove = true)) {
+          if (response.remove) {
             $("#addressReload").load("/userProfile #addressReload");
           }
+        },
+        error: (error) => {
+          console.error("Error during AJAX request:", error);
         },
       });
     }
@@ -137,7 +136,6 @@ document.getElementById('changePass').addEventListener('click', function (e) {
   const conError = document.getElementById('conpassError');
   const currError = document.getElementById('currError');
 
-  // Check if at least one of the passwords is empty
   if (currPass.trim() === "" || newPass.trim() === "" || conPass.trim() === "") {
     currError.style.display = "block";
     currError.textContent = "Must fill out all fields.";
@@ -148,7 +146,6 @@ document.getElementById('changePass').addEventListener('click', function (e) {
     conError.style.display = "block";
     conError.textContent = "Confirm the correct password.";
   } else {
-    // Proceed with the password change logic
     $.ajax({
       url: "/changePassword",
       data: {
@@ -323,3 +320,125 @@ function showEditAddressModal(fullname, mobile, email, houseName, city, state, p
 
   $('#editAddressModal').modal('show');
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  document.getElementById('editProfile').addEventListener('click', function (e) {
+    e.preventDefault();
+
+
+    const editFullname = document.getElementById('editFullname').value;
+    const editEmail = document.getElementById('editEmail').value;
+    const editMobile = document.getElementById('editMobile').value;
+
+    console.log(editFullname,'chek');
+    console.log(editEmail,'chek');
+    console.log(editMobile,'chek');
+
+
+    // Validation patterns
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    const mobilePattern = /^\d{10}$/;
+    const namePattern = /^[a-zA-Z\s]+$/;
+
+    // Error elements
+    const nameError = document.getElementById('editFullnameError');
+    const emailError = document.getElementById('editEmailError');
+    const mobError = document.getElementById('editMobileError');
+
+    // Reset previous errors
+    nameError.style.display = "none";
+    emailError.style.display = "none";
+    mobError.style.display = "none";
+
+    // Validation
+    if (editFullname.trim() === "" || !namePattern.test(editFullname) || editFullname.length < 3) {
+      nameError.style.display = "block";
+      nameError.textContent = "Enter a valid full name.";
+    } else if (editEmail.trim() === "" || !emailPattern.test(editEmail)) {
+      emailError.style.display = "block";
+      emailError.textContent = "Enter a valid email address.";
+    } else if (editMobile.trim() === "" || !mobilePattern.test(editMobile) || editMobile === "0000000000") {
+      mobError.style.display = "block";
+      mobError.textContent = "Enter a valid phone number.";
+    }
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to update your profile?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+      cancelButtonText: "Not now",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: "/editProfile",
+          data: {
+            fullname: editFullname,
+            email: editEmail,
+            mobile: editMobile
+          },
+          method: "post",
+          success: (response) => {
+            if (response.success) {
+              $('#editProfileModal').modal('hide');
+              $('.modal-dropback').remove();
+
+              const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+              })
+
+              Toast.fire({
+                icon: 'success',
+                title: 'Profile updated successfully.'
+              })
+
+              setTimeout(() => {
+                window.location.reload("/userProfile");
+              }, 2000);
+            } else {
+              const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+              })
+
+              Toast.fire({
+                icon: 'error',
+                title: 'Oops!! Try again.'
+              })
+            }
+          },
+        });
+      }
+    });
+  });
+
+
+
+  function showEditProfileModal(fullname, email, mobile) {
+    // Pre-fill the form fields
+    document.getElementById('editFullname').value = fullname;
+    document.getElementById('editEmail').value = email;
+    document.getElementById('editMobile').value = mobile;
+
+    // Show the modal
+    $('#editProfileModal').modal('show');
+  }

@@ -8,26 +8,26 @@ const loadCart = async (req, res) => {
   try {
     const userId = req.session.user_id;
     const cartData = await Cart.findOne({ userId: userId }).populate("product.productId");
-    console.log(cartData, ' check the data');
 
     if (cartData && cartData.product.length > 0) {
       const product = cartData.product;
-      console.log("check");
       let total = 0;
       for (let i = 0; i < product.length; i++) {
         total += product[i].totalPrice;
       }
-
       const subTotal = total;
-      console.log(subTotal, "subtotal");
-      const userData = await User.find();
+      const cart = await Cart.findOne({ userId: req.session.user_id })
+      let cartCount = 0;
+      if (cart) { cartCount = cart.product.length }
 
       res.render("cart", {
-        cart: cartData,
+        user: userId,
         userId,
+        cart: cartData,
         products: product,
         total: total,
-        subTotal
+        subTotal,
+        cartCount
       });
     } else {
       res.render("cart", { userId });
@@ -38,8 +38,6 @@ const loadCart = async (req, res) => {
   }
 };
 
-
-//-------- Add To Cart -------//
 const addToCart = async (req, res) => {
   try {
     const userId = req.session.user_id;
@@ -47,53 +45,49 @@ const addToCart = async (req, res) => {
     const userData = await User.findOne({ _id: userId });
     const productData = await Products.findById({ _id: productId });
     const productQuantity = productData.quantity;
-
+    const count = req.body.count ? parseInt(req.body.count) : 1;
+    const totalPrice = productData.price * count;
     const products = {
       productId: productId,
       productPrice: productData.price,
-      totalPrice: productData.totalPrice,
-      count: productData.count,
+      productName: productData.name,
+      totalPrice: totalPrice,
+      count: count,
       image: productData.images.image1
     };
+    const existCartData = await Cart.findOne({ userId: userId });
 
-    const addCartData = await Cart.findOneAndUpdate(
-      { userId: userId },
-      {
-        $set: {
-          userId: userId,
-          userName: userData.name
-        },
-        $push: {
-          product: products
-        }
-      },
-      { upsert: true, new: true }
-    );
-
-    const updatedProduct = addCartData.product.find((p) => p.productId == productId);
-    const updatedQuantity = updatedProduct ? updatedProduct.count : 0;
-
-    if (updatedQuantity + 1 > productQuantity) {
-      return res.json({ success: false, message: " Quantity limit reached" });
+    if (!existCartData) {
+      const newCartData = await Cart.create({
+        userId: userId,
+        userName: userData.name,
+        product: [products]
+      });
+      return res.json({ success: true, newProduct: true });
     }
-    res.json({ success: true });
+    const existProductIndex = existCartData.product.findIndex((p) => p.productId == productId);
+    if (existProductIndex !== -1) {
+      existCartData.product[existProductIndex].count += count;
+      await existCartData.save();
+      return res.json({ success: true, newProduct: false });
+    } else {
+      existCartData.product.push(products);
+      await existCartData.save();
+      return res.json({ success: true, newProduct: true });
+    }
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
+
 //------------- Remove Cart ----------------//
 const removeCartItem = async (req, res) => {
   try {
-    console.log("remove cart");
     const userId = req.session.user_id;
     const productId = req.body.product;
-    console.log("check product idd", productId);
     const cartData = await Cart.findOne({ userId: userId });
-
-    // console.log(userId, 'check')
-    console.log(cartData, "cartData");
     if (cartData) {
       await Cart.findOneAndUpdate(
         { userId: userId },
@@ -109,9 +103,14 @@ const removeCartItem = async (req, res) => {
   }
 };
 
+
+
+
+
+
+
 const quantityUpdate = async (req, res) => {
   try {
-    console.log("check------------------");
     const proId = req.body.product;
     const userData = req.session.user_id;
     let count = parseInt(req.body.count);
@@ -131,13 +130,8 @@ const quantityUpdate = async (req, res) => {
         return;
       }
     } else if (count < 0) {
-      // Quantity is being decreased
       if (updateQuantity <= 1 || Math.abs(count) > updateQuantity) {
-        await Cart.updateOne(
-          { userId: userData },
-          { $pull: { product: { productId: proId } } }
-        );
-        res.json({ success: true });
+        res.json({ success: false, message: "Minimum quantity reached!" });
         return;
       }
     }
@@ -147,14 +141,12 @@ const quantityUpdate = async (req, res) => {
       { $inc: { "product.$.count": count } }
     );
 
-    console.log(cartdata, "chek cd----------------------");
     const updatedCartData = await Cart.findOne({ userId: userData });
     const updatedProduct = updatedCartData.product.find(
       (product) => product.productId == proId
     );
     const updatedQuantity = updatedProduct.count;
 
-    // Calculate the correct total price
     const productTotal = productData.price * updatedQuantity;
 
     await Cart.updateOne(
@@ -169,6 +161,7 @@ const quantityUpdate = async (req, res) => {
 };
 
 
+
 const loadCheckOut = async (req, res) => {
   try {
     const user_id = req.session.user_id;
@@ -178,12 +171,10 @@ const loadCheckOut = async (req, res) => {
     );
     const addressId = req.session.id;
     const addressData = await Address.findOne({ user: user_id });
-
+    const cart = await Cart.findOne({ userId: req.session.user_id })
+    let cartCount = 0;
+    if (cart) { cartCount = cart.product.length }
     const products = cartData.product;
-    console.log(products, "check this ");
-    console.log(userData, "check this ");
-    console.log(addressId, "check thisaddressId ");
-
     let total = 0;
     for (let i = 0; i < products.length; i++) {
       total += products[i].totalPrice;
@@ -226,6 +217,7 @@ const loadCheckOut = async (req, res) => {
           products: products,
           Total,
           totalamount,
+          cartCount
         });
       } else {
         res.render("cart", { message: proName, name: req.session.name });

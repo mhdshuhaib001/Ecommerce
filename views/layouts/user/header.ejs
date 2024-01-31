@@ -115,16 +115,13 @@
 
                             <ul class="text-right">
 
-                                <% if (locals.user) { %>
-                                    <li><a href="/logout" class="account"><i class="fal fa-user-friends"></i>
-                                            <article class="account-registar d-inline-block" onclick="confirmLogout()">
-                                                LogOut</article>
-                                        </a></li>
-                                    <% } else { %>
+                              
                                         <li><a href="login" class="account"><i class="fal fa-user-friends"></i>
-                                                <article class="account-registar d-inline-block">Login/Signup</article>
+                                                <article class="account-registar d-inline-block">Login/signup</article>
                                             </a></li>
-                                        <% } %>
+
+                                        
+
                                             <li><a href="javascript:void(0)"><i class="fal fa-search"></i></a>
 
                                                 <!-- search popup -->
@@ -252,32 +249,20 @@
 
                                             <!-- Your HTML code ... -->
 
-                                            <% if (locals.user) { %>
-                                                <li>
-                                                    <a href="cart">
-                                                        <i class="fal fa-shopping-bag">
-                                                            <span>
-                                                                <%= cartCount %>
-                                                            </span>
-                                                        </i>
-                                                    </a>
+                                            <li>
+                                                <a href="cart">
+                                                    <i class="fal fa-shopping-bag">
+                                                        <span><%= (typeof cartCount !== 'undefined' && cartCount !== null && cartCount !== "") ? cartCount : '0' %></span>
+                                                    </i>
+                                                </a>
+                                            </li>
+                                            
 
-                                                </li>
-                                                <% } else { %>
-                                                    <li>
-                                                        <a href="cart">
-                                                            <i class="fal fa-shopping-bag">
-                                                                <span>
-                                                                    Cart
-                                                                </span>
-                                                            </i>
-                                                        </a>
-                                                        
-                                                    </li>
-                                                    <% } %>
 
-                                                        <!-- Your HTML code ... -->
-                                                        <!-- <div class="minicart">
+
+
+                                                    <!-- Your HTML code ... -->
+                                                    <!-- <div class="minicart">
                                                             <div class="minicart-body">
                                                                 <div class="minicart-content">
                                                                     <ul class="text-left">
@@ -353,17 +338,17 @@
                                                                 </div>
                                                             </div>
                                                         </div> -->
-                                                        </li>
-                                                        <li><a href="javascript:void(0)"><i
-                                                                    class="fal fa-align-right"></i></a>
-                                                            <ul class="submenu bold-content text-right">
-                                                                <li><a href="userProfile">My Account</a></li>
-                                                                <li><a href="checkout.html">Checkout</a></li>
-                                                                <li><a href="shop.html">Shop</a></li>
-                                                                <li><a href="wishlist.html">Wishlist</a></li>
-                                                                <li><a href="question.html">Frequently</a></li>
-                                                            </ul>
-                                                        </li>
+                                                    </li>
+                                                    <li><a href="javascript:void(0)"><i
+                                                                class="fal fa-align-right"></i></a>
+                                                        <ul class="submenu bold-content text-right">
+                                                            <li><a href="userProfile">My Account</a></li>
+                                                            <li><a href="checkout.html">Checkout</a></li>
+                                                            <li><a href="shop.html">Shop</a></li>
+                                                            <li><a href="wishlist.html">Wishlist</a></li>
+                                                            <li><a href="/logout"><i class="bi bi-box-arrow-right"></i> LogOut</a></li>
+                                                        </ul>
+                                                    </li>
                             </ul>
                         </div>
                     </div>

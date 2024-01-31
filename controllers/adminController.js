@@ -88,7 +88,6 @@ const userBlocked = async (req, res) => {
 
         if (!blockedUser.is_blocked ) {
              await User.updateOne({ _id: userId }, { $set: { is_blocked: true } });
-             console.log("check the Update User", User)
             res.json({remove:true})
 
         } else {
@@ -228,10 +227,6 @@ const deleteCategory = async (req, res) => {
 
 
 
-
-
-
-
 module.exports = {
     adminLoginPage,
     adminVerify,
@@ -245,7 +240,5 @@ module.exports = {
     loadeditCategory,
     blockCategory,
     updateCategory,
-    deleteCategory,   
-    
-
+    deleteCategory,  
 }

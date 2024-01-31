@@ -1,46 +1,43 @@
-const User = require("../models/userModel");
-const Cart = require("../models/cartModel");
+const User = require('../models/userModel')
 
-const isLogin = async (req, res, next) => {
-  try {
-    if (req.session.user_id) {
-      const userData = await User.findById(req.session.user_id);
-      if (userData.is_blocked) {
-        res.redirect("/login");
-      } else {
-        // Retrieve the user's cart
-        const cart = await Cart.findOne({ userId: req.session.user_id });
+const isLogin = async (req,res,next)=>{
+    try {
+        
+        if(req.session.user_id){
+            const blockedUser = await User.findOne({ _id: req.session.user_id });
+            if(blockedUser.is_blocked == false){
+                next()
+            }else{
+                req.session.user_id = false;
+                req.session.name = false;
+                res.redirect('/')
+            }
+        }else{
+            res.redirect('/')
+        }
+      
 
-        // Set cartCount in locals
-        res.locals.cartCount = cart ? cart.product.length : 0;
-
-        next();
-      }
-    } else {
-      res.redirect("/login");
+    } catch (error) {
+        console.log(error);
     }
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+}
 
-const isLogout = async (req, res, next) => {
-  try {
-    if (req.session.user_id) {
-      const cart = await Cart.findOne({ userId: req.session.user_id });
+const isLogout = async (req,res,next)=>{
+    try {
+        
+        if(req.session.user_id){
+            res.redirect('/home')
+        }else{
+            next()
+        }
+        
 
-      res.locals.cartCount = cart ? cart.product.length : 0;
-
-      res.redirect("/home");
-    } else {
-      next();
+    } catch (error) {
+        console.log(error);
     }
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+}
 
 module.exports = {
-  isLogin,
-  isLogout
-};
+    isLogin,
+    isLogout
+}

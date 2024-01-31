@@ -53,7 +53,7 @@ body {
 
 .rightbox {
     float: right;
-    width: 79%;
+    width: 80%;
     height: 100%;
     padding-top: 2px;
     display: inline;
@@ -230,4 +230,85 @@ span {
 
 .edit-link i {
     margin-right: 5px;
+}
+
+
+body.wallet-body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.wallet-container {
+    background-image: url('https://www.transparenttextures.com/patterns/brushed-alum.png');
+    max-width: 400px;
+    margin: 50px auto;
+    background-color: #fff; /* Platinum color */
+    color: #333; /* Dark text color */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.background-pattern {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 10px;
+}
+
+.wallet-container:hover {
+    transform: scale(1.02);
+}
+
+.wallet-title {
+    color: #333; /* Dark text color */
+}
+
+.wallet-balance {
+    color: #555; /* Slightly lighter text color */
+    margin-top: 10px;
+}
+
+.wallet-button {
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 5px 10px; /* Smaller padding for a smaller button */
+    font-size: 12px; /* Smaller font size for the button text */
+    border: none;
+    border-radius: 10px; /* Increased border-radius for an attractive look */
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 10px; /* Slightly reduced margin-top */
+}
+
+.wallet-button:hover {
+    background-color: #1a252f;
+}
+
+.wallet-transaction-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.wallet-transaction-item {
+    background-color: #eee; /* Light background color for transaction items */
+    margin: 5px 0;
+    padding: 8px; /* Smaller padding for a smaller transaction item */
+    border-radius: 6px;
+    transition: transform 0.3s ease;
+    font-size: 5px; /* Smaller font size for the transaction text */
+}
+
+.wallet-transaction-item:hover {
+    transform: scale(1.05);
 }

@@ -1,577 +1,427 @@
 <%- include('../layouts/user/header.ejs') -%>
 
-
     <!-- preloader -->
 
+    <div class="has-breadcrumb-bg mb-120">
 
+        <!-- <div class="breadcrumb-content"
+                        style="flex-direction: column;">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb p-0 m-0">
+                                <li class="breadcrumb-item"><a
+                                        href="home">Home</a></li>
+                                <li class="breadcrumb-item active"
+                                    aria-current="page">Cart</li>
+                            </ol>
+                        </nav>
 
-    <div class="shop-body mb-90">
-        <div class="container-fluid">
-            <nav aria-label="breadcrumb" class="mb-40">
-                <ol class="breadcrumb p-0 m-0">
-                    <li class="breadcrumb-item"><a href="index3.html">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Shop</li>
-                </ol>
-            </nav>
-            <div class="shop-wrapper">
-                <div class="row">
+                        <h2 class="cart-title mt-40">Cart</h2>
+                    </div> -->
+        <% if(products.length !=0) {%>
+            <div class="shop-body mb-90">
+                <div class="container-fluid">
+                    <div class="shop-wrapper">
+                        <div class="row">
+                            <div class="col-xl-3 hidden-xl">
+                                <!-- widget -->
 
-                    <div class="col-12">
-                        <div class="filter-heading">
-                            <div class="row">
-                                <div class="col-xl-4 col-lg-4 col-md-4 col-12">
-                                    <div class="filter-shown-item">
-                                        <p class="mb-0">Showing <span>1</span>–<span>24</span> of <span
-                                                class="total_count">56</span> results</p>
+                                <!-- filter area  -->
+
+                                <div class="widget">
+                                    <h4 class="mb-30">Product Categories</h4>
+                                    <div class="category-list">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value id="category1">
+                                            <label class="form-check-label" for="category1">Accessories (0)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value id="category2">
+                                            <label class="form-check-label" for="category2">Char & Table
+                                                (10)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value id="category3">
+                                            <label class="form-check-label" for="category3">Handbag (10)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value id="category4">
+                                            <label class="form-check-label" for="category4">Kids (15)</label>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-4 col-lg-4 col-md-4 col-12">
-                                    <div class="shop-filter-tab">
-                                        <!-- <ul class="nav nav-pills">
-                                            <li><span>Views</span></li>
-                                            <li class="nav-item">
-                                                <a data-toggle="pill" href="#shop-tab-1" data-toggle="tooltip"
-                                                    data-placement="top" title="2 grid"><i
-                                                        class="fal fa-line-columns"></i></a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a data-toggle="pill" href="#shop-tab-2" data-placement="top"
-                                                    title="3 grid"><i class="fal fa-border-none"></i></a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a data-toggle="pill" href="#shop-tab-3" data-placement="top"
-                                                    title="4 grid" class="active"><i
-                                                        class="fal fa-border-center-v"></i></a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a data-toggle="pill" href="#shop-tab-4" data-placement="top"
-                                                    title="list view"><i class="fal fa-list"></i></a>
-                                            </li>
-                                        </ul> -->
+                                <div class="widget mt-50">
+                                    <h4 class="mb-30">Filter By Price</h4>
+                                    <form id="priceFilterForm" action="/filterProduct" method="pos">
+                                        <div class="price-filter">
+                                            <div class="filter-options">
+                                                <label>
+                                                    <input type="checkbox" class="price-checkbox" value="low-to-high"
+                                                        style="color: black;"> Low to
+                                                    High
+                                                </label>
+                                                <br>
+                                                <label>
+                                                    <input type="checkbox" class="price-checkbox" value="high-to-low"
+                                                        style="color: black;"> High to
+                                                    Low
+                                                </label>
+                                                <br>
+                                                <label>
+                                                    <input type="checkbox" class="price-checkbox" value="all"
+                                                        style="color: black;"> All Price
+                                                    Ranges
+                                                </label>
+                                                <br>
+                                                <label>
+                                                    <input type="checkbox" class="price-checkbox" value="0-50"
+                                                        style="color: black;"> $0 - $50
+                                                </label>
+                                                <br>
+                                                <label>
+                                                    <input type="checkbox" class="price-checkbox" value="51-100"
+                                                        style="color: black;"> $51 -
+                                                    $100
+                                                </label>
+                                                <br>
+                                                <label>
+                                                    <input type="checkbox" class="price-checkbox" value="101-200"
+                                                        style="color: black;"> $101 -
+                                                    $200
+                                                </label>
+                                                <!-- Add more predefined price ranges as needed -->
+                                            </div>
+                                            <div class="filter-form-submit mt-35">
+                                                <button type="button" id="applyPriceFilter">Apply
+                                                    Filter</button>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- <div class="widget mt-50">
+                            <h4 class="mb-30">Filter By Color</h4>
+                            <ul class="color-list">
+                                <li style="background-color: #000;"></li>
+                                <li style="background-color: #1E73BE;"></li>
+                                <li style="background-color: #FFD700;"></li>
+                                <li style="background-color: #C9C9C9;"></li>
+                                <li style="background-color: #008000;"></li>
+                                <li style="background-color: #FFFF00;"></li>
+                                <li style="background-color: #FFFFFF;"></li>
+                                <li style="background-color: #DD3333;"></li>
+                            </ul>
+                        </div> -->
+                                <!-- <div class="widget mt-50">
+                            <h4 class="mb-30">Filter By Size</h4>
+                            <div class="size-link">
+                                <a href="shop2.html">3xl</a>
+                                <a href="shop2.html">l</a>
+                                <a href="shop2.html">m</a>
+                                <a href="shop2.html">s</a>
+                                <a href="shop2.html">xl</a>
+                                <a href="shop2.html">xxl</a>
+                            </div>
+                        </div> -->
+                                <!-- <div class="widget mt-50">
+                            <h4 class="mb-30">Featured</h4>
+                            <div class="post-box">
+                                <ul>
+                                    <li>
+                                        <div class="post-img">
+                                            <img src="img/product/1.jpg" class="w-100" alt="">
+                                        </div>
+                                        <div class="post-img-desc">
+                                            <a href="single-product-4.html">Capitalize on low hanging fruit to</a>
+                                            <div class="price">$250.00</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="post-img">
+                                            <img src="img/product/2.jpg" class="w-100" alt="">
+                                        </div>
+                                        <div class="post-img-desc">
+                                            <a href="single-product-4.html">
+                                                Tassels pendant earringso</a>
+                                            <div class="price">$30 - $334</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="post-img">
+                                            <img src="img/product/3.jpg" class="w-100" alt="">
+                                        </div>
+                                        <div class="post-img-desc">
+                                            <a href="single-product-4.html">
+                                                Tassels pendant earringso</a>
+                                            <div class="price">$30 - $334</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div> -->
+                                <div class="widget mt-50">
+                                    <h4 class="mb-30">Popular Tags</h4>
+                                    <div class="category-list">
+                                        <ul>
+                                            <li><a href="/shop?category=<%= categorys[0]._id %>">HOODIE</a></li>
+                                            <li><a href="shop2.html">Clothing</a></li>
+                                            <li><a href="shop2.html">fashion</a></li>
+                                            <li><a href="shop2.html">Fly</a></li>
+                                            <li><a href="shop2.html">Glasses</a></li>
+                                            <li><a href="shop2.html">men</a></li>
+                                            <li><a href="shop2.html">Product</a></li>
+                                            <li><a href="shop2.html">version</a></li>
+                                            <li><a href="shop2.html">women</a></li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- end filter herre  -->
+
+                            <!-- /. widget -->
+                            <div class="col-xl-9">
+                                <div class="filter-heading">
+                                    <div class="row">
+                                        <div class="col-xl-4 col-lg-4 col-md-4 col-12">
+                                            <div class="filter-shown-item">
+                                                <p class="mb-0">
+                                                    Showing <span>
+                                                        <%= (currentPage - 1) * limit + 1 %>
+                                                    </span>–
+                                                    <span>
+                                                        <%= Math.min(currentPage * limit, totalProducts) %>
+                                                    </span>
+                                                    of <span class="total_count">
+                                                        <%= totalProducts %>
+                                                    </span> results
+                                                </p>
+                                                <p class="mb-0">
+                                                    Page <span>
+                                                        <%= currentPage %>
+                                                    </span>
+                                                    of <span>
+                                                        <%= totalPages %>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <!------------------------------------------------------------- hey --------------------------------------------------->
+                                        <div
+                                            class="col-xl-4 col-lg-4 col-md-4 col-12 d-flex justify-content-end position-static">
+                                            <div class="sorting d-inline-block">
+                                                <select name="sort" id="shop-sort">
+                                                    <option value="default">Default
+                                                        sorting</option>
+                                                    <option value="default">Short by
+                                                        popularity</option>
+                                                    <option value="default">Sort by
+                                                        average rating</option>
+                                                    <option value="default">Sort by
+                                                        latest</option>
+                                                    <option value="default">Sort by
+                                                        price: low to high</option>
+                                                    <option value="default">Sort by
+                                                        price: high to low</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                        <!------------------------------------ filtr in head -------------------------------------------- -->
                                     </div>
                                 </div>
 
-                                <div
-                                    class="col-xl-4 col-lg-4 col-md-4 col-12 d-flex justify-content-end position-static">
-                                    <div class="sorting d-inline-block">
-                                        <select name="sort" id="shop-sort">
-                                            <option value="default">Default sorting</option>
-                                            <option value="default">Short by popularity</option>
-                                            <option value="default">Sort by average rating</option>
-                                            <option value="default">Sort by latest</option>
-                                            <option value="default">Sort by price: low to high</option>
-                                            <option value="default">Sort by price: high to low</option>
-                                        </select>
-                                    </div>
-                                    <div class="filter">
-                                        <h6 class="d-inline-block filter-widget-toggle">Filter</h6>
-                                        <div class="filter-popup">
+                                <!-- /. filter heading -->
+                                <div class="filter-content">
+                                    <div class="tab-content">
+
+                                        <div class="product-wrapper mt-55">
                                             <div class="row">
-                                                <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-                                                    <div class="filter-popup-item">
-                                                        <div class="widget">
-                                                            <h4 class="mb-3">Filter By Color</h4>
-                                                            <div class="color-list">
-                                                                <span style="background-color: #000;"></span>
-                                                                <span style="background-color: #1E73BE;"></span>
-                                                                <span style="background-color: #FFD700;"></span>
-                                                                <span style="background-color: #C9C9C9;"></span>
-                                                                <span style="background-color: #008000;"></span>
-                                                                <span style="background-color: #FFFF00;"></span>
-                                                                <span style="background-color: #FFFFFF;"></span>
-                                                                <span style="background-color: #DD3333;"></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-                                                    <div class="widget">
-                                                        <h4 class="mb-3">Filter By Size</h4>
-                                                        <div class="size-link">
-                                                            <a href="shop2.html">3xl</a>
-                                                            <a href="shop2.html">l</a>
-                                                            <a href="shop2.html">m</a>
-                                                            <a href="shop2.html">s</a>
-                                                            <a href="shop2.html">xl</a>
-                                                            <a href="shop2.html">xxl</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-                                                    <div class="widget">
-                                                        <h4 class="mb-3">Filter By Price</h4>
-                                                        <form action="">
-                                                            <div class="price-filter">
-                                                                <div id="slider-range-2"
-                                                                    class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
-                                                                    <div class="ui-slider-range ui-corner-all ui-widget-header"
-                                                                        style="left: 15%; width: 46.4%;"></div>
-                                                                    <span tabindex="0"
-                                                                        class="ui-slider-handle ui-corner-all ui-state-default"
-                                                                        style="left: 15%;"></span>
-                                                                    <span tabindex="0"
-                                                                        class="ui-slider-handle ui-corner-all ui-state-default"
-                                                                        style="left: 60%;"></span>
-                                                                    <div class="ui-slider-range ui-corner-all ui-widget-header"
-                                                                        style="left: 15%; width: 45%;"></div>
+                                                <% products.forEach(product=> { %>
+                                                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12">
+                                                        <div class="product-box mb-40">
+                                                            <div class="product-box-wrapper">
+                                                                <div class="product-img">
+                                                                    <img src="/products/crops/<%= product.images.image1 %>"
+                                                                        class="w-100" alt>
+                                                                    <a href="/product?id=<%= product._id %>"
+                                                                        class="d-block">
+                                                                        <div class="second-img">
+                                                                            <img src="/products/crops/<%= product.images.image2 %>"
+                                                                                alt class="w-100">
+                                                                        </div>
+                                                                    </a>
+                                                                    <a href="javascript:void(0)"
+                                                                        class="product-img-link quick-view-1 text-capitalize">Quick
+                                                                        view</a>
                                                                 </div>
-                                                                <div class="filter-form-submit mt-3">
-                                                                    <button type="submit"
-                                                                        class="btn btn-primary btn-sm">Apply
-                                                                        Filter</button>
-                                                                    <div class="filter-price d-inline-block pl-3">
-                                                                        Price: <span id="amount-2"
-                                                                            class="font-weight-bold text-secondary">$75
-                                                                            - $300</span>
+
+                                                                <div class="product-desc pb-20">
+                                                                    <div class="product-desc-top">
+                                                                        <div class="categories">
+                                                                            <a href="shop2.html"
+                                                                                class="product-category"><span>
+                                                                                    <%= product.category %>
+                                                                                </span></a>
+                                                                        </div>
+                                                                        <a href="wishlist.html"
+                                                                            class="wishlist float-right"><span><i
+                                                                                    class="fal fa-heart"></i></span></a>
+                                                                    </div>
+                                                                    <a href="/product" class="product-title">
+                                                                        <%= product.name %>
+                                                                    </a>
+                                                                    <div class="price-switcher">
+                                                                        <span class="price switcher-item">₹<%=
+                                                                                product.price %>
+                                                                        </span>
+                                                                        <a onclick="addToCart('<%= product._id %>')"
+                                                                            class="add-cart text-capitalize switcher-item"
+                                                                            style="cursor: pointer;">+
+                                                                            Add to Cart</a>
+
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 position-static">
-                                                    <div class="widget">
-                                                        <h4 class="mb-3">Popular Tags</h4>
-                                                        <div class="category-list">
-                                                            <ul>
-                                                                <li><a href="shop2.html">Accessories</a></li>
-                                                                <li><a href="shop2.html">Clothing</a></li>
-                                                                <li><a href="shop2.html">Fashion</a></li>
-                                                                <li><a href="shop2.html">Fly</a></li>
-                                                                <li><a href="shop2.html">Glasses</a></li>
-                                                                <li><a href="shop2.html">Men</a></li>
-                                                                <li><a href="shop2.html">Product</a></li>
-                                                                <li><a href="shop2.html">Version</a></li>
-                                                                <li><a href="shop2.html">Women</a></li>
-                                                            </ul>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                    <% }); %>
+
+                                                        <!-- 
+                                                <div class="text-center mt-20">
+                                                    <a href="shop.html" class="load-more">LOAD MORE...</a>
+                                                </div> -->
                                             </div>
+
                                         </div>
-                                    </div>
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center">
+                                                <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                                                    <a class="page-link" href="/shop?page=<%= currentPage - 1 %>"
+                                                        aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
 
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /. filter heading -->
-
-
-
-                        <!-- PRODUCT LIST  -->
-                        <div class="tab-pane fade  show active" id="shop-tab-3">
-                            <div class="product-wrapper mt-55">
-                                <div class="row">
-                                    <% products.forEach(product=> { %>
-                                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12">
-                                            <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                    <div class="product-img">
-                                                        <img src="/products/crops/<%= product.images.image1 %>"
-                                                            class="w-100" alt="">
-                                                        <a href="/product?id=<%= product._id %>" class="d-block">
-                                                            <div class="second-img">
-                                                                <img src="/products/crops/<%= product.images.image2 %>"
-                                                                    alt="" class="w-100">
-                                                            </div>
+                                                <% for (let i=1; i <=totalPages; i++) { %>
+                                                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                                        <a class="page-link" href="/shop?page=<%= i %>">
+                                                            <%= i %>
                                                         </a>
-                                                        <a href="javascript:void(0)"
-                                                            class="product-img-link quick-view-1 text-capitalize">Quick
-                                                            view</a>
-                                                    </div>
+                                                    </li>
+                                                    <% } %>
 
-                                                    <div class="product-desc pb-20">
-                                                        <div class="product-desc-top">
-                                                            <div class="categories">
-                                                                <a href="shop2.html" class="product-category"><span>
-                                                                        <%= product.category %>
-                                                                    </span></a>
-                                                            </div>
-                                                            <a href="wishlist.html"
-                                                                class="wishlist float-right"><span><i
-                                                                        class="fal fa-heart"></i></span></a>
-                                                        </div>
-                                                        <a href="/product" class="product-title">
-                                                            <%= product.name %>
-                                                        </a>
-                                                        <div class="price-switcher">
-                                                            <span class="price switcher-item">₹<%= product.price %>
-                                                            </span>
-                                                            <a onclick="addToCart('<%= product._id %>')"
-                                                                class="add-cart text-capitalize switcher-item"
-                                                                style="cursor: pointer;">+ Add to Cart</a>
+                                                        <li
+                                                            class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                                                            <a class="page-link"
+                                                                href="/shop?page=<%= currentPage + 1 %>"
+                                                                aria-label="Next">
+                                                                <span aria-hidden="true">&raquo;</span>
+                                                            </a>
+                                                        </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <% }); %>
+                                    <!-- this i want take  -->
 
-                                            <!-- 
-                                        <div class="text-center mt-20">
-                                            <a href="shop.html" class="load-more">LOAD MORE...</a>
-                                        </div> -->
                                 </div>
                             </div>
-
+                            <!-- /. filter content -->
                         </div>
+                        <!-- /. shop products -->
                     </div>
-                    <!-- /. filter content -->
                 </div>
-                <!-- /. shop products -->
             </div>
-        </div>
+            <% } %>
+
     </div>
-    </div>
-
-
-
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-
-            <li class="page-item active">
-                <a class="page-link" href="#">1</a>
-            </li>
-
-            <li class="page-item">
-                <a class="page-link" href="#">2</a>
-            </li>
-
-            <li class="page-item">
-                <a class="page-link" href="#">3</a>
-            </li>
-
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-
-
-
-    <!-- footer section start -->
-    <section class="footer">
-        <div class="footer-top mt-120 pb-120 pt-115" style="background-color: #f5f5f5;">
-            <div class="footer-top-wrapper">
-                <div class="newsletter ">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-6">
-                            <h2 class="title m-0">Sign Up For Our Newsletter</h2>
-                            <p>Subscribe our newsletter and get discount 20% Off</p>
-                        </div>
-                        <div class="col-xl-6 col-lg-6">
-                            <div class="newsletter-form">
-                                <form action="#" method="POST">
-                                    <input type="text" placeholder="Search for our newsletter...">
-                                    <button type="submit"
-                                        class="generic-btn red-hover-btn text-uppercase float-right">Subscribe
-                                        Now</button>
-                                </form>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <!-- /.newsletter -->
-                <div class="service pt-57 mt-40 gray-border-top">
-                    <div class="row justify-content-center">
-                        <div class="col-xl-4 col-md-6 service-item">
-                            <div class="service-box service-box-2">
-                                <div class="service-box-content">
-                                    <h4 class="title">Worldwide Shipping</h4>
-                                    <p class="service-desc">Duis autem vel eum iriure dolor in hendrerit velit esse
-                                        molestie consequat.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-4 col-md-6 service-item">
-                            <div class="service-box service-box-2">
-                                <div class="service-box-content">
-                                    <h4 class="title">Online Support 24/7</h4>
-                                    <p class="service-desc">Duis autem vel eum iriure dolor in hendrerit velit esse
-                                        molestie consequat.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-4 col-lg-6 hidden-md service-item">
-                            <div class="service-box service-box-2">
-                                <div class="service-box-content">
-                                    <h4 class="title">Money Return Guarantee</h4>
-                                    <p class="service-desc">Duis autem vel eum iriure dolor in hendrerit velit esse
-                                        molestie consequat.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /. service -->
-                <!-- /. footer bottom -->
-            </div>
-
-        </div>
-
-        <!-- footer top -->
-
-        <div class="footer-bottom pt-77" style="background-color: #292929;">
-            <div class="container-1180">
-                <div class="footer-bottom-wrapper">
-                    <div class="footer-bottom-primary pb-60">
-                        <div class="row">
-                            <div class="col-xl-5 col-lg-5 col-md-9">
-                                <div class="footer-item has-desc">
-                                    <div class="footer-logo mb-25">
-                                        <img src="img/logo/logo2.png" width="120" height="31" alt="">
-                                    </div>
-                                    <div class="footer-desc">
-                                        <p class="mb-10">Mazia store is a premium theme with advanced admin module.
-                                            It’s
-                                            extremely customizable, easy to use and fully responsive and retina
-                                            ready.
-                                        </p>
-                                    </div>
-                                    <div class="footer-img mt-65">
-                                        <img src="img/logo/paypal.png" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-7 col-lg-7 col-md-12">
-                                <div class="row">
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6">
-                                        <div class="footer-menu">
-                                            <ul>
-                                                <li><a href="javascript:void(0)" class="title">MY ACCOUNT</a></li>
-                                                <li><a href="login.html">My account</a></li>
-                                                <li><a href="checkout.html">Checkout</a></li>
-                                                <li><a href="shop2.html">Shop</a></li>
-                                                <li><a href="wishlist.html">Wishlist</a></li>
-                                                <li><a href="question.html">Frequently</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6">
-                                        <div class="footer-menu">
-                                            <ul>
-                                                <li><a href="javascript:void(0)" class="title">Quick Links</a></li>
-                                                <li><a href="shop2.html">Special Offers</a></li>
-                                                <li><a href="shop2.html">Gift Cards</a></li>
-                                                <li><a href="shop2.html">F21 Red</a></li>
-                                                <li><a href="about.html">Privacy Policy</a></li>
-                                                <li><a href="about.html">Teams of Use</a></li>
-                                                <li><a href="portfolio.html">Portfolio</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 hidden-sm">
-                                        <div class="footer-menu">
-                                            <ul>
-                                                <li><a href="javascript:void(0)" class="title">Company Info</a></li>
-                                                <li><a href="about.html">About us</a></li>
-                                                <li><a href="blog.html">Careers</a></li>
-                                                <li><a href="portfolio2.html">Business With Us</a></li>
-                                                <li><a href="shop2.html">Find a Store</a></li>
-                                                <li><a href="question.html">Teams of Use</a></li>
-                                                <li><a href="portfolio3.html">Press & Talent</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </section>
-    <!-- footer section end -->
-
-
-
-
-
-
-
-    <!-- product popup start -->
-    <section id="product-popup">
-        <div class="product-popup-overlay"></div>
-        <div class="product-popup-container">
-            <div class="product-inner w-100">
-                <div class="product-inner-content">
-                    <div class="quick-close-action"><i class="fal fa-times"></i></div>
-                    <div class="row">
-                        <div class="col-xl-5 col-lg-5 col-md-5 col-sm-6">
-                            <div class="tab-content">
-                                <div class="tab-pane fade show active" id="product-popup-1">
-                                    <div class="product-popup-img">
-                                        <img src="img/product/10.jpg" class="w-100" alt="">
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="product-popup-2">
-                                    <div class="product-popup-img">
-                                        <img src="img/product/11.jpg" class="w-100" alt="">
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="product-popup-3">
-                                    <div class="product-popup-img">
-                                        <img src="img/product/12.jpg" class="w-100" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                            <ul class="nav nav-pills justify-content-center mt-10">
-                                <li class="nav-item">
-                                    <a class="active" data-toggle="pill" href="#product-popup-1">
-                                        <img src="img/product/10.jpg" class="w-100" alt="">
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="" data-toggle="pill" href="#product-popup-2">
-                                        <img src="img/product/11.jpg" class="w-100" alt="">
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="" data-toggle="pill" href="#product-popup-3">
-                                        <img src="img/product/12.jpg" class="w-100" alt="">
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-xl-7 col-lg-7 col-md-7 col-sm-6">
-                            <div class="product-content">
-                                <div class="product-title">
-                                    <h2>Nari Narwhal Usb...</h2>
-                                </div>
-                                <div class="price">$<span>44.00</span>–<span>$250.00</span></div>
-                                <a href="single-product-4.html" class="all-feature">See all feature</a>
-                                <div class="quick-quantity mt-30">
-                                    <form action="#" method="POST">
-                                        <input type="number" value="1">
-                                        <button type="submit" class="generic-btn red-hover-btn text-capitalize">add
-                                            to
-                                            cart</button>
-                                    </form>
-                                </div>
-
-                                <div class="product-desc pb-20 mt-25 gray-border-top">
-                                    <p class="mb-0">Typi non habent claritatem insitam, est usus legentis in iis qui
-                                        facit eorum claritatem. Investigationes demonstraverunt lectores legere me
-                                        lius
-                                        quod ii legunt saepius. Claritas est etiam processus A Capitalize on low
-                                        hanging
-                                        fruit to identify a ballpark value added activity to beta test. Override the
-                                        digital...ditional clickthroughs from DevOps. Nanotechnology immersion along
-                                        the
-                                        information highway will close the […]</p>
-                                </div>
-                                <div class="product-list mt-25">
-                                    <ul>
-                                        <li>– Light green crewnec...t.</li>
-                                        <li>– Hand pockets.</li>
-                                        <li>– Relaxed fit.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- product popup end -->
-
-    <!-- startup popup start -->
-    <section id="startup-popup">
-        <div class="product-popup-overlay has-startup" style="opacity: 1;visibility: visible"></div>
-        <div class="startup-popup-body">
-            <div class="startup-body-content h-100">
-                <div class="row justify-content-end h-100">
-                    <div class="col-6 h-100">
-                        <div class="startup-popup-inner h-100">
-                            <div class="close-search-popup">
-                                <i class="fal fa-times"></i>
-                            </div>
-                            <div class="startup-popup-main-content">
-                                <h2>Get Our Email Letter</h2>
-                                <p class="mb-0">Subscribe to the Mazia store mailing list to receive updates on new
-                                    arrivals, special offers
-                                    and other discount information.</p>
-                                <div class="startup-subscribe-form">
-                                    <form action="#" method="POST">
-                                        <input type="text" placeholder="Subscribe to our newsletter" class="mb-30">
-                                        <button class="generic-btn red-hover-btn text-uppercase">Subscribe
-                                            now</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="startup-popup-sub-content">
-                                <div class="popup-warning">
-                                    <input type="checkbox" id="startup-popup-hidden">
-                                    <label for="startup-popup-hidden">Do not show the popup again</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- startup popup end -->
-
 
 
 
     <script>
-        function addToCart(productId) {
+        // function addToCart(productId) {
 
+        //     $.ajax({
+        //         url: "/addToCart",
+        //         method: "post",
+        //         data: {
+        //             id: productId,
+        //         },
+        //         success: (response) => {
+        //             if (response.login == true) {
+        //                 swal
+        //                     .fire({
+        //                         icon: "warning",
+        //                         title: "Please Login",
+        //                         confirmButtonColor: "#3085d6",
+        //                         confirmButtonText: "Login",
+        //                         showCancelButton: true,
+        //                         cancelButtonColor: "#d33",
+        //                         text: response.message,
+        //                     })
+        //                     .then((result) => {
+        //                         if (result.isConfirmed) {
+        //                             window.location.href = "/loadLogin";
+        //                         }
+        //                     });
+        //             } else if (response.success) {
+        //                 swal.fire({
+        //                     position: "center",
+        //                     icon: "success",
+        //                     title: "Product added to cart",
+        //                     showConfirmButton: false,
+        //                     timer: 1500,
+        //                 });
+        //                 $("#cartDiv").load("/ #cartDiv");
+        //             } else {
+        //                 swal.fire({
+        //                     icon: "error",
+        //                     title: "Sorry ! Out of stock. ",
+        //                     text: response.message,
+        //                 });
+        //             }
+        //         },
+        //     });
+        // }
+
+
+        function addToCart(productId, count = 1) {
             $.ajax({
                 url: "/addToCart",
                 method: "post",
                 data: {
                     id: productId,
+                    count: count,
                 },
                 success: (response) => {
                     if (response.login == true) {
-                        swal
-                            .fire({
-                                icon: "warning",
-                                title: "Please Login",
-                                confirmButtonColor: "#3085d6",
-                                confirmButtonText: "Login",
-                                showCancelButton: true,
-                                cancelButtonColor: "#d33",
-                                text: response.message,
-                            })
-                            .then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = "/loadLogin";
-                                }
-                            });
+                        // Handle login logic if needed
                     } else if (response.success) {
-                        swal.fire({
-                            position: "center",
-                            icon: "success",
-                            title: "Product added to cart",
-                            showConfirmButton: false,
-                            timer: 1500,
-                        });
+                        if (response.newProduct) {
+                            swal.fire({
+                                position: "center",
+                                icon: "success",
+                                title: "Product added to cart",
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
+                        } else {
+                            swal.fire({
+                                position: "center",
+                                icon: "info",
+                                title: "Product already in the cart. Increasing quantity.",
+                                showConfirmButton: false,
+                                timer: 2000,
+                            });
+                        }
                         $("#cartDiv").load("/ #cartDiv");
                     } else {
                         swal.fire({
                             icon: "error",
-                            title: "Sorry ! Out of stock. ",
+                            title: "Sorry! Out of stock.",
                             text: response.message,
                         });
                     }
@@ -579,83 +429,8 @@
             });
         }
 
-
-
-        function addToCart(productId) {
-
-            $.ajax({
-                url: "/addToCart",
-                method: "post",
-                data: {
-                    id: productId,
-                },
-                success: (response) => {
-                    if (response.login == true) {
-                        swal
-                            .fire({
-                                icon: "warning",
-                                title: "Please Login",
-                                confirmButtonColor: "#3085d6",
-                                confirmButtonText: "Login",
-                                showCancelButton: true,
-                                cancelButtonColor: "#d33",
-                                text: response.message,
-                            })
-                            .then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = "/loadLogin";
-                                }
-                            });
-                    } else if (response.success) {
-                        swal.fire({
-                            position: "center",
-                            icon: "success",
-                            title: "Product added to cart",
-                            showConfirmButton: false,
-                            timer: 1500,
-                        });
-                        $("#cartDiv").load("/ #cartDiv");
-                    } else {
-                        swal.fire({
-                            icon: "error",
-                            title: "Sorry ! Out of stock. ",
-                            text: response.message,
-                        });
-                    }
-                },
-            });
-        }
     </script>
 
 
-
-
-
-
-
-
-
-
-
-    <!-- JS here -->
-
-
-    <script src="js/vendor/jquery-1.12.4.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/isotope.pkgd.min.js"></script>
-    <script src="js/one-page-nav-min.js"></script>
-    <script src="js/slick.min.js"></script>
-    <script src="js/jquery.meanmenu.min.js"></script>
-    <script src="js/ajax-form.js"></script>
-    <script src="js/fontawesome.min.js"></script>
-    <script src="js/wow.min.js"></script>
-    <script src="js/jquery-ui.js"></script>
-    <script src="js/jquery.scrollUp.min.js"></script>
-    <script src="js/imagesloaded.pkgd.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/plugins.js"></script>
-    <script src="js/main.js"></script>
 
     <%- include('../layouts/user/footer.ejs') -%>

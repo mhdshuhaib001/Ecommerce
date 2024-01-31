@@ -15993,6 +15993,52 @@ code {
 
 /*-------------------------------------------------------------------*/
 /* === Components === */
+
+
+.pagination-container {
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.page-item {
+  margin: 0 3px;
+}
+
+.page-link {
+  display: block;
+  padding: 5px 10px;
+  text-decoration: none;
+  color: white;
+  border: 1px solid #000;
+  border-radius: 3px;
+}
+
+.active .page-link {
+  background-color: #000;
+  color: #fff;
+}
+
+.disabled .page-link {
+  pointer-events: none;
+  background-color: #ddd;
+  color: black;
+  border: 1px solid #ddd;
+}
+
+.pagination a {
+  cursor: pointer;
+}
+
 /* Badges */
 .badge {
   border-radius: 0.25rem;

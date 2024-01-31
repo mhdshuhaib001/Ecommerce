@@ -5,8 +5,6 @@
         <div id="loader"></div>
     </div>
 
-
-
     <main>
 
         <!-- breadcrumb-area-start -->
@@ -93,7 +91,6 @@
                 <div class="checkout">
                     <div class="container">
                         <form id="checkout-form">
-
                             <div class="row">
                                 <div class="col-lg-9">
                                     <p class="m-3">Select your preferable address</p>
@@ -105,8 +102,9 @@
                                                 <div class="card card-dashboard" onclick="selectAddress(this)">
                                                     <div class="card-body p-0 m-1">
                                                         <input type="radio" class="pl-4 ml-3 mr-1" name="address"
-                                                            value="<%= address.fullname %>,<%= address.mobile %>,<%= address.email %>,<%= address.houseName %>,<%= address.city %>,<%= address.state %>,<%= address.pincode %>  "
-                                                            <%=index===0 ? 'checked' : '' %> id="">
+                                                            value='<%= JSON.stringify(address) %>' <%=index===0
+                                                            ? 'checked' : '' %> id="">
+
                                                         <h6 class="m-0 d-inline">Address Name</h6>
                                                         <!-- <span class="text-info"
                                                             style="font-size: small;">(default)</span> -->
@@ -119,7 +117,7 @@
                                                                             City: <%= address.city %><br>
                                                                                 State: <%= address.state %><br>
                                                                                     Pincode: <%= address.pincode %><br>
-                                                                                        <a href="#"
+                                                                                        <a 
                                                                                             onclick="showEditAddressModal()">Edit
                                                                                             <i class="fa-sharp fa-solid fa-pen"
                                                                                                 style="color: #cc9966;"></i></a>
@@ -127,58 +125,127 @@
                                                     </div><!-- End .card-body -->
                                                 </div><!-- End .card-dashboard -->
                                             </div><!-- End .col-lg-6 -->
-                                            <% })} %>
-
-
-
-
-                                                <!-- End Address Cards Loop -->
+                                            <% })} %> <!-- End Address Cards Loop -->
                                     </div><!-- Row end -->
                                     <button class="btn btn-primary" id="addBtn"> Ship to another address</button>
 
-                                    <form action="#" id="addAddressForm" style="display: none;">
+                                    <form action="" id="addAddressForm" style="display: none;">
                                         <!-- Address Details Form -->
                                     </form>
                                 </div><!-- End .col-lg-9 -->
 
+                                <!-- edit Modal -->
+
+                             <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true"
+                                style="padding-top: 80px;">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">edit
+                                                Address</h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/editAddress" id="editAddressform" method="post">
+                                                <div class="form-group">
+                                                    <label for="fullname">Full Name
+                                                        *</label>
+                                                    <input type="text" class="form-control" name="fullname"
+                                                        id="fullnames" required>
+                                                    <div id="fnameError" style="display: none; color: red;">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="email">Email *</label>
+                                                    <input type="email" class="form-control" name="email"
+                                                        id="emails" required>
+                                                    <div id="addEmailError" style="display: none; color: red;">
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="mobile">Mobile *</label>
+                                                    <input type="tel" class="form-control" name="mobile"
+                                                        id="mobiles" required>
+                                                    <div id="mobiles" style="display: none; color: red;">
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="state">State *</label>
+                                                    <input type="text" class="form-control" name="state"
+                                                        id="states" required>
+                                                    <div id="stateError" style="display: none; color: red;">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="city">City *</label>
+                                                    <input type="text" class="form-control" name="city"
+                                                        id="citys" required>
+                                                    <div id="cityError" style="display: none; color: red;">
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="pincode">Pincode *</label>
+                                                    <input type="tel" class="form-control" name="pincode"
+                                                        id="pincodes" autocomplete="off" required>
+                                                    <div id="pinError" style="display: none; color: red;">
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="house">House Name *</label>
+                                                    <input type="text" class="form-control" name="houseName"
+                                                        id="houseNames" required>
+                                                    <div id="houseError" style="display: none; color: red;">
+                                                    </div>
+                                                    <input type="text" class="form-control"
+                                                        style="display: none;" id="addressId" name="addressId">
+                                                </div>
+
+                                                <button id="editAddress" type="submit"
+                                                    class="btn btn-outline-primary">
+                                                    <span>Add Address</span>
+                                                    <i class="icon-long-arrow-right"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
                                 <aside class="col-lg-3">
                                     <div class="summary">
-                                        <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+                                        <h3 class="summary-title">Your
+                                            Order</h3><!-- End .summary-title -->
 
                                         <table class="table table-summary">
                                             <thead>
                                                 <tr>
-                                                    <th>Product</th>
-                                                    <th>Total</th>
+                                                    <th>Sub Total</th>
+                                                    <th><%= totalamount %></th>
                                                 </tr>
                                             </thead>
-                                            <% products.forEach((value, index)=> { %>
                                                 <tbody>
 
                                                     <tr>
-                                                        <td><a>
-                                                                <%= value.productId.name %> <span>Set <%= value.count %>
-                                                                    </span>
-                                                            </a></td>
-                                                        <td id="productTotal">₹<%= value.totalPrice %>
-                                                        </td>
+                                                       
                                                     </tr>
-                                                    <!-- End Sample Product Row -->
-
-                                                    <!-- Sample Subtotal Row (Replace this with your dynamic data) -->
-                                                    <tr class="summary-subtotal">
-                                                        <td>Subtotal:</td>
-                                                        <td id="total1">
-                                                            <%= Total %>
-                                                        </td>
-                                                    </tr>
-                                                    <% }) %>
                                                         <tr>
                                                             <td>Shipping:</td>
                                                             <td>Free shipping</td>
                                                         </tr>
                                                         <tr class="summary-total">
-                                                            <td class="">Total:</td>
+                                                            <td class>Total:</td>
                                                             <td id="total1">
                                                                 <%= totalamount %>
                                                             </td>
@@ -194,19 +261,21 @@
                                                 <h6>Payment methods</h6>
                                                 <div class="payment-methods">
                                                     <label>
-                                                        <input type="radio" name="paymentMethod" id="razorpay">
+                                                        <input type="radio" name="payment" id="razorpay"
+                                                            value="onlinePayment" required>
                                                         <span>Online Payments</span>
                                                     </label>
 
                                                     <label>
-                                                        <input type="radio" name="paymentMethod" id="wallet">
+                                                        <input type="radio" name="payment" id="wallet">
                                                         <span>Wallet</span>
                                                     </label>
 
                                                     <label>
-                                                        <input type="radio" name="payment" id="COD" name="payment"
-                                                            value="COD" required>
-                                                        <span>Cash on Delivery</span>
+                                                        <input type="radio" name="payment" id="COD" value="COD"
+                                                            checked>
+                                                        <span>Cash on
+                                                            Delivery</span>
                                                     </label>
                                                 </div>
 
@@ -214,8 +283,10 @@
                                         </div><!-- End .accordion -->
 
                                         <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
-                                            <span class="btn-text">Place Order</span>
-                                            <span class="btn-hover-text">Proceed to Checkout</span>
+                                            <span class="btn-text">Place
+                                                Order</span>
+                                            <span class="btn-hover-text">Proceed to
+                                                Checkout</span>
                                         </button>
                                     </div><!-- End .summary -->
                                 </aside><!-- End .col-lg-3 -->
@@ -227,16 +298,8 @@
 
         </section>
 
-
         <!-- checkout-area end -->
     </main>
-
-
-
-
-
-
-
 
     <!-- footer section start -->
     <section class="footer">
@@ -268,7 +331,8 @@
                             <div class="service-box service-box-2">
                                 <div class="service-box-content">
                                     <h4 class="title">Worldwide Shipping</h4>
-                                    <p class="service-desc">Duis autem vel eum iriure dolor in hendrerit velit esse
+                                    <p class="service-desc">Duis autem vel eum
+                                        iriure dolor in hendrerit velit esse
                                         molestie consequat.</p>
                                 </div>
                             </div>
@@ -278,7 +342,8 @@
                             <div class="service-box service-box-2">
                                 <div class="service-box-content">
                                     <h4 class="title">Online Support 24/7</h4>
-                                    <p class="service-desc">Duis autem vel eum iriure dolor in hendrerit velit esse
+                                    <p class="service-desc">Duis autem vel eum
+                                        iriure dolor in hendrerit velit esse
                                         molestie consequat.</p>
                                 </div>
                             </div>
@@ -288,7 +353,8 @@
                             <div class="service-box service-box-2">
                                 <div class="service-box-content">
                                     <h4 class="title">Money Return Guarantee</h4>
-                                    <p class="service-desc">Duis autem vel eum iriure dolor in hendrerit velit esse
+                                    <p class="service-desc">Duis autem vel eum
+                                        iriure dolor in hendrerit velit esse
                                         molestie consequat.</p>
                                 </div>
                             </div>
@@ -310,15 +376,17 @@
                             <div class="col-xl-5 col-lg-5 col-md-9">
                                 <div class="footer-item has-desc">
                                     <div class="footer-logo mb-25">
-                                        <img src="img/logo/logo2.png" width="120" height="31" alt="">
+                                        <img src="img/logo/logo2.png" width="120" height="31" alt>
                                     </div>
                                     <div class="footer-desc">
-                                        <p class="mb-10">Mazia store is a premium theme with advanced admin module. It’s
-                                            extremely customizable, easy to use and fully responsive and retina ready.
+                                        <p class="mb-10">Mazia store is a premium
+                                            theme with advanced admin module. It’s
+                                            extremely customizable, easy to use and
+                                            fully responsive and retina ready.
                                         </p>
                                     </div>
                                     <div class="footer-img mt-65">
-                                        <img src="img/logo/paypal.png" alt="">
+                                        <img src="img/logo/paypal.png" alt>
                                     </div>
                                 </div>
                             </div>
@@ -327,8 +395,10 @@
                                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6">
                                         <div class="footer-menu">
                                             <ul>
-                                                <li><a href="javascript:void(0)" class="title">MY ACCOUNT</a></li>
-                                                <li><a href="login.html">My account</a></li>
+                                                <li><a href="javascript:void(0)" class="title">MY
+                                                        ACCOUNT</a></li>
+                                                <li><a href="login.html">My
+                                                        account</a></li>
                                                 <li><a href="checkout.html">Checkout</a></li>
                                                 <li><a href="shop2.html">Shop</a></li>
                                                 <li><a href="wishlist.html">Wishlist</a></li>
@@ -340,12 +410,18 @@
                                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6">
                                         <div class="footer-menu">
                                             <ul>
-                                                <li><a href="javascript:void(0)" class="title">Quick Links</a></li>
-                                                <li><a href="shop2.html">Special Offers</a></li>
-                                                <li><a href="shop2.html">Gift Cards</a></li>
-                                                <li><a href="shop2.html">F21 Red</a></li>
-                                                <li><a href="about.html">Privacy Policy</a></li>
-                                                <li><a href="about.html">Teams of Use</a></li>
+                                                <li><a href="javascript:void(0)" class="title">Quick
+                                                        Links</a></li>
+                                                <li><a href="shop2.html">Special
+                                                        Offers</a></li>
+                                                <li><a href="shop2.html">Gift
+                                                        Cards</a></li>
+                                                <li><a href="shop2.html">F21
+                                                        Red</a></li>
+                                                <li><a href="about.html">Privacy
+                                                        Policy</a></li>
+                                                <li><a href="about.html">Teams of
+                                                        Use</a></li>
                                                 <li><a href="portfolio.html">Portfolio</a></li>
                                             </ul>
                                         </div>
@@ -354,13 +430,19 @@
                                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 hidden-sm">
                                         <div class="footer-menu">
                                             <ul>
-                                                <li><a href="javascript:void(0)" class="title">Company Info</a></li>
-                                                <li><a href="about.html">About us</a></li>
+                                                <li><a href="javascript:void(0)" class="title">Company
+                                                        Info</a></li>
+                                                <li><a href="about.html">About
+                                                        us</a></li>
                                                 <li><a href="blog.html">Careers</a></li>
-                                                <li><a href="portfolio2.html">Business With Us</a></li>
-                                                <li><a href="shop2.html">Find a Store</a></li>
-                                                <li><a href="question.html">Teams of Use</a></li>
-                                                <li><a href="portfolio3.html">Press & Talent</a></li>
+                                                <li><a href="portfolio2.html">Business
+                                                        With Us</a></li>
+                                                <li><a href="shop2.html">Find a
+                                                        Store</a></li>
+                                                <li><a href="question.html">Teams of
+                                                        Use</a></li>
+                                                <li><a href="portfolio3.html">Press
+                                                        & Talent</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -375,12 +457,6 @@
     </section>
     <!-- footer section end -->
 
-
-
-
-
-
-
     <!-- product popup start -->
     <section id="product-popup">
         <div class="product-popup-overlay"></div>
@@ -393,34 +469,34 @@
                             <div class="tab-content" id="pills-tabContent">
                                 <div class="tab-pane fade show active" id="product-popup-1">
                                     <div class="product-popup-img">
-                                        <img src="img/product/10.jpg" class="w-100" alt="">
+                                        <img src="img/product/10.jpg" class="w-100" alt>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="product-popup-2">
                                     <div class="product-popup-img">
-                                        <img src="img/product/11.jpg" class="w-100" alt="">
+                                        <img src="img/product/11.jpg" class="w-100" alt>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="product-popup-3">
                                     <div class="product-popup-img">
-                                        <img src="img/product/12.jpg" class="w-100" alt="">
+                                        <img src="img/product/12.jpg" class="w-100" alt>
                                     </div>
                                 </div>
                             </div>
                             <ul class="nav nav-pills justify-content-center mt-10" id="pills-tab" role="tablist">
                                 <li class="nav-item">
                                     <a class="active" data-toggle="pill" href="#product-popup-1">
-                                        <img src="img/product/10.jpg" class="w-100" alt="">
+                                        <img src="img/product/10.jpg" class="w-100" alt>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="" data-toggle="pill" href="#product-popup-2">
-                                        <img src="img/product/11.jpg" class="w-100" alt="">
+                                    <a class data-toggle="pill" href="#product-popup-2">
+                                        <img src="img/product/11.jpg" class="w-100" alt>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="" data-toggle="pill" href="#product-popup-3">
-                                        <img src="img/product/12.jpg" class="w-100" alt="">
+                                    <a class data-toggle="pill" href="#product-popup-3">
+                                        <img src="img/product/12.jpg" class="w-100" alt>
                                     </a>
                                 </li>
                             </ul>
@@ -435,17 +511,23 @@
                                 <div class="quick-quantity mt-30">
                                     <form action="#" method="POST">
                                         <input type="number" value="1">
-                                        <button type="submit" class="generic-btn red-hover-btn text-capitalize">add to
+                                        <button type="submit" class="generic-btn red-hover-btn text-capitalize">add
+                                            to
                                             cart</a>
                                     </form>
                                 </div>
 
                                 <div class="product-desc pb-20 mt-25 gray-border-top">
-                                    <p class="mb-0">Typi non habent claritatem insitam, est usus legentis in iis qui
-                                        facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius
-                                        quod ii legunt saepius. Claritas est etiam processus A Capitalize on low hanging
-                                        fruit to identify a ballpark value added activity to beta test. Override the
-                                        digital...ditional clickthroughs from DevOps. Nanotechnology immersion along the
+                                    <p class="mb-0">Typi non habent claritatem
+                                        insitam, est usus legentis in iis qui
+                                        facit eorum claritatem. Investigationes
+                                        demonstraverunt lectores legere me lius
+                                        quod ii legunt saepius. Claritas est etiam
+                                        processus A Capitalize on low hanging
+                                        fruit to identify a ballpark value added
+                                        activity to beta test. Override the
+                                        digital...ditional clickthroughs from
+                                        DevOps. Nanotechnology immersion along the
                                         information highway will close the […]</p>
                                 </div>
                                 <div class="product-list mt-25">
@@ -477,20 +559,23 @@
                             </div>
                             <div class="startup-popup-main-content">
                                 <h2>Get Our Email Letter</h2>
-                                <p class="mb-0">Subscribe to the Mazia store mailing list to receive updates on new
+                                <p class="mb-0">Subscribe to the Mazia store mailing
+                                    list to receive updates on new
                                     arrivals, special offers
                                     and other discount information.</p>
                                 <div class="startup-subscribe-form">
                                     <form action="#" method="POST">
                                         <input type="text" placeholder="Subscribe to our newsletter" class="mb-30">
-                                        <button class="generic-btn red-hover-btn text-uppercase">Subscribe now</button>
+                                        <button class="generic-btn red-hover-btn text-uppercase">Subscribe
+                                            now</button>
                                     </form>
                                 </div>
                             </div>
                             <div class="startup-popup-sub-content">
                                 <div class="popup-warning">
                                     <input type="checkbox" id="startup-popup-hidden">
-                                    <label for="startup-popup-hidden">Do not show the popup again</label>
+                                    <label for="startup-popup-hidden">Do not show
+                                        the popup again</label>
                                 </div>
                             </div>
                         </div>
@@ -501,52 +586,121 @@
     </section>
     <!-- startup popup end -->
 
-
-
-
-
-
-
     <script>
 
         $("#checkout-form").submit(function (e) {
             e.preventDefault();
             console.log('check this');
 
-            console.log($("#total1").text().trim());
-
             const total = $("#total1").text().trim();
-            var formDataArray = $(this).serializeArray();
-            formDataArray.push({ name: 'total', value: total });
+            const selectedAddress = $("input[name='address']:checked").val();
+            const address = selectedAddress ? JSON.parse(selectedAddress) : {};
+            const paymentMethod = $("input[name='payment']:checked").val();
 
-            console.log(formDataArray, 'checking form data');
+            // Construct form data manually
+            const formData = {
+                total: total,
+                address: address,
+                payment: paymentMethod
+            };
+
+            console.log(formData, 'checking form data');
+
             $.ajax({
                 url: "/placeOrder",
-                method: "post",
-                data: formDataArray,
+                method: "POST",
+                contentType: 'application/json',
+                data: JSON.stringify({ formData }),
                 success: (response) => {
+                    console.log(response, 'check response');
                     if (response.codsuccess == true) {
-                        location.href = `/orderSuccess/${response.orderid}`;
+                        location.href = `/orderSuccess/${response.orderId}`;
                     } else if (response.stock) {
                         location.reload();
                     } else if (response.placed == true) {
+                        console.log(response);
                         window.location.href = '/orderSuccess';
+                    } else if (response.razorpay) {
+                        console.log("checking Razorpay payment");
+                        console.log(response);
+                        razorPayment(response.order, formData);
                     }
                 },
             });
         });
 
+        function razorPayment(order, formData) {
+            var options = {
+                key: "rzp_test_ewQ5RiYCmaDgeL",
+                amount: formData.total,
+                currency: "INR",
+                name: "Loom Fasion",
+                description: "Test Transaction",
+                image: "/user/images/icons/logo.png",
+                order_id: order.id,
+                handler: function (response) {
+                    console.log('helooo', response);
+                    verifyPayment(response, order);
+
+                },
+                prefill: {
+                    name: "Loom",
+                    email: "loom@gmail.com",
+                    contact: "910000000369",
+                },
+                notes: {
+                    address: "Razorpay Corporate Office",
+                    orderId: order._id,
+                },
+                theme: {
+                    color: "#c96",
+                },
+            };
+
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        }
+
+
+        function verifyPayment(payment, order) {
+
+            const amount2 = document.getElementById("total1").innerHTML;
+            const orderId = order.id;
+            $.ajax({
+                url: "/verify-payment",
+                method: "post",
+                data: {
+                    payment: payment,
+                    amount2: amount2,
+                    order: order,
+                },
+                success: (response) => {
+                    console.log(response, "response")
+                    if (response.placed == true) {
+                        console.log(response, 'thie is the place for ordering');
+                        window.location.href = `/orderSuccess/${orderId}`;
+                        swal.fire({
+                            positon: "center",
+                            icon: "error",
+                            title: "Payment failed",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    }
+                },
+            });
+        }
+
+
+
+
 
     </script>
 
+    <script src="/js/profileEdits.js"></script>
 
-
-
-
-
-
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-
 
     <!-- JS here -->
     <script src="js/vendor/jquery-1.12.4.min.js"></script>

@@ -19,7 +19,7 @@
     </header>
     <h4>Enter OTP Code</h4>
     <p>Your code was sent to you via email</p>
-   <form method="post" class="otp-form" id="otpForm">
+   <form  class="otp-form" id="otpForm">
       <div class="input-field" id="otp-container">
         <input type="number" name="otp" id="otp" maxlength="1">
         <!-- <input type="number" name="digit2" maxlength="1">
@@ -30,8 +30,7 @@
 
       <div id="otp-error" class="error-message"></div>
       <p id="timeSpan"> Resend OTP in <b class="text-dark"><span id="timer">60 </span></b> Seconds.</p>
-      <p style="display: none;" id="resendLink">Didn't get the OTP &nbsp; <a href="/resendOtp"><b class="text-dark">
-            Resend</b></a></p>
+      
       <% if(verifyErr){ %>
         <div id="myAlert1" data-aos="fade-down" style="top: 6rem;     background-color: #1f6f6f"
           class="alert alert-dark  py-4	 fade show fs-5 fixed-top alt text-center text-white" role="alert">
@@ -51,9 +50,9 @@
           <% } %>
         
           <button style="background-color: #1f6f6f;" onmouseover="this.style.backgroundColor='#198585'" onmouseout="this.style.backgroundColor='#1f6f6f'" type="submit" id="otpSubmit" onclick="validate()" class="btn">Verify OTP</button>
-
-
     </form>
+    <p style="display: none;" id="resendLink">Didn't get the OTP &nbsp; <a href="/resendOtp"><b class="text-white">
+      Resend</b></a></p>
   </div>
   <script>
 
