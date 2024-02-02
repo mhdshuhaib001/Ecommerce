@@ -71,6 +71,7 @@ const placeOrder = async (req, res) => {
         const orderId = orderData._id;
 
         if (orderData && status === 'placed') {
+            
             for (let i = 0; i < cartData.product.length; i++) {
                 let product = cartData.product[i].productId;
                 let count = cartData.product[i].count;
@@ -216,27 +217,22 @@ const orderCancel = async (req, res) => {
 const returnRequest = async (req, res) => {
     try {
 
-console.log(req.body,'req.body');
-        const orderId = req.body.orderId;
-        const productId = req.body.productId;
-
+        const orderId = req.body.order;
+        const productId = req.body.id;
         const orderData = await Order.findOne({
             "_id": orderId,
             "orderProducts._id": productId
-        });        console.log(orderData,'chekkkkkkkiiis');
+        });
 
         const updateReturn = await Order.updateOne(
             { _id: orderId, "orderProducts._id": productId },
             { $set: { "orderProducts.$.status": 'Returned' } }
         );
 
-        console.log(updateReturn,'ivane kitti');
-
-        if (updateReturn.nModified === 1) {
-            res.status(200).json({ success: true, message: 'Return request processed successfully' });
+        if (updateReturn) {
+           res.json({success: true});
         } else {
-            // Handle the case where the document was not modified
-            res.status(404).json({ success: false, message: 'Order or product not found' });
+            res.json({success: false});
         }
     } catch (error) {
         console.error('Error in returnRequest controller:', error);

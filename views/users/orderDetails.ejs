@@ -510,7 +510,7 @@
                                                             style="color: rgb(215, 44, 44)">Cancel</button>
                                                         <% } else if (product.status=="delivered" ) { %>
                                                             <button type="button" class="btn btn-warning"
-                                                            onclick="returnRequest('<%= product._id %>')"                                                                style="color: rgb(128, 44, 5)">Return</button>
+                                                            onclick="returnRequest('<%= product._id %>','<%= orderData._id%>')"                                                                style="color: rgb(128, 44, 5)">Return</button>
                                                             <% } else if (product.status=="Cancelled" ) { %>
                                                                 <label style="color: red;">Cancelled</label>
                                                                 <% } else if (product.status=="pending" ) { %>
@@ -946,7 +946,7 @@
 
 
 
-    function returnRequest(id, productId) {
+    function returnRequest(id, order) {
         console.log('moopare ethis x');
         console.log(id,'cheking id');
         swal.fire({
@@ -962,7 +962,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     url: "/returnRequest",
-                    data: {id , productId},
+                    data: {id , order},
                     method: 'post',
                     success: (response) => {
                         window.location.reload()

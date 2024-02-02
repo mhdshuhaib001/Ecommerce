@@ -271,7 +271,8 @@ const filterProduct = async (req, res) => {
       const minimum= parseInt(splitPrice[0])
       const maximum = parseInt(splitPrice[1])  
       const sort =parseInt( req.query.sort)
-      const category = req.query.category
+      const searchQuery = req.query.search ? req.query.search : "";
+      const category = req.query.category 
       const categoryData = await Category.find()
       const totalDoc = await Products.countDocuments();
      

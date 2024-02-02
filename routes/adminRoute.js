@@ -24,7 +24,8 @@ admin_Rout.use(express.urlencoded({ extended: true }));
 
 const adminController = require("../controllers/adminController");
 const productController = require("../controllers/productController");
-const orderController = require("../controllers/orderController")
+const orderController = require("../controllers/orderController");
+const couponController = require("../controllers/couponController")
 
 
 admin_Rout.get("/", auth.isLogout, adminController.adminLoginPage);
@@ -54,9 +55,16 @@ admin_Rout.get("/edit-product-page", auth.isLogin, productController.loadEditPro
 admin_Rout.post("/editProduct", auth.isLogin, multer2.productImagesUpload2, productController.editedProduct);
 admin_Rout.delete("/admin/removeImage", auth.isLogin, productController.removeImage);
 
-admin_Rout.get("/order", auth.isLogin, orderController.loadOrderManagement)
-admin_Rout.put("/updateOrder", orderController.updateOrder)
-admin_Rout.get("/orderSummery", auth.isLogin, orderController.orderDetails)
+admin_Rout.get("/order", auth.isLogin, orderController.loadOrderManagement);
+admin_Rout.put("/updateOrder", orderController.updateOrder);
+admin_Rout.get("/orderSummery", auth.isLogin, orderController.orderDetails);
+
+
+admin_Rout.get("/coupon",couponController.loadCouponManagement);
+admin_Rout.get("/addCoupon",couponController.addCouponLoad);
+admin_Rout.post("/addCoupon",couponController.addCoupon);
+admin_Rout.put("/blockCoupon",couponController.blockCoupon);
+admin_Rout.delete("/couponDelet",couponController.deletCouopon);
 
 
 

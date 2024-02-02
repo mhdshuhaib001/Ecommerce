@@ -15366,6 +15366,26 @@ a.text-dark:hover, a.text-dark:focus {
 
 /*-------------------------------------------------------------------*/
 /* === Core Styles === */
+
+/* ---------------------------------------------------------------------------------------- */
+/* flash tag */
+.flash-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  background-color: #28a745; /* Green color for success */
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+/* Style for different flash message types (e.g., success, error) */
+.flash-message.error {
+  background-color: #dc3545; /* Red color for error */
+}
+
 /* Reset Styles */
 body {
   padding: 0;

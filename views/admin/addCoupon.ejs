@@ -1,0 +1,184 @@
+<%- include("../layouts/admin/header.ejs") %>
+
+<!-- Your Coupon Management HTML template with horizontal form elements -->
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Coupon Management Form</h4>
+                        <p class="card-description">Fill in the details to add a coupon</p>
+                        <form class="forms-sample">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="couponName">Coupon Name</label>
+                                    <input type="text" class="form-control" id="couponName" placeholder="Coupon Name">
+                                    <p style="color: red" id="nameLengthError"></p>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="couponCode">Coupon Code</label>
+                                    <input type="text" class="form-control" id="couponCode" placeholder="Coupon Code">
+                                    <p style="color: red" id="codeLengthError"></p>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="discountAmount">Discount Amount</label>
+                                    <input type="text" class="form-control" id="discountAmount" placeholder="Discount Amount">
+                                    <p style="color: red" id="discountError"></p>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="activationDate">Activation Date</label>
+                                    <input type="date" class="form-control" id="activationDate" placeholder="mm/dd/yyyy">
+                                    <p style="color: red" id="activError"></p>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="expiryDate">Expire Date</label>
+                                    <input type="date" class="form-control" id="expiryDate" placeholder="mm/dd/yyyy">
+                                    <p style="color: red" id="expireError"></p>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="criteriaAmount">Criteria Amount</label>
+                                    <input type="text" class="form-control" id="criteriaAmount" placeholder="Criteria Amount">
+                                    <p style="color: red" id="criteriaError"></p>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="userLimits">User Limits</label>
+                                    <input type="text" class="form-control" id="userLimits" placeholder="User Limits">
+                                    <p style="color: red" id="limitError"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" id="addCoupon" class="btn btn-primary" style="margin-right: 10px;">Submit</button>
+                                <button id="cancelCoupon" class="btn btn-dark">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    document.getElementById("addCoupon").addEventListener("click", function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("couponName").value;
+        const code = document.getElementById("couponCode").value;
+        const discount = document.getElementById("discountAmount").value;
+        const activeDate = document.getElementById("activationDate").value;
+        const expiryDate = document.getElementById("expiryDate").value;
+        const criteriaAmount = document.getElementById("criteriaAmount").value;
+        const userLimit = document.getElementById("userLimits").value;
+
+        const nameLengthError = document.getElementById("nameLengthError");
+        const codeLengthError = document.getElementById("codeLengthError");
+        const discountError = document.getElementById("discountError");
+        const activationDateError = document.getElementById("activError");
+        const expireDateError = document.getElementById("expireError");
+        const criteriaError = document.getElementById("criteriaError");
+        const userLimitError = document.getElementById("limitError");
+
+        // Reset error messages
+        nameLengthError.textContent = "";
+        codeLengthError.textContent = "";
+        discountError.textContent = "";
+        activationDateError.textContent = "";
+        expireDateError.textContent = "";
+        criteriaError.textContent = "";
+        userLimitError.textContent = "";
+
+        if (name === "") {
+            nameLengthError.textContent = "Coupon name is required.";
+        } else if (name.length < 4) {
+            nameLengthError.textContent = "Coupon name must be at least 4 characters.";
+        } else if (code === "") {
+            codeLengthError.textContent = "Coupon code is required.";
+        } else if (discount === "") {
+            discountError.textContent = "Discount is required";
+        } else if (discount < 0) {
+            discountError.textContent = "Discount must be positive";
+        } else if (criteriaAmount === "") {
+            criteriaError.textContent = "Criteria must be required";
+        } else if (criteriaAmount < 0) {
+            criteriaError.textContent = "Criteria must be positive ";
+        } else if (userLimit === "") {
+            userLimitError.textContent = "User limit must be required";
+        } else if (userLimit < 0) {
+            userLimitError.textContent = "User limit must be positive";
+        } else if (activeDate === "") {
+            activationDateError.textContent = "Activation Date is required";
+        } else if (expiryDate === "") {
+            expireDateError.textContent = "Expiry Date is required";
+        } else if (expiryDate <= activeDate) {
+            expireDateError.textContent = "Expiry date must be after activation date.";
+        } else if (code.length < 6) {
+            codeLengthError.textContent = "Coupon code must be at least 6 characters.";
+        } else if (criteriaAmount > discount) {
+            criteriaError.textContent = "Criteria amount should be less than discount amount.";
+        } else {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to add this Coupon?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Add",
+                cancelButtonText: "Cancel",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/admin/addCoupon",
+                        data: {
+                            name,
+                            code,
+                            discount,
+                            activeDate,
+                            expiryDate,
+                            criteriaAmount,
+                            userLimit,
+                        },
+                        method: "POST",
+                        success: (response) => {
+                            if (response.exist) {
+                                codeLengthError.textContent = "Coupon code already exists.";
+                            } else if (response.success) {
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: "top-end",
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                });
+
+                                Toast.fire({
+                                    icon: "success",
+                                    title: "Coupon Added.",
+                                });
+                                setTimeout(() => {
+                                    window.location.href = "/admin/coupon";
+                                }, 3000);
+                            } else {
+                                console.error("Unexpected response:", response);
+                                alert("Unexpected response. Please try again later.");
+                            }
+                        },
+                        error: (error) => {
+                            console.error("AJAX request failed:", error);
+                            alert("Failed to add Coupon. Please try again later.");
+                        },
+                    });
+                }
+            });
+        }
+    });
+</script>
+
+<%- include("../layouts/admin/footer.ejs") %>
