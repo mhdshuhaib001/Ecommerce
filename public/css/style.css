@@ -29,6 +29,7 @@ Pagination
 18. contact
 19. login
 20. single blog
+21. modap  css
 *. footer
 *. popup
 
@@ -220,7 +221,6 @@ img {
   margin-top: 2px;
 }
 
-
 /*===========Pagination============= */
 .pagination {
   justify-content: center;
@@ -267,8 +267,6 @@ img {
   vertical-align: middle;
 }
 
-
-
 /*=============== BREAKPOINTS ===============*/
 /* For medium devices */
 @media screen and (min-width: 576px) {
@@ -283,7 +281,6 @@ img {
     margin-bottom: 2rem;
   }
 }
-
 
 /* ============================================ */
 #loader-wrapper {
@@ -3861,10 +3858,14 @@ a.price-calculate:hover {
   font-weight: 600;
 }
 
-
 /* halloo */
 /* -------------------------- 17. Checkout ------------------------- */
 /* Updated Styles for Coupon Area */
+
+#checkout_coupon {
+  display: none; /* Hide the coupon input by default */
+}
+
 .coupon-accordion h3 {
   font-size: 16px;
   font-weight: 700;
@@ -3877,7 +3878,7 @@ a.price-calculate:hover {
 }
 
 .coupon-accordion h3::before {
-  content: "\f07b";
+  /* content: "\f07b"; */
   left: 15px;
   top: 13px;
   position: absolute;
@@ -3901,39 +3902,36 @@ p.lost-password a:hover {
   display: none;
 }
 
-.coupon-info input[type="text"] {
+/* .coupon-info input[type="text"] {
   width: 37%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-right: 10px;
   font-size: 14px;
-}
+} */
 
 .apply-coupon-btn {
   background-color: #2a2121;
-    color: #fff;
-    border: 1px solid #ccc;
-    padding: 8px 9px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
+  color: #fff;
+  border: 1px solid #ccc;
+  padding: 8px 9px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
 }
 
 .apply-coupon-btn:hover {
   background-color: #59cc5f;
 }
 
-
-
-
 .address-form {
   border: 1px solid #eaedff;
   padding: 10px;
   border-radius: 5px;
-  width: 253px; 
-  margin: 3px 6px 3px 15px ; 
+  width: 253px;
+  margin: 3px 6px 3px 15px;
 }
 
 .address-form h3 {
@@ -3950,7 +3948,7 @@ p.lost-password a:hover {
 }
 
 .address-form .edit-address-btn {
-  background: #4CAF50; /* Green color */
+  background: #4caf50; /* Green color */
   color: #fff;
   border: none;
   padding: 8px 12px;
@@ -3961,8 +3959,6 @@ p.lost-password a:hover {
 .address-form .edit-address-btn:hover {
   background: #45a049; /* Darker green color on hover */
 }
-
-
 
 .ship-different-title h3 label {
   display: inline-block;
@@ -4005,7 +4001,6 @@ p.lost-password a:hover {
  width: 50%;
 } */
 
-
 .card-dashboard {
   width: 73%;
   height: 115%;
@@ -4042,7 +4037,6 @@ p.lost-password a:hover {
   margin-top: 20px;
 }
 
-
 /* Add this CSS to your existing stylesheet */
 
 .payment-methods {
@@ -4064,15 +4058,14 @@ p.lost-password a:hover {
 
 /* Responsive styling for smaller screens */
 @media (max-width: 767px) {
-  .col-lg-9, .col-lg-3 {
-      width: 100%;
+  .col-lg-9,
+  .col-lg-3 {
+    width: 100%;
   }
 }
 
-
-
 .accordion-summary {
-  margin-bottom: 3.2rem
+  margin-bottom: 3.2rem;
 }
 
 .accordion-summary .card {
@@ -4081,74 +4074,74 @@ p.lost-password a:hover {
   font-size: 1.2rem;
   line-height: 1.67;
   border: none;
-  background-color: transparent
+  background-color: transparent;
 }
 
 .accordion-summary .card-title {
   font-weight: 300;
   font-size: 1.4rem;
   color: #333;
-  letter-spacing: 0
+  letter-spacing: 0;
 }
 
 .accordion-summary .card-title a {
   color: inherit;
-  padding: .7rem 0 .7rem 3rem
+  padding: 0.7rem 0 0.7rem 3rem;
 }
 
 .accordion-summary .card-title a img {
-  margin-top: 1rem
+  margin-top: 1rem;
 }
 
 .accordion-summary .card-title a:hover,
 .accordion-summary .card-title a:focus {
-  color: inherit
+  color: inherit;
 }
 
 .accordion-summary .card-title a small {
   font-size: 1.1rem;
-  color: #999
+  color: #999;
 }
 
 .accordion-summary .card-title a:before {
-  content: '';
+  content: "";
   width: 1.6rem;
   height: 1.6rem;
   border-radius: 50%;
   border: 0.1rem solid #c96;
   right: auto;
   left: 0;
-  top: .7rem;
+  top: 0.7rem;
   transform: translateY(0);
-  -ms-transform: translateY(0)
+  -ms-transform: translateY(0);
 }
 
 .accordion-summary .card-title a:after {
-  content: '';
+  content: "";
   display: block;
-  width: .6rem;
-  height: .6rem;
+  width: 0.6rem;
+  height: 0.6rem;
   position: absolute;
-  left: .5rem;
+  left: 0.5rem;
   top: 1.2rem;
   border-radius: 50%;
   background-color: #c96;
   visibility: visible;
   opacity: 1;
-  transition: all .3s
+  transition: all 0.3s;
 }
 
 .accordion-summary .card-title a.collapsed:before {
-  border-color: #dadada
+  border-color: #dadada;
 }
 
 .accordion-summary .card-title a.collapsed:after {
   opacity: 0;
-  visibility: hidden
+  visibility: hidden;
 }
 
 .accordion-summary .card-body {
-  padding: .4rem 0 .8rem 3rem
+  padding: 0.4rem 0 0.8rem 3rem;
 }
 
 /* -------------------- 18. Contact --------------------- */
@@ -4516,4 +4509,53 @@ a.replay:hover {
 }
 .sidebar-list {
   display: none;
+}
+
+/* Modal css */
+/* Add this CSS to style the modified modal */
+#returnRequestModal {
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#returnRequestModal .modal-content {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#returnRequestModal .modal-header {
+  background-color: #007bff;
+  color: #fff;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+#returnRequestModal .modal-body {
+  color: #333;
+  padding: 20px;
+}
+
+#returnRequestModal textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+#returnRequestModal button.btn-primary {
+  background-color: #28a745;
+  color: #fff;
+  border: 1px solid #28a745;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#returnRequestModal button.btn-primary:hover {
+  background-color: #218838;
+  border: 1px solid #218838;
 }

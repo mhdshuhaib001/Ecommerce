@@ -1,54 +1,65 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-    
-    name:{
-        type:String,
-        required:true
+
+    name: {
+        type: String,
+        required: true
     },
-    email:{
-        type:String,
-        required:true
+    email: {
+        type: String,
+        required: true
     },
-    mobile:{
-        type:Number,
-        required:true
+    mobile: {
+        type: Number,
+        required: true
     },
-    password:{
-        type:String,
-        required:true
+    password: {
+        type: String,
+        required: true
     },
-   
-     is_admin:{
-        type:Boolean,
-        required:true,
-        default:false
+
+    is_admin: {
+        type: Boolean,
+        required: true,
+        default: false
     },
-    is_blocked:{
-        type:Boolean,
-        required:true,
-        default:false
+    is_blocked: {
+        type: Boolean,
+        required: true,
+        default: false
     },
-    is_verified:{
-        type:Boolean,
-        default:false,
-        required:true,  
+    is_verified: {
+        type: Boolean,
+        default: false,
+        required: true,
     },
-    token:{
-        type:String,
-        default:''
+    token: {
+        type: String,
+        default: ''
     },
     wallet: {
         type: Number,
-        default: 0  
+        default: 0
     },
-    walletHistory:[{
-        date:{
-            type:Date
+    walletHistory: [{
+        transactionDate: {
+            type: String,
+            required: true,
         },
-        amount:{
-            type:Number,
+        transactionTime: {
+            type: String,
+            required: true,
         },
+        amount: {
+            type: Number,
+        },
+        reason: {
+            type: String
+        },
+        direction: {
+            type: String
+        }
     }]
 })
 

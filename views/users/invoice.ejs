@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Invoice - Fashion Arclight</title>
+    <title>Invoice - Loom-Fashions</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
@@ -53,10 +53,23 @@
             width: 23%;
             left: 77%;
         }
+
+        .container {
+            width: 100%;
+        }
+
+        .card {
+            box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+            border-radius: 10px;
+            width: 100%;
+            /* Adjust as needed */
+        }
     </style>
 </head>
 
 <body>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
+        integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -64,31 +77,41 @@
                     <div class="card-body">
                         <div class="invoice-title">
                             <h4 class="font-size-15">Loom</h4>
-                            <div class="logo"><img src="https://your-company-logo-url.com" alt="Company Logo"></div>
+                            <!-- <div class="logo"><img src="https://your-company-logo-url.com" alt="Company Logo"></div> -->
                             <p class="text-muted">loomfashion@gmail.com | call: 877 456 237</p>
                         </div>
                         <hr class="my-4">
                         <div class="row">
                             <div class="col-sm-6">
+                                <h4></h4>
                                 <div class="text-muted">
+
                                     <h5 class="font-size-14 mb-2">Billed To:</h5>
-                                    <h5 class="font-size-14 mb-2">Customer's Name</h5>
-                                    <p class="mb-2">Customer's Address</p>
-                                    <p class="mb-2">Customer's Mobile</p>
-                                    <p>Order Date: MM/DD/YYYY</p>
+                                    <h5 class="font-size-14 mb-2">
+                                        <%= order.deliveryDetails.fullname %>
+                                    </h5>
+                                    <p class="mb-2">Customer's <%= order.deliveryDetails.houseName %>
+                                    </p>
+                                    <p class="mb-2">Customer's <%= order.deliveryDetails.mobile %>
+                                    </p>
+                                    <p>Order Date: <%= order.purchaseDate %>
+                                    </p>
                                 </div>
                             </div>
 
                             <div class="col-sm-6">
                                 <div class="text-muted text-sm-end">
                                     <div>
-                                        <p class="font-size-14 mb-1">Order Id: #DS0204</p>
+                                        <p class="font-size-14 mb-1">Order Id: <%= order._id %>
+                                        </p>
                                     </div>
                                     <div class="mt-2">
-                                        <p class="font-size-14 mb-1">Order Date: MM/DD/YYYY</p>
+                                        <p class="font-size-14 mb-1">Order Date: <%= order.purchaseDate %>
+                                        </p>
                                     </div>
                                     <div class="mt-2">
-                                        <p class="font-size-14 mb-1">Payment Method: Payment Method</p>
+                                        <p class="font-size-14 mb-1">Payment Method: <%= order.paymentMethod %>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -107,38 +130,76 @@
                                             <th class="text-end" style="width: 60px;">Total</th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>
-                                                <div>
-                                                    <h5 class="text-truncate font-size-14 mb-1">Product Name</h5>
-                                                    <p class="text-muted mb-0">Category, Color</p>
-                                                </div>
-                                            </td>
-                                            <td>$99.99</td>
-                                            <td>2</td>
-                                            <td class="text-end">$199.98</td>
-                                        </tr>
-                                        <tr class="total-row">
-                                            <th scope="row" colspan="4" class="text-end">Total</th>
-                                            <td class="text-end">₹199.98</td>
-                                        </tr>
+                                        <% orderProducts.forEach((product , index)=>{ %>
+
+                                            <tr>
+
+                                                <th scope="row">
+                                                    <%= index + 1 %>
+                                                </th>
+                                                <td>
+                                                    <div>
+                                                        <h6 class="text-truncate font-size-1 mb-1">
+                                                            <%= product.productName %>
+                                                        </h6>
+                                                        <!-- <p class="text-muted mb-0">Category, Color</p> -->
+                                                    </div>
+                                                </td>
+                                                <td>₹ <%= product.productPrice %>
+                                                </td>
+                                                <td>
+                                                    <%= product.count %>
+                                                </td>
+                                                <td class="text-end">₹ <%= product.totalPrice%>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+
+                                            <tr class="total-row">
+                                                <th scope="row" colspan="4" class="text-end">Total</th>
+                                                <td class="text-end">₹ <%= order.totalAmount %>
+                                                </td>
+                                            </tr>
+                                            
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="btn-group">
-                                <button class="btn btn-success me-1" onclick="window.print()">Print</button>
+                            <!-- <div class="btn-group">
+                                <a href="#" class="btn btn-success me-1" id="downloadPdfBtn"><i
+                                        class="fa fa-download"></i> Download PDF</a>
                                 <button class="btn btn-primary">Send</button>
-                            </div>
+                            </div> -->
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
+
+<script>
+    document.getElementById('downloadPdfBtn').addEventListener('click', async function () {
+        try {
+            // Replace 'your_order_id' with the actual order ID
+            const orderId = 'your_order_id';
+            
+            // Make a fetch request to the backend route for generating PDF
+            const response = await fetch(`/generatePdf?id=${orderId}`);
+            const blob = await response.blob();
+
+            // Create a link and trigger the download
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'invoice.pdf';
+            link.click();
+        } catch (error) {
+            console.error(error);
+        }
+    });
+</script>
 
 </html>

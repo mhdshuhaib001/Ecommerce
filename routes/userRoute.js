@@ -2,8 +2,8 @@ const express = require("express");
 const user_Rout = express();
 const session = require('express-session');
 const config = require('../config/config');
-const auth = require('../middleware/auth')
-require("dotenv").config()
+const auth = require('../middleware/auth');
+require("dotenv").config();
 
 
 user_Rout.use(session({
@@ -19,7 +19,8 @@ const userController = require("../controllers/userController");
 const addressController = require("../controllers/addressController")
 const cartController = require("../controllers/cartController");
 const productController = require("../controllers/productController");
-const orderControllers = require("../controllers/orderController")
+const orderControllers = require("../controllers/orderController");
+const couponController = require("../controllers/couponController");
 //======= View Engine ========//
 user_Rout.set("views", "./views/users");
 
@@ -62,7 +63,7 @@ user_Rout.post("/quantityUpdate", cartController.quantityUpdate);
 
 
 
-user_Rout.get('/userProfile', auth.isLogin, userController.loadprofile);
+user_Rout.get('/userProfile', auth.isLogin,userController.loadprofile);
 user_Rout.post('/addAddress', addressController.addAddress);
 user_Rout.post('/removeAddress',addressController.removeAddress);
 user_Rout.post("/changePassword",auth.isLogin,userController.changePassword);
@@ -78,13 +79,17 @@ user_Rout.get('/orderSuccess/:id',auth.isLogin,orderControllers.success);
 user_Rout.get('/orderDetails',auth.isLogin,orderControllers.OrderDetailsLoad );
 user_Rout.post('/returnRequest', orderControllers.returnRequest)
 user_Rout.post('/orderCancel',orderControllers.orderCancel);
-user_Rout.get('/invoice',orderControllers.invoice)
+user_Rout.get('/invoice',orderControllers.invoice);
 
-user_Rout.post('/filterProduct',productController.filterProduct)
+user_Rout.get('/filter',productController.filterProduct);
+
+user_Rout.post('/appliCopuon',couponController.applyCoupon);
+user_Rout.post('/removeCoupon',couponController.removeCoupon)
 
 
 
-user_Rout.get('/product', productController.loadProduct)
+user_Rout.get('/product', productController.loadProduct);
+
 
 user_Rout.get("/shop",userController.loadShop);
 

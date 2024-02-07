@@ -33,21 +33,25 @@ const cartSchema = new mongoose.Schema({
         default: 0,
       },
       category: {
-        type:String,
+        type: String,
       },
-      image:{
-        type:String,
-        required:true
+      image: {
+        type: String,
+        required: true
       },
-      productName:{
-        type:String,
-        required:true
+      productName: {
+        type: String,
+        required: true
       },
 
     },
   ],
+  couponDiscount: {
+    type: String,
+    ref: "coupon",
+  }
 });
 
- module.exports = mongoose.model("Cart", cartSchema);
+module.exports = mongoose.model("Cart", cartSchema);
 
 

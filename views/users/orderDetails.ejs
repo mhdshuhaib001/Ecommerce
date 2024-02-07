@@ -17,7 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/mixitup@3"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -129,6 +129,8 @@
                                             <article class="account-registar d-inline-block" onclick="confirmLogout()">
                                                 LogOut</article>
                                         </a></li>
+
+
                                     <% } else { %>
                                         <li><a href="login" class="account"><i class="fal fa-user-friends"></i>
                                                 <article class="account-registar d-inline-block">Login/Signup</article>
@@ -468,9 +470,23 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="card">
+
                         <div class="card-body">
+                            <div class="invoice" style="display: flex; justify-content: flex-end;">
+                                <% if (orderData && orderData.orderProducts && orderData.orderProducts.some(product=>
+                                    product.status === 'delivered')) { %>
+                                    <a href="/invoice?_id=<%= orderData._id %>">
+                                        <button id="Invoice" class="add-review-button btn btn-info">
+                                            <i class="fa-solid fa-download"></i> Invoice
+                                        </button>
+                                    </a>
+                                    <% } %>
+                            </div>
+
+
+
                             <h4 class="header-title mb-3">Items from Order #VL2537</h4>
-                            <div class="table-responsive">
+                            <div class="table-responsiv">
                                 <!-- Your table code for Items from Order goes here -->
                                 <table class="table table-bordered table-centered mb-0">
                                     <thead class="table-light">
@@ -503,22 +519,25 @@
                                                     <%= product.status %>
                                                 </td>
                                                 <td>
-                                                    <% if(product.status=="placed" ) { %>
+                                                    <% if(product.status !=="cancelled" && product.status !=="delivered"
+                                                        && product.status !=="request" && product.status !=="Accepted" )
+                                                        { %>
                                                         <button type="button"
                                                             onclick="cancelProduct('<%= product._id %>', '<%= orderData._id %>')"
                                                             class="btn btn-warning"
                                                             style="color: rgb(215, 44, 44)">Cancel</button>
                                                         <% } else if (product.status=="delivered" ) { %>
-                                                            <button type="button" class="btn btn-warning"
-                                                            onclick="returnRequest('<%= product._id %>','<%= orderData._id%>')"                                                                style="color: rgb(128, 44, 5)">Return</button>
-                                                            <% } else if (product.status=="Cancelled" ) { %>
-                                                                <label style="color: red;">Cancelled</label>
-                                                                <% } else if (product.status=="pending" ) { %>
-                                                                    <button type="button"
-                                                                        onclick="cancelProduct('<%= product._id %>', '<%= orderData._id %>')"
-                                                                        class="btn btn-warning"
-                                                                        style="color: rgb(215, 44, 44)">Cancel</button>
-                                                                    <% }%>
+                                                                <button type="button" class="btn btn-warning"
+                                                                    onclick="returnRequest('<%= product._id %>','<%= orderData._id%>')"
+                                                                    style="color: rgb(128, 44, 5)">Return</button>
+                                                            <% } else if (product.status=="Accepted" ) { %>
+                                                                <label style="color: red;">OrderReturned</label>
+                                                                <% } else if (product.status=="request" ) { %>
+                                                                    <label
+                                                                        style="color: rgb(221, 221, 27);">Requested</label>
+                                                                    <% } else {%>
+                                                                        <label style="color: red;">Requested</label>
+                                                                        <% } %>
                                                 </td>
                                             </tr>
                                             <% }) %>
@@ -541,7 +560,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4">
+                <!-- <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body">
                             <h4 class="header-title mb-3">Track Order</h4>
@@ -590,7 +609,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <!-- end row -->
@@ -901,12 +920,145 @@
 </section>
 <!-- startup popup end -->
 
+<!-- -------------------------------Modal for return request------------------------------ -->
+ <!-- <div class="modal fade" id="returnRequestModal" tabindex="-1" role="dialog" aria-labelledby="orderDetailsModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderDetailsModalLabel">
+                    Return Product Request
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body m-3">
+                <p style="color: #0a9538; font-style: italic;">
+                    Honesty Appreciated: We believe you! Get your full refund with no fuss. Just share your reason, and
+                    your next purchase comes with a sweet discount. Cheers!
+                </p>
+                <form action="" class="m-3">
+                    <div class="row justify-content-center">
+                        <div class="col-md-12">
+                            <textarea class="pl-2 w-100" name="reasonNote" id=""
+                                placeholder="Drop your reason for return here..." required></textarea>
+                        </div>
+                        <div class="col-md-12 mt-2">
+                            <button type="submit" class="btn btn-primary">Submit Return Request</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> -->
+  
+
 
 
 <script>
 
+    
+
+// function returnRequest(id, order) {
+
+// console.log('moopare ethis x');
+// swal.fire({
+//     title: "Are you sure?",
+//     text: "You want to return this Product?",
+//     icon: "warning",
+//     showCancelButton: true,
+//     confirmButtonColor: "#3085d6",
+//     cancelButtonColor: "#d33",
+//     confirmButtonText: "Yes",
+//     cancelButtonText: "Not now",
+// }).then((result) => {
+//     if (result.isConfirmed) {
+//         $.ajax({
+//             url: "/returnRequest",
+//             data: { id, order },
+//             method: 'post',
+//             success: (response) => {
+//                 window.location.reload()
+
+//                 const Toast = Swal.mixin({
+//                     toast: true,
+//                     position: 'top-end',
+//                     showConfirmButton: false,
+//                     timer: 3000,
+//                 })
+//                 Toast.fire({
+//                     icon: 'success',
+//                     title: 'Return request is sended.'
+//                 })
+//             }
+//         });
+//     }
+// })
+// }
+
+
+function returnRequest(id, order) {
+    alert("mc dsc")
+    
+
+        console.log('moopare ethis x');
+        Swal.fire({
+            title: 'Are you sure?',
+            html: 'Do you want to send a refund request for this order? <br><br><span style="color: red;">NB: If you got the coupon, it will be deducted</span>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#7ac093',
+            confirmButtonText: 'Yes, send refund request!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#returnRequestModal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                }).modal('show');
+
+                $('#returnRequestModal').on('hidden.bs.modal', function () {
+                    location.reload();
+                });
+
+                $('#returnRequestModal form').submit(function (event) {
+                    event.preventDefault();
+
+                    const formData = new FormData(this);
+                    formData.append('orderId', order);
+                    formData.append('productId', id);
+
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/returnRequest",
+                            data: { formData },
+                            method: 'post',
+                            success: (response) => {
+                                window.location.reload()
+
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                })
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Return request is sended.'
+                                })
+                            }
+                        });
+                    }
+                })
+            }
+        });
+    }
+
+
     function cancelProduct(orderProductId, orderId) {
-        console.log("Inside cancelProduct function", orderProductId, orderId, '-----------');
+
         Swal.fire({
             title: "Are you sure?",
             text: "You want to cancel this Order?",
@@ -945,43 +1097,6 @@
     }
 
 
-
-    function returnRequest(id, order) {
-        console.log('moopare ethis x');
-        console.log(id,'cheking id');
-        swal.fire({
-            title: "Are you sure?",
-            text: "You want to return this Product?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes",
-            cancelButtonText: "Not now",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: "/returnRequest",
-                    data: {id , order},
-                    method: 'post',
-                    success: (response) => {
-                        window.location.reload()
-
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000,
-                        })
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Return request is sended.'
-                        })
-                    }
-                });
-            }
-        })
-    }
 
 
 </script>

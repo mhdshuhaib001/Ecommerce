@@ -510,9 +510,11 @@ $('#showlogin').on('click', function () {
 /*-------------------------
 	showcoupon toggle function
 --------------------------*/
-$('#showcoupon').on('click', function () {
+$('#couponShow').on('click', function () {
 	$('#checkout_coupon').slideToggle(900);
 });
+
+
 
 /*-------------------------
 	Create an account toggle function

@@ -58,6 +58,7 @@ admin_Rout.delete("/admin/removeImage", auth.isLogin, productController.removeIm
 admin_Rout.get("/order", auth.isLogin, orderController.loadOrderManagement);
 admin_Rout.put("/updateOrder", orderController.updateOrder);
 admin_Rout.get("/orderSummery", auth.isLogin, orderController.orderDetails);
+admin_Rout.post("/returnOrder",auth.isLogin,orderController.returnOrder)
 
 
 admin_Rout.get("/coupon",couponController.loadCouponManagement);
@@ -65,6 +66,7 @@ admin_Rout.get("/addCoupon",couponController.addCouponLoad);
 admin_Rout.post("/addCoupon",couponController.addCoupon);
 admin_Rout.put("/blockCoupon",couponController.blockCoupon);
 admin_Rout.delete("/couponDelet",couponController.deletCouopon);
+// admin_Rout.get("/editCoupon",couponController.loadEditCoupon);
 
 
 

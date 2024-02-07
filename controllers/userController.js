@@ -626,11 +626,13 @@ const loadprofile = async (req, res) => {
     const userData = await User.findOne({ _id: userId });
     const addressData = await Address.findOne({ user: userId });
     const orderData = await Order.find({ userId: userId });
+    const walletData = await User.findOne({_id: userId}).sort({transactionTime:1});
     const cart = await Cart.findOne({userId:req.session.user_id})
+    console.log(walletData,'walletdata');
     let cartCount=0; 
     if(cart){cartCount = cart.product.length}
 
-    res.render("userProfile", { user:userData, addressData, orderData ,cartCount});
+    res.render("userProfile", { user:userData, addressData, orderData ,cartCount,walletData});
   } catch (error) {
     console.log(error.message);
   }
@@ -691,6 +693,4 @@ module.exports = {
   resetPassword,
   loadprofile,
   changePassword,
-
-
 };

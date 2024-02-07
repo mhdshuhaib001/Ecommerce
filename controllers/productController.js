@@ -12,7 +12,7 @@ const path = require("path")
 
 const loadproduct = async (req, res) => {
     try {
-        const itemPage = 10; 
+        const itemPage = 10;
         const page = +req.query.page || 1;
         const totalProducts = await Products.countDocuments();
         const totalPages = Math.ceil(totalProducts / itemPage);
@@ -228,9 +228,9 @@ const editedProduct = async (req, res) => {
 
 
 
-  
-  
-  
+
+
+
 
 // product
 const loadProduct = async (req, res) => {
@@ -248,7 +248,7 @@ const loadProduct = async (req, res) => {
 
 
         if (productView) {
-            res.render("product", { productView, category, products,cartCount , user:userData});
+            res.render("product", { productView, category, products, cartCount, user: userData });
         } else {
             res.status(404).render("404");
 
@@ -261,20 +261,38 @@ const loadProduct = async (req, res) => {
 
 
 
+
 const filterProduct = async (req, res) => {
     try {
 
+
+        const user_id = req.session.user_id
       const price = req.query.price;
       const page = req.query.page ? req.query.page : 1;
       const prevPage = page-1
       const splitPrice =price.split('-')
       const minimum= parseInt(splitPrice[0])
       const maximum = parseInt(splitPrice[1])  
-      const sort =parseInt( req.query.sort)
+      const sort = req.query.sort ? parseInt(req.query.sort) : undefined;
       const searchQuery = req.query.search ? req.query.search : "";
       const category = req.query.category 
       const categoryData = await Category.find()
       const totalDoc = await Products.countDocuments();
+    //   const wishlistData = await Wishlist.findOne({user:req.session.user_id})
+    //   const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
+
+      console.log(user_id,'user_id');
+      console.log(price,'price');
+      console.log(page,'page');
+      console.log(searchQuery,'searchQuery')
+      console.log(prevPage);
+      console.log(splitPrice,'splitPrice');
+      console.log(minimum,'minimum');
+      console.log(maximum,'maximum');
+      console.log(sort,'sort');
+      console.log(category,'category');
+      console.log(categoryData,'categoryData');
+      console.log(totalDoc,'totalDoc');
      
 
       if(category == "all") {
@@ -282,29 +300,31 @@ const filterProduct = async (req, res) => {
             name:{ $regex:searchQuery, $options:'i'},
             price: { $gte: minimum, $lte: maximum }
           }).sort({ price: sort }).skip(prevPage*4).limit(4)
-          res.render('shop',{products:productData,categorys:categoryData,totalDoc,page})
-      } else {
+          res.render('shop',{products:productData,categorys:categoryData,wishData,user_id,totalDoc,page})
+        } else {
         const productData = await Products.find({
             name:{ $regex:searchQuery, $options:'i'},
             price: { $gte: minimum, $lte: maximum },category:category
           }).sort({ price: sort }).skip(prevPage*4).limit(4)
     
-          res.render('shop',{products:productData,categorys:categoryData,totalDoc,page})
-      }     
+      res.render('shop',{products:productData,categorys:categoryData,wishData,user_id,totalDoc,page})
+        }
+           
     } catch (error) {
       console.error(error.message);
       res.status(500).json({ error: "Internal server error" });
     }
   };
 
-module.exports = {
-    loadproduct,
-    loadAddProduct,
-    addProduct,
-    blockProduct,
-    deleteProduct,
-    loadEditProduct,
-    editedProduct,
-    loadProduct,
-    filterProduct,
-}
+
+    module.exports = {
+        loadproduct,
+        loadAddProduct,
+        addProduct,
+        blockProduct,
+        deleteProduct,
+        loadEditProduct,
+        editedProduct,
+        loadProduct,
+        filterProduct,
+    }

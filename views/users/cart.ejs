@@ -128,9 +128,7 @@
                                                             <div
                                                                 class="table-data">
                                                                 <span
-                                                                    class="total">₹<%=
-                                                                    product.totalPrice
-                                                                    %>
+                                                                    class="total"><span>₹</span>&nbsp;<%= product.totalPrice %>
 
                                                                 </span>
                                                             </div>
@@ -176,7 +174,7 @@
                                             <tr>
                                                 <th>Subtotal</th>
                                                 <td>
-                                                    <%=subTotal%>
+                                                    <span>₹</span>&nbsp;<%=subTotal%>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -187,13 +185,14 @@
                                                                 during checkout.</p> -->
                                                     <a href="javascript:void(0)"
                                                         class="price-calculate">Free
-                                                        shipping : ₹00.0</a>
+                                                        shipping : ₹ &nbsp;00.0</a>
 
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th>Total</th>
-                                                <td><strong>
+                                                <td>
+                                                    <span>₹</span>&nbsp;<strong>
                                                         <%=subTotal%>
                                                     </strong></td>
                                             </tr>

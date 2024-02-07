@@ -24,7 +24,6 @@
                       <th> Expiry Date </th>
                       <th> Used </th>
                       <th> Action</th>
-                      <th> Update </th>
                       <th> Remove </th>
                     </tr>
                   </thead>
@@ -42,10 +41,10 @@
                             <%= coupon.couponCode %>
                           </td>
                           <td>
-                            <%= coupon.discountAmount %>
+                            <%= coupon.discountAmount %><span>%</span>
                           </td>
                           <td>
-                            <%= coupon.criteriaAmount %>
+                            <span>₹</span> <%= coupon.criteriaAmount %>
                           </td>
                           <td>
                             <%= coupon.activeDate %>
@@ -54,7 +53,7 @@
                             <%= coupon.expiryDate %>
                           </td>
                           <td>
-                            <%= coupon.usedUser %>
+                            <%= coupon.usedUser.length %>/<%= coupon.usersLimit %>
                           </td>
                           <% if(!coupon.is_blocked){ %>
                             <td onclick="couponBlock('<%= coupon._id %>')">
@@ -65,9 +64,9 @@
                                 <a class="badge badge-danger">Blocked</a>
                               </td>
                               <% } %>
-                                <td>
-                                  <a href="/admin/edit-coupon?id=2" class="badge badge-success">Edit</a>
-                                </td>
+                                <!-- <td>
+                                  <a href="/admin/editCoupon?<%= coupon._id %>" class="badge badge-success">Edit</a>
+                                </td> -->
                                 <td>
                                   <button class="btn-inverse-danger" onclick="deleteCoupon('<%= coupon._id %>')">
                                     <span style="text-decoration: none; color: #fff; cursor: pointer;">Delete</span>
@@ -85,6 +84,9 @@
       </div>
     </div>
   </div>
+
+          <div id="notification-container"></div>
+
 
   <script>
 
@@ -164,6 +166,25 @@
             }
         });
     }
+
+
+       // <!------------showing notification------------->
+       function showNotification(message, success = true) {
+                const notificationContainer = document.getElementById('notification-container');
+                notificationContainer.innerHTML = message;
+
+                if (success) {
+                    notificationContainer.style.color = 'green';
+                } else {
+                    notificationContainer.style.color = 'red';
+                }
+
+                notificationContainer.style.display = 'block';
+
+                setTimeout(() => {
+                    notificationContainer.style.display = 'none';
+                }, 3000);
+            }
   </script>
 
   <%-include("../layouts/admin/footer.ejs")%>

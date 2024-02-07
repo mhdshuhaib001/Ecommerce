@@ -25,7 +25,7 @@
 
             <div class="rightbox">
                 <div class="profile tabShow">
-                    <h4 class="custom-h4">Profile</h4>
+                    <h4 class="custom-h4" style="color: #0C7075;">Profile</h4>
                     <h6 class="custom-h2"> Name</h6>
                     <input type="text" class="input" value="<%= user.name %>" readonly>
                     <h6 class="custom-h2">Email</h6>
@@ -82,18 +82,66 @@
 
                 <div class="changePassword tabShow" id="passForm">
 
-                    <h4 class="custom-h4">ChangePassword</h4>
-                    <h6 class="custom-h2">Current Password</h6>
-                    <input type="password" name="CurrentPass" id="password" class="input">
-                    <div id="currError" style="display: none; color: red;"></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-6">
+                                <h4 class="custom-h4">Change Password</h4>
+                                <form>
+                                    <!-- Current Password -->
+                                    <div class="form-group">
+                                        <label for="password" class="custom-h2">Current Password</label>
+                                        <div class="input-group" id="show_hide_current_password">
+                                            <input type="password" name="CurrentPass" id="password"
+                                                class="form-control pass-key">
+                                            <div class="input-group-addon">
+                                                <a href="#" class="show"
+                                                    onclick="togglePasswordVisibility('password', 'show_hide_current_password')">
+                                                    <i class="fa" id="toggleCurrentPasswordIcon"
+                                                        aria-hidden="true">👁️</i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div id="currError" style="display: none; color: red;"></div>
+                                    </div>
 
-                    <h6 class="custom-h2">New Password</h6>
-                    <input type="password" name="newPass" id="newPass" class="input" value>
-                    <div id="newpassError" style="display: none; color: red;"></div>
-                    <h6 class="custom-h2">Conform Password</h6>
-                    <input type="password" name="ConformPass" id="conPass" class="input">
-                    <div id="conpassError" style="display: none; color: red;"></div>
-                    <button class="btns" type="submit" id="changePass">Submit</button>
+                                    <!-- New Password -->
+                                    <div class="form-group">
+                                        <label for="newPass" class="custom-h2">New Password</label>
+                                        <div class="input-group" id="show_hide_new_password">
+                                            <input type="password" name="newPass" id="newPass"
+                                                class="form-control pass-key">
+                                            <div class="input-group-addon">
+                                                <a href="#" class="show"
+                                                    onclick="togglePasswordVisibility('newPass', 'show_hide_new_password')">
+                                                    <i class="fa" id="toggleNewPasswordIcon" aria-hidden="true">👁️</i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div id="newpassError" style="display: none; color: red;"></div>
+                                    </div>
+
+                                    <!-- Confirm Password -->
+                                    <div class="form-group">
+                                        <label for="conPass" class="custom-h2">Confirm Password</label>
+                                        <div class="input-group" id="show_hide_confirm_password">
+                                            <input type="password" name="ConformPass" id="conPass"
+                                                class="form-control pass-key">
+                                            <div class="input-group-addon">
+                                                <a href="#" class="show"
+                                                    onclick="togglePasswordVisibility('conPass', 'show_hide_confirm_password')">
+                                                    <i class="fa" id="toggleConfirmPasswordIcon"
+                                                        aria-hidden="true">👁️</i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div id="conpassError" style="display: none; color: red;"></div>
+                                    </div>
+
+                                    <button class="btn btn-primary" type="submit" id="changePass">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
 
@@ -134,7 +182,7 @@
                                                         <td>
                                                             <%= order.purchaseDate %>
                                                                 <small class="text-muted">
-                                                                    <%= order.purchaseTime %>
+
                                                                 </small>
                                                         </td>
                                                         <td> <span>₹</span>
@@ -151,6 +199,7 @@
                                                         <td>
                                                             <i class="fa fa"></i>
                                                         </td>
+
                                                     </tr>
                                                     <% }) %>
                                             </tbody>
@@ -186,18 +235,54 @@
                 </div>
 
                 <div class="coupen tabShow">
-
-
-                    <body class="wallet-body">
-                        <div class="background-pattern"></div>
+                    <div class="walletBody">
                         <div class="wallet-container">
+                            <div class="background-pattern"></div>
                             <h1 class="wallet-title">Your Wallet</h1>
-                            <p id="balance" class="wallet-balance">Balance: $0.00</p>
-                            <button onclick="addMoney()" class="wallet-button">Add Money</button>
+                            <div class="balance-container">Balance: <span id="balance" class="balance-amount">₹<%=
+                                        walletData.wallet %></span></div>
+                            <!-- <button onclick="addMoney()" class="wallet-button">Add Money</button> -->
                             <h2 class="wallet-transaction-title">Transaction History</h2>
                             <ul id="transaction-list" class="wallet-transaction-list"></ul>
+
+                            <table class="history-table">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Date</th>
+                                        <th>Transaction</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-body">
+                                    <% if (Array.isArray(walletData.walletHistory) && walletData.walletHistory.length>
+                                        0) { %>
+                                        <% walletData.walletHistory.forEach((transaction, i)=> { %>
+                                            <tr>
+                                                <td>
+                                                    <%= i + 1 %>
+                                                </td>
+                                                <td>
+                                                    <%= transaction.transactionDate %> <small><%= transaction.transactionTime %></small>
+                                                </td>
+                                                <td>
+                                                    <%= transaction.direction %>
+                                                </td>
+                                                <td> <span>₹</span>
+                                                    <%= transaction.amount %>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="3">No wallet transactions found</td>
+                                                    </tr>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+
                         </div>
-                    </body>
+                    </div>
 
                 </div>
 
@@ -474,6 +559,25 @@
             //     }, 3000);
             // }
 
+            function togglePasswordVisibility(fieldId, groupId) {
+                const passField = document.getElementById(fieldId);
+                const togglePasswordIcon = document.getElementById('toggle' + fieldId.charAt(0).toUpperCase() + fieldId.slice(1) + 'Icon');
+
+                if (passField.type === 'password') {
+                    passField.type = 'text';
+                    togglePasswordIcon.textContent = '🔒'; // Change to closed eye icon
+                    togglePasswordIcon.style.color = '#3498db';
+                } else {
+                    passField.type = 'password';
+                    togglePasswordIcon.textContent = '👁️'; // Change to open eye icon
+                    togglePasswordIcon.style.color = '#222';
+                }
+
+                // Add a timeout to reset the icon after a short delay
+                setTimeout(function () {
+                    togglePasswordIcon.textContent = '👁️';
+                }, 1500);
+            }
 
 
         </script>

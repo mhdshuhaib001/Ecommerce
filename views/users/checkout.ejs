@@ -1,5 +1,121 @@
 <%-include("../layouts/user/header.ejs")%>
 
+    <style>
+        /* Styles for Coupon Card */
+
+        .coupon-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* height: 100vh;
+            background-color: #dc143c; */
+        }
+
+        .coupon-card {
+            width: 400px;
+            height: 210px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+            padding: 10px;
+            position: relative;
+            margin: 7px;
+        }
+
+        .coupon-main,
+        .coupon-copy-button {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            align-items: center;
+        }
+
+        .coupon-card::after,
+        .coupon-card::before {
+            position: absolute;
+            content: "";
+            height: 40px;
+            border-radius: 40px;
+            z-index: 1;
+            width: 40px;
+        }
+
+        .coupon-card::after {
+            right: -20px;
+            top: 70px;
+        }
+
+        .coupon-card::before {
+            left: -20px;
+            top: 70px;
+        }
+
+        .coupon-img img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .coupon-vertical {
+            border-left: 5px dotted black;
+            height: 100px;
+            position: absolute;
+            left: 40%;
+        }
+
+        .coupon-content h1 {
+            font-size: 35px;
+            margin-left: -20px;
+            color: #565656;
+        }
+
+        .coupon-content h1 span {
+            font-size: 18px;
+        }
+
+        .coupon-content h2 {
+            font-size: 18px;
+            margin-left: -20px;
+            color: #565656;
+            text-transform: uppercase;
+        }
+
+        .coupon-content p {
+            font-size: 16px;
+            color: #696969;
+            margin-left: -20px;
+        }
+
+        .coupon-copy-button {
+            margin: 6px 0 -5px 0;
+            height: 37px;
+            border-radius: 4px;
+            padding: 0 1px;
+            border: 1px solid #e1e1e1;
+        }
+
+        .coupon-copy-button input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .coupon-copy-button button {
+            padding: 5px 20px;
+            background-color: #dc143c;
+            color: #fff;
+            border: 1px solid transparent;
+        }
+
+        .coupon-remove-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: #dc143c;
+        }
+    </style>
+
     <!-- preloader -->
     <div id="loader-wrapper">
         <div id="loader"></div>
@@ -28,62 +144,112 @@
         <!-- breadcrumb-area-end -->
 
         <!-- coupon-area start -->
-        <!-- <section class="coupon-area pt-20 pb-20">
-            <div class="container">
-                <div class="row">
-                     <div class="col-md-6">
-                        <div class="coupon-accordion">  -->
-        <!-- ACCORDION START -->
-        <!-- <h3>Returning customer? <span id="showlogin">Click here to login</span></h3>
-                            <div id="checkout-login" class="coupon-content">
-                                <div class="coupon-info">
-                                    <p class="coupon-text">Quisque gravida turpis sit amet nulla posuere lacinia. Cras sed est
-                                        sit amet ipsum luctus.</p>
-                                    <form action="#">
-                                        <p class="form-row-first">
-                                            <label>Username or email <span class="required">*</span></label>
-                                            <input type="text" />
-                                        </p>
-                                        <p class="form-row-last">
-                                            <label>Password <span class="required">*</span></label>
-                                            <input type="text" />
-                                        </p>
-                                        <p class="form-row">
-                                            <button class="btn theme-btn" type="submit">Login</button>
-                                            <label>
-                                                <input type="checkbox" />
-                                                Remember me
-                                            </label>
-                                        </p>
-                                        <p class="lost-password">
-                                            <a href="javascript:void(0)">Lost your password?</a>
-                                        </p>
-                                    </form>
+
+        <body class="couponBody">
+            <section class="coupon-area pt-30 pb-30">
+                <div class="container">
+                    <!-- <div class="row"> -->
+                    <div class="col-md-12">
+                        <div class="coupon-accordion">
+                            <!-- ACCORDION START -->
+                            <h3>Have a coupon? <span id="couponShow">Click here
+                                    to get your code</span></h3>
+                            <div id="checkout_coupon" class="coupon-checkout-content" style="width: 100%;">
+                                <div class="coupon-info d-flex justify-content-center" id="reloadArea">
+                                    <% if (couponData && couponData.length> 0) { %>
+                                        <% couponData.forEach(function(coupon) { %>
+                                            <% if (totalamount> coupon.criteriaAmount) { %>
+                                                <div class="coupon-container">
+                                                    <div class="coupon-card">
+                                                        <div class="coupon-main">
+                                                            <div class="coupon-img">
+                                                                <img src="https://i.pinimg.com/originals/c7/84/67/c78467db9ff497393cb548a48f02d451.png"
+                                                                    alt />
+                                                            </div>
+                                                            <div class="coupon-vertical"></div>
+                                                            <div class="coupon-content">
+                                                                <h2>
+                                                                    <%= coupon.name %>
+                                                                </h2>
+                                                                <h1>
+                                                                    <%= coupon.discountAmount %>% <span>Coupon</span>
+                                                                </h1>
+                                                                <p>Valid till <%= coupon.expiryDate %>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="coupon-copy-button">
+                                                            <% if (coupon.usedUser.toString()===userId.toString()) { %>
+                                                                <input id="apply-value" type="text" readonly
+                                                                    value="<%= coupon.couponCode %>" />
+                                                                <button onclick="removeCoupon('<%= coupon._id %>')"
+                                                                    class="coupon-copy-btn">Remove</button>
+                                                                <% } else { %>
+                                                                    <input id="apply-value" type="text" readonly
+                                                                        value="<%= coupon.couponCode %>" />
+                                                                    <button onclick="couponApplied('<%= coupon._id %>')"
+                                                                        class="coupon-copy-btn">Apply</button>
+                                                                    <% } %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% } else { %>
+                                                    <!-- <div
+                                                        class="coupon-card <%= totalamount <= coupon.totalamount ? 'fade-out' : '' %>">
+                                                        <div class="coupon-main">
+                                                            <div class="coupon-img">
+                                                                <img src="https://i.pinimg.com/originals/c7/84/67/c78467db9ff497393cb548a48f02d451.png"
+                                                                    alt />
+                                                            </div>
+                                                            <div class="coupon-vertical"></div>
+                                                            <div class="coupon-content">
+                                                                <h2>
+                                                                    <%= coupon.name %>
+                                                                </h2>
+                                                                <h1>
+                                                                    <%= coupon.discountAmount %>%
+                                                                        <span>Coupon</span>
+                                                                </h1>
+                                                                <p>Valid till <%= coupon.expiryDate %>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="coupon-copy-button">
+                                                            <% if (coupon.usedUser.toString()===userId.toString()) { %>
+                                                                <input id="apply-value" type="text" readonly
+                                                                    value="<%= coupon.couponCode %>" />
+                                                                <button onclick="removeCoupon('<%= coupon._id %>')"
+                                                                    class="coupon-copy-btn">Remove</button>
+                                                                <% } else { %>
+                                                                    <input id="apply-value" type="text" readonly
+                                                                        value="<%= coupon.couponCode %>" />
+                                                                    <button onclick="couponApplied('<%= coupon._id %>')"
+                                                                        class="coupon-copy-btn">Apply</button>
+                                                                    <% } %>
+                                                        </div>
+                                                    </div> -->
+                                                    <h5>No Coupon</h5>
+
+                                                    <% } %>
+                                                        <% }); %>
+                                                            <% } else { %>
+                                                                <div
+                                                                    style="background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
+                                                                    <p style="color: #555; margin: 0;">No
+                                                                        coupons
+                                                                        available at the moment. Check back
+                                                                        later!</p>
+                                                                </div>
+                                                                <% } %>
                                 </div>
-                            </div> -->
-        <!-- ACCORDION END -->
-        <!-- </div>
-            </div> -->
-        <!-- <div class="col-md-6">
-                <div class="coupon-accordion">
-                 
-                    <h3>Have a coupon? <span id="showcoupon">Click here to enter your code</span></h3>
-                    <div id="checkout_coupon" class="coupon-checkout-content">
-                        <div class="coupon-info">
-                            <form action="#">
-                                <p class="checkout-coupon">
-                                    <input type="text" placeholder="Coupon Code" />
-                                    <button type="submit">Apply Coupon</button>
-                                </p>
-                            </form>
+
+                            </div>
                         </div>
                     </div>
+                    <!-- </div> -->
                 </div>
-            </div> -->
-        <!-- </div>
-            </div>
-        </section> -->
-        <!-- coupon-area end -->
+            </section>
+        </body>
         <!-- checkout-area start -->
 
         <section>
@@ -93,7 +259,8 @@
                         <form id="checkout-form">
                             <div class="row">
                                 <div class="col-lg-9">
-                                    <p class="m-3">Select your preferable address</p>
+                                    <p class="m-3">Select your preferable
+                                        address</p>
                                     <div class="row">
 
                                         <% if (addressData && addressData.address && addressData.address.length> 0) {
@@ -105,7 +272,8 @@
                                                             value='<%= JSON.stringify(address) %>' <%=index===0
                                                             ? 'checked' : '' %> id="">
 
-                                                        <h6 class="m-0 d-inline">Address Name</h6>
+                                                        <h6 class="m-0 d-inline">Address
+                                                            Name</h6>
                                                         <!-- <span class="text-info"
                                                             style="font-size: small;">(default)</span> -->
                                                         <br>
@@ -117,7 +285,7 @@
                                                                             City: <%= address.city %><br>
                                                                                 State: <%= address.state %><br>
                                                                                     Pincode: <%= address.pincode %><br>
-                                                                                        <a 
+                                                                                        <a
                                                                                             onclick="showEditAddressModal()">Edit
                                                                                             <i class="fa-sharp fa-solid fa-pen"
                                                                                                 style="color: #cc9966;"></i></a>
@@ -127,131 +295,149 @@
                                             </div><!-- End .col-lg-6 -->
                                             <% })} %> <!-- End Address Cards Loop -->
                                     </div><!-- Row end -->
-                                    <button class="btn btn-primary" id="addBtn"> Ship to another address</button>
+                                    <button class="btn btn-primary" id="addBtn">
+                                        Ship to another address</button>
 
-                                    <form action="" id="addAddressForm" style="display: none;">
+                                    <form action id="addAddressForm" style="display: none;">
                                         <!-- Address Details Form -->
                                     </form>
                                 </div><!-- End .col-lg-9 -->
 
                                 <!-- edit Modal -->
 
-                             <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog"
-                                aria-labelledby="exampleModalLabel" aria-hidden="true"
-                                style="padding-top: 80px;">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">edit
-                                                Address</h5>
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form action="/editAddress" id="editAddressform" method="post">
-                                                <div class="form-group">
-                                                    <label for="fullname">Full Name
-                                                        *</label>
-                                                    <input type="text" class="form-control" name="fullname"
-                                                        id="fullnames" required>
-                                                    <div id="fnameError" style="display: none; color: red;">
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="email">Email *</label>
-                                                    <input type="email" class="form-control" name="email"
-                                                        id="emails" required>
-                                                    <div id="addEmailError" style="display: none; color: red;">
-                                                    </div>
-
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="mobile">Mobile *</label>
-                                                    <input type="tel" class="form-control" name="mobile"
-                                                        id="mobiles" required>
-                                                    <div id="mobiles" style="display: none; color: red;">
-                                                    </div>
-
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="state">State *</label>
-                                                    <input type="text" class="form-control" name="state"
-                                                        id="states" required>
-                                                    <div id="stateError" style="display: none; color: red;">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="city">City *</label>
-                                                    <input type="text" class="form-control" name="city"
-                                                        id="citys" required>
-                                                    <div id="cityError" style="display: none; color: red;">
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="pincode">Pincode *</label>
-                                                    <input type="tel" class="form-control" name="pincode"
-                                                        id="pincodes" autocomplete="off" required>
-                                                    <div id="pinError" style="display: none; color: red;">
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="house">House Name *</label>
-                                                    <input type="text" class="form-control" name="houseName"
-                                                        id="houseNames" required>
-                                                    <div id="houseError" style="display: none; color: red;">
-                                                    </div>
-                                                    <input type="text" class="form-control"
-                                                        style="display: none;" id="addressId" name="addressId">
-                                                </div>
-
-                                                <button id="editAddress" type="submit"
-                                                    class="btn btn-outline-primary">
-                                                    <span>Add Address</span>
-                                                    <i class="icon-long-arrow-right"></i>
+                                <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-top: 80px;">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">edit
+                                                    Address</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
                                                 </button>
-                                            </form>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="/editAddress" id="editAddressform" method="post">
+                                                    <div class="form-group">
+                                                        <label for="fullname">Full
+                                                            Name
+                                                            *</label>
+                                                        <input type="text" class="form-control" name="fullname"
+                                                            id="fullnames" required>
+                                                        <div id="fnameError" style="display: none; color: red;">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="email">Email
+                                                            *</label>
+                                                        <input type="email" class="form-control" name="email"
+                                                            id="emails" required>
+                                                        <div id="addEmailError" style="display: none; color: red;">
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="mobile">Mobile
+                                                            *</label>
+                                                        <input type="tel" class="form-control" name="mobile"
+                                                            id="mobiles" required>
+                                                        <div id="mobiles" style="display: none; color: red;">
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="state">State
+                                                            *</label>
+                                                        <input type="text" class="form-control" name="state" id="states"
+                                                            required>
+                                                        <div id="stateError" style="display: none; color: red;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="city">City
+                                                            *</label>
+                                                        <input type="text" class="form-control" name="city" id="citys"
+                                                            required>
+                                                        <div id="cityError" style="display: none; color: red;">
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="pincode">Pincode
+                                                            *</label>
+                                                        <input type="tel" class="form-control" name="pincode"
+                                                            id="pincodes" autocomplete="off" required>
+                                                        <div id="pinError" style="display: none; color: red;">
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="house">House
+                                                            Name *</label>
+                                                        <input type="text" class="form-control" name="houseName"
+                                                            id="houseNames" required>
+                                                        <div id="houseError" style="display: none; color: red;">
+                                                        </div>
+                                                        <input type="text" class="form-control" style="display: none;"
+                                                            id="addressId" name="addressId">
+                                                    </div>
+
+                                                    <button id="editAddress" type="submit"
+                                                        class="btn btn-outline-primary">
+                                                        <span>Add Address</span>
+                                                        <i class="icon-long-arrow-right"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
-                                
-                            </div>
 
                                 <aside class="col-lg-3">
                                     <div class="summary">
                                         <h3 class="summary-title">Your
                                             Order</h3><!-- End .summary-title -->
 
-                                        <table class="table table-summary">
+                                        <table class="table table-summary" id="reloadArea2">
                                             <thead>
                                                 <tr>
                                                     <th>Sub Total</th>
-                                                    <th><%= totalamount %></th>
+
+                                                    <th>
+                                                        ₹<%= totalamount %>
+                                                    </th>
                                                 </tr>
                                             </thead>
-                                                <tbody>
-
-                                                    <tr>
-                                                       
+                                            <tbody>
+                                                <% if (cartData.couponDiscount !=="undefined" &&
+                                                    cartData.couponDiscount> 0) { %>
+                                                    <tr style="color: green;">
+                                                        <td>Discount:</td>
+                                                        <td>
+                                                            <span>-</span><%= cartData.couponDiscount %>
+                                                        </td>
                                                     </tr>
+                                                    <% } %>
+
                                                         <tr>
                                                             <td>Shipping:</td>
                                                             <td>Free shipping</td>
                                                         </tr>
                                                         <tr class="summary-total">
-                                                            <td class>Total:</td>
-                                                            <td id="total1">
-                                                                <%= totalamount %>
+                                                            <td class="text-primary">Total:</td>
+                                                            <td>
+                                                                ₹
+                                                                <span id="total1">
+                                                                    <%= discountAmount%>
+                                                                </span>
                                                             </td>
                                                         </tr>
-                                                </tbody>
-
+                                            </tbody>
                                         </table><!-- End .table table-summary -->
 
                                         <hr class="mt-0">
@@ -267,13 +453,13 @@
                                                     </label>
 
                                                     <label>
-                                                        <input type="radio" name="payment" id="wallet">
+                                                        <input type="radio" name="payment" id="wallet" value="wallet"
+                                                            checked>
                                                         <span>Wallet</span>
                                                     </label>
 
                                                     <label>
-                                                        <input type="radio" name="payment" id="COD" value="COD"
-                                                            checked>
+                                                        <input type="radio" name="payment" id="COD" value="COD" checked>
                                                         <span>Cash on
                                                             Delivery</span>
                                                     </label>
@@ -282,11 +468,11 @@
                                             </div>
                                         </div><!-- End .accordion -->
 
-                                        <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
-                                            <span class="btn-text">Place
-                                                Order</span>
-                                            <span class="btn-hover-text">Proceed to
-                                                Checkout</span>
+                                        <button type="submit" style="background-color:#052659 ;" class="btn ">
+                                                 <span style="color: white;" class="btn-text">Place
+                                                    Order</span>
+                                                <span  style="color: white;" class="btn-hover-text">Proceed to
+                                                    Checkout</span> 
                                         </button>
                                     </div><!-- End .summary -->
                                 </aside><!-- End .col-lg-3 -->
@@ -301,293 +487,7 @@
         <!-- checkout-area end -->
     </main>
 
-    <!-- footer section start -->
-    <section class="footer">
-        <div class="footer-top mt-120 pb-120 pt-115" style="background-color: #f5f5f5;">
-            <div class="footer-top-wrapper">
-                <div class="newsletter ">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-6">
-                            <h2 class="title m-0">Sign Up For Our Newsletter</h2>
-                            <p>Subscribe our newsletter and get discount 20% Off</p>
-                        </div>
-                        <div class="col-xl-6 col-lg-6">
-                            <div class="newsletter-form">
-                                <form action="#" method="POST">
-                                    <input type="text" placeholder="Search for our newsletter...">
-                                    <button type="submit"
-                                        class="generic-btn red-hover-btn text-uppercase float-right">Subscribe
-                                        Now</button>
-                                </form>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <!-- /.newsletter -->
-                <div class="service pt-57 mt-40 gray-border-top">
-                    <div class="row justify-content-center">
-                        <div class="col-xl-4 col-md-6 service-item">
-                            <div class="service-box service-box-2">
-                                <div class="service-box-content">
-                                    <h4 class="title">Worldwide Shipping</h4>
-                                    <p class="service-desc">Duis autem vel eum
-                                        iriure dolor in hendrerit velit esse
-                                        molestie consequat.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-4 col-md-6 service-item">
-                            <div class="service-box service-box-2">
-                                <div class="service-box-content">
-                                    <h4 class="title">Online Support 24/7</h4>
-                                    <p class="service-desc">Duis autem vel eum
-                                        iriure dolor in hendrerit velit esse
-                                        molestie consequat.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-4 col-lg-6 hidden-md service-item">
-                            <div class="service-box service-box-2">
-                                <div class="service-box-content">
-                                    <h4 class="title">Money Return Guarantee</h4>
-                                    <p class="service-desc">Duis autem vel eum
-                                        iriure dolor in hendrerit velit esse
-                                        molestie consequat.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /. service -->
-                <!-- /. footer bottom -->
-            </div>
-
-        </div>
-        <!-- footer top -->
-
-        <div class="footer-bottom pt-77" style="background-color: #292929;">
-            <div class="container-1180">
-                <div class="footer-bottom-wrapper">
-                    <div class="footer-bottom-primary pb-60">
-                        <div class="row">
-                            <div class="col-xl-5 col-lg-5 col-md-9">
-                                <div class="footer-item has-desc">
-                                    <div class="footer-logo mb-25">
-                                        <img src="img/logo/logo2.png" width="120" height="31" alt>
-                                    </div>
-                                    <div class="footer-desc">
-                                        <p class="mb-10">Mazia store is a premium
-                                            theme with advanced admin module. It’s
-                                            extremely customizable, easy to use and
-                                            fully responsive and retina ready.
-                                        </p>
-                                    </div>
-                                    <div class="footer-img mt-65">
-                                        <img src="img/logo/paypal.png" alt>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-7 col-lg-7 col-md-12">
-                                <div class="row">
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6">
-                                        <div class="footer-menu">
-                                            <ul>
-                                                <li><a href="javascript:void(0)" class="title">MY
-                                                        ACCOUNT</a></li>
-                                                <li><a href="login.html">My
-                                                        account</a></li>
-                                                <li><a href="checkout.html">Checkout</a></li>
-                                                <li><a href="shop2.html">Shop</a></li>
-                                                <li><a href="wishlist.html">Wishlist</a></li>
-                                                <li><a href="question.html">Frequently</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6">
-                                        <div class="footer-menu">
-                                            <ul>
-                                                <li><a href="javascript:void(0)" class="title">Quick
-                                                        Links</a></li>
-                                                <li><a href="shop2.html">Special
-                                                        Offers</a></li>
-                                                <li><a href="shop2.html">Gift
-                                                        Cards</a></li>
-                                                <li><a href="shop2.html">F21
-                                                        Red</a></li>
-                                                <li><a href="about.html">Privacy
-                                                        Policy</a></li>
-                                                <li><a href="about.html">Teams of
-                                                        Use</a></li>
-                                                <li><a href="portfolio.html">Portfolio</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 hidden-sm">
-                                        <div class="footer-menu">
-                                            <ul>
-                                                <li><a href="javascript:void(0)" class="title">Company
-                                                        Info</a></li>
-                                                <li><a href="about.html">About
-                                                        us</a></li>
-                                                <li><a href="blog.html">Careers</a></li>
-                                                <li><a href="portfolio2.html">Business
-                                                        With Us</a></li>
-                                                <li><a href="shop2.html">Find a
-                                                        Store</a></li>
-                                                <li><a href="question.html">Teams of
-                                                        Use</a></li>
-                                                <li><a href="portfolio3.html">Press
-                                                        & Talent</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </section>
-    <!-- footer section end -->
-
-    <!-- product popup start -->
-    <section id="product-popup">
-        <div class="product-popup-overlay"></div>
-        <div class="product-popup-container">
-            <div class="product-inner w-100">
-                <div class="product-inner-content">
-                    <div class="quick-close-action"><i class="fal fa-times"></i></div>
-                    <div class="row">
-                        <div class="col-xl-5 col-lg-5 col-md-5 col-sm-6">
-                            <div class="tab-content" id="pills-tabContent">
-                                <div class="tab-pane fade show active" id="product-popup-1">
-                                    <div class="product-popup-img">
-                                        <img src="img/product/10.jpg" class="w-100" alt>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="product-popup-2">
-                                    <div class="product-popup-img">
-                                        <img src="img/product/11.jpg" class="w-100" alt>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="product-popup-3">
-                                    <div class="product-popup-img">
-                                        <img src="img/product/12.jpg" class="w-100" alt>
-                                    </div>
-                                </div>
-                            </div>
-                            <ul class="nav nav-pills justify-content-center mt-10" id="pills-tab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="active" data-toggle="pill" href="#product-popup-1">
-                                        <img src="img/product/10.jpg" class="w-100" alt>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class data-toggle="pill" href="#product-popup-2">
-                                        <img src="img/product/11.jpg" class="w-100" alt>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class data-toggle="pill" href="#product-popup-3">
-                                        <img src="img/product/12.jpg" class="w-100" alt>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-xl-7 col-lg-7 col-md-7 col-sm-6">
-                            <div class="product-content">
-                                <div class="product-title">
-                                    <h2>Nari Narwhal Usb...</h2>
-                                </div>
-                                <div class="price">$<span>44.00</span>–<span>$250.00</span></div>
-                                <a href="single-product-4.html" class="all-feature">See all feature</a>
-                                <div class="quick-quantity mt-30">
-                                    <form action="#" method="POST">
-                                        <input type="number" value="1">
-                                        <button type="submit" class="generic-btn red-hover-btn text-capitalize">add
-                                            to
-                                            cart</a>
-                                    </form>
-                                </div>
-
-                                <div class="product-desc pb-20 mt-25 gray-border-top">
-                                    <p class="mb-0">Typi non habent claritatem
-                                        insitam, est usus legentis in iis qui
-                                        facit eorum claritatem. Investigationes
-                                        demonstraverunt lectores legere me lius
-                                        quod ii legunt saepius. Claritas est etiam
-                                        processus A Capitalize on low hanging
-                                        fruit to identify a ballpark value added
-                                        activity to beta test. Override the
-                                        digital...ditional clickthroughs from
-                                        DevOps. Nanotechnology immersion along the
-                                        information highway will close the […]</p>
-                                </div>
-                                <div class="product-list mt-25">
-                                    <ul>
-                                        <li>– Light green crewnec...t.</li>
-                                        <li>– Hand pockets.</li>
-                                        <li>– Relaxed fit.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- product popup end -->
-
-    <!-- startup popup start -->
-    <section id="startup-popup">
-        <div class="product-popup-overlay has-startup" style="opacity: 1;visibility: visible"></div>
-        <div class="startup-popup-body">
-            <div class="startup-body-content h-100">
-                <div class="row justify-content-end h-100">
-                    <div class="col-6 h-100">
-                        <div class="startup-popup-inner h-100">
-                            <div class="close-search-popup">
-                                <i class="fal fa-times"></i>
-                            </div>
-                            <div class="startup-popup-main-content">
-                                <h2>Get Our Email Letter</h2>
-                                <p class="mb-0">Subscribe to the Mazia store mailing
-                                    list to receive updates on new
-                                    arrivals, special offers
-                                    and other discount information.</p>
-                                <div class="startup-subscribe-form">
-                                    <form action="#" method="POST">
-                                        <input type="text" placeholder="Subscribe to our newsletter" class="mb-30">
-                                        <button class="generic-btn red-hover-btn text-uppercase">Subscribe
-                                            now</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="startup-popup-sub-content">
-                                <div class="popup-warning">
-                                    <input type="checkbox" id="startup-popup-hidden">
-                                    <label for="startup-popup-hidden">Do not show
-                                        the popup again</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- startup popup end -->
-
     <script>
-
         $("#checkout-form").submit(function (e) {
             e.preventDefault();
             console.log('check this');
@@ -604,6 +504,7 @@
                 payment: paymentMethod
             };
 
+
             console.log(formData, 'checking form data');
 
             $.ajax({
@@ -619,15 +520,24 @@
                         location.reload();
                     } else if (response.placed == true) {
                         console.log(response);
-                        window.location.href = '/orderSuccess';
-                    } else if (response.razorpay) {
-                        console.log("checking Razorpay payment");
-                        console.log(response);
+                        location.href = `/orderSuccess/${response.orderId}`;
+                    } else if (response.walletFailed == true) {
+                        swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "Insufficient Balance In Your Wallet",
+                            showConfirmButton: false,
+                            showCancelButton: false,
+                            timer: 1500,
+                        });
+                    }
+                    else if (response.razorpay) {
                         razorPayment(response.order, formData);
                     }
                 },
             });
         });
+
 
         function razorPayment(order, formData) {
             var options = {
@@ -690,9 +600,106 @@
                 },
             });
         }
+    </script>
+
+    <script>
+     function couponApplied(couponId) {
+    $.ajax({
+        url: "/appliCopuon",
+        data: { couponId },
+        method: "POST",
+        success: function (response) {
+            if (response.coupon === true) {
+                $('#reloadArea').load('/checkout #reloadArea');
+                $('#reloadArea2').load('/checkout #reloadArea2');
+                Swal.fire({
+                    title: "Coupon Applied",
+                    text: "Your coupon has been successfully applied.",
+                    icon: "success",
+                });
+            } else if (response.user) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2000,
+                });
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Coupon removed. You can apply a new one.'
+                });
+            } else if (response.limit) {
+                Swal.fire({
+                    title: "Coupon Limit Reached",
+                    text: "This coupon has reached its usage limit.",
+                    icon: "warning",
+                });
+            } else if (response.expired) {
+                Swal.fire({
+                    title: "Coupon Expired",
+                    text: "This coupon has expired.",
+                    icon: "warning",
+                });
+            } else if (response.cartAmount) {
+                Swal.fire({
+                    title: "Invalid Coupon",
+                    text: "Your cart total does not meet the minimum criteria for this coupon.",
+                    icon: "warning",
+                });
+            } else if(response.used){
+                Swal.fire({
+                    title: "Coupon Used",
+                    text: "Only one coupon at a time.",
+                    icon: "warning",
+                });
+            }
+            else {
+                Swal.fire({
+                    title: "Coupon Error",
+                    text: "There was an error applying the coupon. Please try again.",
+                    icon: "error",
+                });
+            }
+        },
+        error: function (error) {
+            Swal.fire({
+                title: "Coupon Error",
+                text: "There was an error applying the coupon. Please try again.",
+                icon: "error",
+            });
+        }
+    });
+}
 
 
+        function removeCoupon(couponId) {
+            $.ajax({
+                url: "/removeCoupon",
+                data: { couponId },
+                method: "POST",
+                success: function (response) {
+                    if (response.couponRemove === true) {
+                        $('#reloadArea').load('/checkout #reloadArea');
+                        $('#reloadArea2').load('/checkout #reloadArea2');
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 2000,
+                        })
 
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'couponremoved.'
+                        })
+                        setTimeout(() => {
+                        }, 2000);
+
+                    }
+                }
+            })
+        }
 
 
     </script>
@@ -701,24 +708,5 @@
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-
-    <!-- JS here -->
-    <script src="js/vendor/jquery-1.12.4.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/isotope.pkgd.min.js"></script>
-    <script src="js/one-page-nav-min.js"></script>
-    <script src="js/slick.min.js"></script>
-    <script src="js/jquery.meanmenu.min.js"></script>
-    <script src="js/ajax-form.js"></script>
-    <script src="js/fontawesome.min.js"></script>
-    <script src="js/wow.min.js"></script>
-    <script src="js/jquery-ui.js"></script>
-    <script src="js/jquery.scrollUp.min.js"></script>
-    <script src="js/imagesloaded.pkgd.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/plugins.js"></script>
-    <script src="js/main.js"></script>
 
     <%-include("../layouts/user/footer.ejs")%>

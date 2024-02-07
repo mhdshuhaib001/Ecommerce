@@ -30,7 +30,8 @@ const  couponSchema = new  mongoos.Schema({
         required: true
     },
     usersLimit:{
-        type: Number
+        type: Number,
+        required: true 
     },
     is_blocked: {
         type: Boolean,

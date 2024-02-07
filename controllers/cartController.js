@@ -2,6 +2,10 @@ const Cart = require("../models/cartModel");
 const Products = require("../models/productsModel");
 const User = require("../models/userModel");
 const Address = require("../models/addressModel");
+const Coupon = require("../models/couponModel");
+
+
+
 
 //-------------Cart-------------------
 const loadCart = async (req, res) => {
@@ -15,6 +19,7 @@ const loadCart = async (req, res) => {
       for (let i = 0; i < product.length; i++) {
         total += product[i].totalPrice;
       }
+
       const subTotal = total;
       const cart = await Cart.findOne({ userId: req.session.user_id })
       let cartCount = 0;
@@ -38,8 +43,11 @@ const loadCart = async (req, res) => {
   }
 };
 
+
+
 const addToCart = async (req, res) => {
   try {
+
     const userId = req.session.user_id;
     const productId = req.body.id;
     const userData = await User.findOne({ _id: userId });
@@ -47,6 +55,7 @@ const addToCart = async (req, res) => {
     const productQuantity = productData.quantity;
     const count = req.body.count ? parseInt(req.body.count) : 1;
     const totalPrice = productData.price * count;
+
     const products = {
       productId: productId,
       productPrice: productData.price,
@@ -55,6 +64,7 @@ const addToCart = async (req, res) => {
       count: count,
       image: productData.images.image1
     };
+
     const existCartData = await Cart.findOne({ userId: userId });
 
     if (!existCartData) {
@@ -65,6 +75,7 @@ const addToCart = async (req, res) => {
       });
       return res.json({ success: true, newProduct: true });
     }
+
     const existProductIndex = existCartData.product.findIndex((p) => p.productId == productId);
     if (existProductIndex !== -1) {
       existCartData.product[existProductIndex].count += count;
@@ -75,6 +86,7 @@ const addToCart = async (req, res) => {
       await existCartData.save();
       return res.json({ success: true, newProduct: true });
     }
+
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -110,6 +122,7 @@ const removeCartItem = async (req, res) => {
 
 
 const quantityUpdate = async (req, res) => {
+
   try {
     const proId = req.body.product;
     const userData = req.session.user_id;
@@ -154,6 +167,7 @@ const quantityUpdate = async (req, res) => {
       { $set: { "product.$.totalPrice": productTotal } }
     );
     res.json({ success: true });
+
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -161,73 +175,57 @@ const quantityUpdate = async (req, res) => {
 };
 
 
-
 const loadCheckOut = async (req, res) => {
   try {
     const user_id = req.session.user_id;
-    const userData = await User.findOne({ _id: req.session.user_id });
-    const cartData = await Cart.findOne({ userId: user_id }).populate(
-      "product.productId"
-    );
-    const addressId = req.session.id;
+
+    const userData = await User.findOne({ _id: user_id });
+    const cartData = await Cart.findOne({ userId: user_id }).populate("product.productId");
+    const cartTotal = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
     const addressData = await Address.findOne({ user: user_id });
-    const cart = await Cart.findOne({ userId: req.session.user_id })
-    let cartCount = 0;
-    if (cart) { cartCount = cart.product.length }
-    const products = cartData.product;
-    let total = 0;
-    for (let i = 0; i < products.length; i++) {
-      total += products[i].totalPrice;
+    const couponData = await Coupon.find({
+      usedUser: { $nin: [user_id] }
+  });
+
+    let couponDiscount = 0;
+    if (cartData.couponDiscount) {
+      couponDiscount = cartData.couponDiscount;
     }
 
-    let stock = [];
-    let countCart = [];
+    const discountAmount = cartTotal - couponDiscount;
 
-    for (let i = 0; i < stock.length; i++) {
-      stock.push(cartData.product[i].productId.quantity);
-      countCart.push(cartData.product[i].count);
-    }
-
+    const cartCount = cartData.product.length;
     let instock = true;
-    let productIndex = 0;
 
-    for (let i = 0; i < stock.length; i++) {
-      if (stock[i] > countCart[i] || stock[i] == countCart[i]) {
-        instock = true;
-      } else {
+    for (const product of cartData.product) {
+      if (product.productId.quantity < product.count) {
         instock = false;
-        productIndex = i;
+        proName = product.productId.name;
         break;
       }
     }
 
-    const proName = cartData.product[productIndex].productId.name;
+    const Total = cartTotal;
+    let totalamount = cartTotal;
+    console.log(totalamount,'chek cehtaana');
+    const userId = userData._id;
 
-    if (user_id) {
-      if (instock === true) {
-        const Total = total;
-        const totalamount = total;
-        const userId = userData._id;
-
-        res.render("checkout", {
-          user: userData,
-          addressData,
-          userId,
-          cartData,
-          products: products,
-          Total,
-          totalamount,
-          cartCount
-        });
-      } else {
-        res.render("cart", { message: proName, name: req.session.name });
-      }
-    } else {
-      res.redirect("/loadLogin");
-    }
-
+    res.render("checkout", {
+      user: userData,
+      addressData,
+      userId,
+      cartData,
+      products: cartData.product,
+      Total,
+      totalamount,
+      cartCount,
+      couponData,
+      cartTotal, 
+      discountAmount, 
+    });
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
+    res.status(500).send('Internal Server Error');
   }
 };
 
