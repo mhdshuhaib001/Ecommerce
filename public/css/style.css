@@ -4559,3 +4559,9 @@ a.replay:hover {
   background-color: #218838;
   border: 1px solid #218838;
 }
+
+
+.filter-form-submit label {
+  display: block;
+  margin-bottom: 10px;
+}

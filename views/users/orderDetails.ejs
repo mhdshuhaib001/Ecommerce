@@ -527,9 +527,11 @@
                                                             class="btn btn-warning"
                                                             style="color: rgb(215, 44, 44)">Cancel</button>
                                                         <% } else if (product.status=="delivered" ) { %>
-                                                                <button type="button" class="btn btn-warning"
-                                                                    onclick="returnRequest('<%= product._id %>','<%= orderData._id%>')"
-                                                                    style="color: rgb(128, 44, 5)">Return</button>
+                                                            <button type="button" class="btn btn-warning"
+                                                                id="requestStatus"
+                                                                onclick="returnRequest('<%= product._id %>','<%= orderData._id%>')"
+                                                                style="color: rgb(128, 44, 5)">Return</button>
+
                                                             <% } else if (product.status=="Accepted" ) { %>
                                                                 <label style="color: red;">OrderReturned</label>
                                                                 <% } else if (product.status=="request" ) { %>
@@ -921,88 +923,72 @@
 <!-- startup popup end -->
 
 <!-- -------------------------------Modal for return request------------------------------ -->
- <!-- <div class="modal fade" id="returnRequestModal" tabindex="-1" role="dialog" aria-labelledby="orderDetailsModalLabel"
+<div class="modal fade" id="returnReasonModal" tabindex="-1" role="dialog" aria-labelledby="returnReasonModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="orderDetailsModalLabel">
-                    Return Product Request
-                </h5>
+                <h5 class="modal-title" id="returnReasonModalLabel">Enter Return Reason</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body m-3">
-                <p style="color: #0a9538; font-style: italic;">
-                    Honesty Appreciated: We believe you! Get your full refund with no fuss. Just share your reason, and
-                    your next purchase comes with a sweet discount. Cheers!
-                </p>
-                <form action="" class="m-3">
-                    <div class="row justify-content-center">
-                        <div class="col-md-12">
-                            <textarea class="pl-2 w-100" name="reasonNote" id=""
-                                placeholder="Drop your reason for return here..." required></textarea>
-                        </div>
-                        <div class="col-md-12 mt-2">
-                            <button type="submit" class="btn btn-primary">Submit Return Request</button>
-                        </div>
+            <div class="modal-body">
+                <form id="returnReasonForm">
+                    <div class="form-group">
+                        <label for="returnReason">Reason for Return:</label>
+                        <textarea class="form-control" name="returnReason" id="returnReason" rows="3" required></textarea>
                     </div>
+                    <button type="button" class="btn btn-primary" id="submitReturnReason">Submit</button>
                 </form>
             </div>
         </div>
     </div>
-</div> -->
-  
-
-
+</div>
 
 <script>
 
+
+
+    // function returnRequest(id, order) {
+
+    // console.log('moopare ethis x');
+    // swal.fire({
+    //     title: "Are you sure?",
+    //     text: "You want to return this Product?",
+    //     icon: "warning",
+    //     showCancelButton: true,
+    //     confirmButtonColor: "#3085d6",
+    //     cancelButtonColor: "#d33",
+    //     confirmButtonText: "Yes",
+    //     cancelButtonText: "Not now",
+    // }).then((result) => {
+    //     if (result.isConfirmed) {
+    //         $.ajax({
+    //             url: "/returnRequest",
+    //             data: { id, order },
+    //             method: 'post',
+    //             success: (response) => {
+    //                 window.location.reload()
+
+    //                 const Toast = Swal.mixin({
+    //                     toast: true,
+    //                     position: 'top-end',
+    //                     showConfirmButton: false,
+    //                     timer: 3000,
+    //                 })
+    //                 Toast.fire({
+    //                     icon: 'success',
+    //                     title: 'Return request is sended.'
+    //                 })
+    //             }
+    //         });
+    //     }
+    // })
+    // }
     
-
-// function returnRequest(id, order) {
-
-// console.log('moopare ethis x');
-// swal.fire({
-//     title: "Are you sure?",
-//     text: "You want to return this Product?",
-//     icon: "warning",
-//     showCancelButton: true,
-//     confirmButtonColor: "#3085d6",
-//     cancelButtonColor: "#d33",
-//     confirmButtonText: "Yes",
-//     cancelButtonText: "Not now",
-// }).then((result) => {
-//     if (result.isConfirmed) {
-//         $.ajax({
-//             url: "/returnRequest",
-//             data: { id, order },
-//             method: 'post',
-//             success: (response) => {
-//                 window.location.reload()
-
-//                 const Toast = Swal.mixin({
-//                     toast: true,
-//                     position: 'top-end',
-//                     showConfirmButton: false,
-//                     timer: 3000,
-//                 })
-//                 Toast.fire({
-//                     icon: 'success',
-//                     title: 'Return request is sended.'
-//                 })
-//             }
-//         });
-//     }
-// })
-// }
-
-
-function returnRequest(id, order) {
-    alert("mc dsc")
     
-
+    function returnRequest(id, order) {
         console.log('moopare ethis x');
         Swal.fire({
             title: 'Are you sure?',
@@ -1014,49 +1000,53 @@ function returnRequest(id, order) {
             confirmButtonText: 'Yes, send refund request!'
         }).then((result) => {
             if (result.isConfirmed) {
-                $('#returnRequestModal').modal({
-                    backdrop: 'static',
-                    keyboard: false
-                }).modal('show');
+                $('#returnReasonModal').modal('show');
 
-                $('#returnRequestModal').on('hidden.bs.modal', function () {
+                $('#returnReasonModal').on('hidden.bs.modal', function () {
                     location.reload();
                 });
 
-                $('#returnRequestModal form').submit(function (event) {
-                    event.preventDefault();
+                // Event listener for input changes on the textarea
+                $('#returnReason').on('input', function () {
+                    const returnReason = $(this).val();
+                    $('#submitReturnReason').data('returnReason', returnReason);
+                });
 
-                    const formData = new FormData(this);
-                    formData.append('orderId', order);
-                    formData.append('productId', id);
+                $('#submitReturnReason').on('click', function () {
+                    const returnReason = $(this).data('returnReason');
+                    console.log('Return Reason:', returnReason);
 
                     if (result.isConfirmed) {
                         $.ajax({
                             url: "/returnRequest",
-                            data: { formData },
-                            method: 'post',
+                            data: {  order, id, returnReason: returnReason },
+                            method: 'POST',
                             success: (response) => {
-                                window.location.reload()
-
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: 'top-end',
-                                    showConfirmButton: false,
-                                    timer: 3000,
-                                })
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: 'Return request is sended.'
-                                })
+                                if (response.success) {
+                                    Swal.fire({
+                                        title: 'Refund request sent!',
+                                        text: "We'll review your request and get back to you shortly.",
+                                        icon: 'success'
+                                    }).then(() => {
+                                        $('#refundRequestModal').modal('hide');
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Oops!',
+                                        text: response.message || 'There was an error processing your request. Please try again.',
+                                        icon: 'error'
+                                    });
+                                }
                             }
                         });
                     }
-                })
+                });
             }
         });
     }
 
-
+        
     function cancelProduct(orderProductId, orderId) {
 
         Swal.fire({

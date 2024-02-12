@@ -44,11 +44,7 @@ const userSchema = new mongoose.Schema({
     },
     walletHistory: [{
         transactionDate: {
-            type: String,
-            required: true,
-        },
-        transactionTime: {
-            type: String,
+            type: Date,
             required: true,
         },
         amount: {

@@ -82,6 +82,7 @@ user_Rout.post('/orderCancel',orderControllers.orderCancel);
 user_Rout.get('/invoice',orderControllers.invoice);
 
 user_Rout.get('/filter',productController.filterProduct);
+user_Rout.get('/seachProduct',userController.searchProducts)
 
 user_Rout.post('/appliCopuon',couponController.applyCoupon);
 user_Rout.post('/removeCoupon',couponController.removeCoupon)

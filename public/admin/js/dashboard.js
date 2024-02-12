@@ -61,6 +61,9 @@
         }
       });
     }
+
+
+    
     if ($("#transaction-history").length) {
       var areaData = {
         labels: ["Paypal", "Stripe","Cash"],

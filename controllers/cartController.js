@@ -47,13 +47,18 @@ const loadCart = async (req, res) => {
 
 const addToCart = async (req, res) => {
   try {
-
     const userId = req.session.user_id;
     const productId = req.body.id;
     const userData = await User.findOne({ _id: userId });
     const productData = await Products.findById({ _id: productId });
     const productQuantity = productData.quantity;
     const count = req.body.count ? parseInt(req.body.count) : 1;
+    
+    // Check if the product quantity is greater than 0
+    if (productQuantity <= 0) {
+      return res.json({ success: false, newProduct: true, message: "Product is out of stock" });
+    }
+
     const totalPrice = productData.price * count;
 
     const products = {
@@ -77,11 +82,22 @@ const addToCart = async (req, res) => {
     }
 
     const existProductIndex = existCartData.product.findIndex((p) => p.productId == productId);
+
     if (existProductIndex !== -1) {
+      // Check if adding the count exceeds available quantity
+      if (productQuantity < count + existCartData.product[existProductIndex].count) {
+        return res.json({ success: false, newProduct: false, message: "Quantity limit reached!" });
+      }
+
       existCartData.product[existProductIndex].count += count;
       await existCartData.save();
       return res.json({ success: true, newProduct: false });
     } else {
+      // Check if adding the count exceeds available quantity
+      if (productQuantity < count) {
+        return res.json({ success: false, newProduct: true, message: "Quantity limit reached!" });
+      }
+
       existCartData.product.push(products);
       await existCartData.save();
       return res.json({ success: true, newProduct: true });
@@ -92,7 +108,6 @@ const addToCart = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 //------------- Remove Cart ----------------//
 const removeCartItem = async (req, res) => {
@@ -114,10 +129,6 @@ const removeCartItem = async (req, res) => {
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
-
-
-
-
 
 
 
@@ -175,6 +186,7 @@ const quantityUpdate = async (req, res) => {
 };
 
 
+
 const loadCheckOut = async (req, res) => {
   try {
     const user_id = req.session.user_id;
@@ -183,15 +195,17 @@ const loadCheckOut = async (req, res) => {
     const cartData = await Cart.findOne({ userId: user_id }).populate("product.productId");
     const cartTotal = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
     const addressData = await Address.findOne({ user: user_id });
+    const state = addressData.state; 
+    const district = addressData.district; 
+    console.log(state, 'oooooo', district, '==========');
     const couponData = await Coupon.find({
       usedUser: { $nin: [user_id] }
-  });
+    });
 
     let couponDiscount = 0;
     if (cartData.couponDiscount) {
       couponDiscount = cartData.couponDiscount;
     }
-
     const discountAmount = cartTotal - couponDiscount;
 
     const cartCount = cartData.product.length;
@@ -205,9 +219,15 @@ const loadCheckOut = async (req, res) => {
       }
     }
 
+    let shippingAmount = 0;
+    if (cartTotal < 1300) {
+      shippingAmount = 90;
+    } else {
+      shippingAmount = 0;
+    }
+
     const Total = cartTotal;
     let totalamount = cartTotal;
-    console.log(totalamount,'chek cehtaana');
     const userId = userData._id;
 
     res.render("checkout", {
@@ -222,12 +242,14 @@ const loadCheckOut = async (req, res) => {
       couponData,
       cartTotal, 
       discountAmount, 
+      shippingAmount
     });
   } catch (error) {
     console.error(error.message);
     res.status(500).send('Internal Server Error');
   }
 };
+
 
 module.exports = {
   loadCart,

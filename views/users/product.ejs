@@ -9,10 +9,9 @@
         <div class="container-fluid">
             <nav aria-label="breadcrumb" class="mb-40">
                 <ol class="breadcrumb p-0 m-0">
-                    <li class="breadcrumb-item"><a href="index4.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="home">Home</a></li>
                     <li class="breadcrumb-item" aria-current="page">Product</li>
-                    <li class="breadcrumb-item active" aria-current="page">single
-                        Product</li>
+                    <!-- <li class="breadcrumb-item active" aria-current="page">Product</li> -->
                 </ol>
             </nav>
             <div class="shop-wrapper">
@@ -158,14 +157,12 @@
                                         </div>
                                     </div>
                                     <div class="quick-quantity mt-60">
-                                        <form action="/cart" >
                                             <button onclick="addToCart('<%= productView._id %>')"
                                                 class="list-add-cart-btn red-hover-btn border-0"
                                                 style="padding-left: 80px;padding-right: 80px;transition: all .5s;">add
                                                 to
                                                 cart
                                             </button>
-                                        </form>
                                     </div>
                                     <div class="single-product-action mt-35">
                                         <ul>
@@ -675,50 +672,64 @@
 
     <script>
     
-        function addToCart(productId) {
-
-            $.ajax({
-                url: "/addToCart",
-                method: "post",
-                data: {
-                    id: productId,
-                },
-                success: (response) => {
-                    if (response.login == true) {
-                        swal
-                            .fire({
-                                icon: "warning",
-                                title: "Please Login",
-                                confirmButtonColor: "#3085d6",
-                                confirmButtonText: "Login",
-                                showCancelButton: true,
-                                cancelButtonColor: "#d33",
-                                text: response.message,
-                            })
-                            .then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = "/loadLogin";
-                                }
-                            });
-                    } else if (response.success) {
-                        swal.fire({
-                            position: "center",
-                            icon: "success",
-                            title: "Product added to cart",
-                            showConfirmButton: false,
-                            timer: 1500,
-                        });
-                        $("#cartDiv").load("/ #cartDiv");
-                    } else {
-                        swal.fire({
-                            icon: "error",
-                            title: "Sorry ! Out of stock. ",
-                            text: response.message,
-                        });
-                    }
-                },
+    
+    function addToCart(productId, count = 1) {
+    $.ajax({
+        url: "/addToCart",
+        method: "post",
+        data: {
+            id: productId,
+            count: count,
+        },
+        success: (response) => {
+            if (response.login == true) {
+                // Handle login logic if needed
+            } else if (response.success) {
+                if (response.newProduct) {
+                    swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Product added to cart",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                } else {
+                    swal.fire({
+                        position: "center",
+                        icon: "info",
+                        title: "Product already in the cart. Increasing quantity.",
+                        showConfirmButton: false,
+                        timer: 2000,
+                    });
+                }
+                $("#cartDiv").load("/ #cartDiv");
+            } else {
+                if (response.message && response.message.toLowerCase().includes("out of stock")) {
+                    swal.fire({
+                        icon: "error",
+                        title: "Sorry! Out of stock.",
+                        text: response.message,
+                    });
+                } else {
+                    swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "An error occurred while adding the product to the cart.",
+                    });
+                }
+            }
+        },
+        error: (error) => {
+            console.error("Error adding product to cart:", error);
+            swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "An error occurred while processing your request.",
             });
-        }
+        },
+    });
+}
+
     </script>
 
     <%-include("../layouts/user/footer.ejs")%>

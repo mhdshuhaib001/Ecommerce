@@ -569,6 +569,40 @@ const loadShop = async (req, res) => {
   }
 };
 
+const searchProducts = async (req , res)=>{
+  try {
+
+    console.log(req.query,'monte quarryy');
+    const category = await Category.find({blocked:0 });
+    const serchQuary = req.query.searchQuary;
+    const searchRegex = new RegExp(`^${serchQuary}`, "i");
+    const page = parseInt(req.query.page) || 1;
+    const limit = 8;
+    const totalProducts = await Product.countDocuments({});
+    const totalPages = Math.ceil(totalProducts / limit);
+    const skip = (page - 1) * limit;
+    const productData = await Product.find({})
+      .skip(skip)
+      .limit(limit);
+
+
+    const products = await Product.find({name:{$regex:searchRegex},blocked:0});
+
+    console.log(searchRegex,'suiii');
+    console.log(serchQuary);
+    console.log('ividay okey ahne');
+    res.render("shop",{
+      products,
+      currentPage:page,
+      totalPages,
+      limit,
+      totalProducts
+    })
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 
 // ------------Logout------------
 const logout = async (req, res) => {
@@ -622,17 +656,20 @@ const loadError404 = async (req, res) => {
 
 const loadprofile = async (req, res) => {
   try {
-    const userId = req.session.user_id
+    const userId = req.session.user_id;
     const userData = await User.findOne({ _id: userId });
     const addressData = await Address.findOne({ user: userId });
-    const orderData = await Order.find({ userId: userId });
-    const walletData = await User.findOne({_id: userId}).sort({transactionTime:1});
-    const cart = await Cart.findOne({userId:req.session.user_id})
-    console.log(walletData,'walletdata');
-    let cartCount=0; 
-    if(cart){cartCount = cart.product.length}
+    const orderData = await Order.find({ userId: userId }).sort({ purchaseDate: -1 });
+    const walletData = await User.findOne({ _id: userId }).sort({ 'walletHistory.transactionDate': -1 });
+  console.log(orderData,'------------------------');
+  console.log(walletData,'0000000000000000000000000');
+    const cart = await Cart.findOne({ userId: req.session.user_id });
+    let cartCount = 0;
+    if (cart) {
+      cartCount = cart.product.length;
+    }
 
-    res.render("userProfile", { user:userData, addressData, orderData ,cartCount,walletData});
+    res.render("userProfile", { user: userData, addressData, orderData, cartCount, walletData });
   } catch (error) {
     console.log(error.message);
   }
@@ -675,6 +712,7 @@ const changePassword = async (req, res) => {
 module.exports = {
   loadHome,
   loadShop,
+  searchProducts,
   loadSignup,
   loadLogin,
   verifylogin,

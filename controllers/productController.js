@@ -265,66 +265,67 @@ const loadProduct = async (req, res) => {
 const filterProduct = async (req, res) => {
     try {
 
-
+        console.log(req.body, 'testing req .body');
         const user_id = req.session.user_id
-      const price = req.query.price;
-      const page = req.query.page ? req.query.page : 1;
-      const prevPage = page-1
-      const splitPrice =price.split('-')
-      const minimum= parseInt(splitPrice[0])
-      const maximum = parseInt(splitPrice[1])  
-      const sort = req.query.sort ? parseInt(req.query.sort) : undefined;
-      const searchQuery = req.query.search ? req.query.search : "";
-      const category = req.query.category 
-      const categoryData = await Category.find()
-      const totalDoc = await Products.countDocuments();
-    //   const wishlistData = await Wishlist.findOne({user:req.session.user_id})
-    //   const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
+        const price = req.query.price;
+        console.log(price, 'chekkuing price ');
+        const page = req.query.page ? req.query.page : 1;
+        const prevPage = page - 1
+        const splitPrice = price.split('-')
+        const minimum = parseInt(splitPrice[0])
+        const maximum = parseInt(splitPrice[1])
+        const sortOptions = {
+            'low-to-high': 1,
+            'high-to-low': -1,
+            'default': 1
+        };
 
-      console.log(user_id,'user_id');
-      console.log(price,'price');
-      console.log(page,'page');
-      console.log(searchQuery,'searchQuery')
-      console.log(prevPage);
-      console.log(splitPrice,'splitPrice');
-      console.log(minimum,'minimum');
-      console.log(maximum,'maximum');
-      console.log(sort,'sort');
-      console.log(category,'category');
-      console.log(categoryData,'categoryData');
-      console.log(totalDoc,'totalDoc');
-     
+        // Use the defined sort options
+        const sort = sortOptions[req.query.sort] || sortOptions['default'];
+        console.log(sort, 'sort'); const searchQuery = req.query.search ? req.query.search : "";
+        const category = req.query.category
+        const categoryData = await Category.find()
+        const totalDoc = await Products.countDocuments();
+        //   const wishlistData = await Wishlist.findOne({user:req.session.user_id})
+        //   const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
 
-      if(category == "all") {
+        console.log(user_id, 'user_id');
+        console.log(price, 'price');
+        console.log(page, 'page');
+        console.log(searchQuery, 'searchQuery')
+        console.log(prevPage);
+        console.log(splitPrice, 'splitPrice');
+        console.log(minimum, 'minimum');
+        console.log(maximum, 'maximum');
+        console.log(sort, 'sort');
+        console.log(category, 'category');
+        console.log(categoryData, 'categoryData');
+        console.log(totalDoc, 'totalDoc');
+
+
+
         const productData = await Products.find({
-            name:{ $regex:searchQuery, $options:'i'},
+            name: { $regex: searchQuery, $options: 'i' },
             price: { $gte: minimum, $lte: maximum }
-          }).sort({ price: sort }).skip(prevPage*4).limit(4)
-          res.render('shop',{products:productData,categorys:categoryData,wishData,user_id,totalDoc,page})
-        } else {
-        const productData = await Products.find({
-            name:{ $regex:searchQuery, $options:'i'},
-            price: { $gte: minimum, $lte: maximum },category:category
-          }).sort({ price: sort }).skip(prevPage*4).limit(4)
-    
-      res.render('shop',{products:productData,categorys:categoryData,wishData,user_id,totalDoc,page})
-        }
-           
+        }).sort({ price: sort }).skip(prevPage * 4).limit(4)
+
+        res.render('shop', { products: productData, categorys: categoryData, user_id, totalDoc, page })
+
+
     } catch (error) {
-      console.error(error.message);
-      res.status(500).json({ error: "Internal server error" });
+        console.error(error.message);
+        res.status(500).json({ error: "Internal server error nthoo" });
     }
-  };
+};
 
-
-    module.exports = {
-        loadproduct,
-        loadAddProduct,
-        addProduct,
-        blockProduct,
-        deleteProduct,
-        loadEditProduct,
-        editedProduct,
-        loadProduct,
-        filterProduct,
-    }
+module.exports = {
+    loadproduct,
+    loadAddProduct,
+    addProduct,
+    blockProduct,
+    deleteProduct,
+    loadEditProduct,
+    editedProduct,
+    loadProduct,
+    filterProduct,
+}

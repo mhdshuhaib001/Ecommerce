@@ -13,28 +13,28 @@ const fs = require('fs').promises;
 const dotenv = require("dotenv");
 dotenv.config();
 
-
-
-
 var instance = new Razorpay({
     key_id: process.env.KEY_ID,
     key_secret: process.env.KEY_SECRET
 });
 
 
+
+
+
 //-----------orderPlaced-----------------
+
 const placeOrder = async (req, res) => {
     try {
         const user_id = req.session.user_id;
         const cartData = await Cart.findOne({ userId: user_id });
         const paymentMethod = req.body.formData.payment;
         const total = req.body.formData.total;
+        const shippingAmount = req.body.formData.shippingAmount; // Corrected this line
         const status = paymentMethod === 'COD' ? 'placed' : 'pending';
         const userData = await User.findById(user_id);
-        const walletBalace = userData.wallet;
+        const walletBalance = userData.wallet;
         const address = req.body.formData.address;
-
-
 
         const productData = cartData.product.map(product => ({
             productId: product.productId,
@@ -47,39 +47,31 @@ const placeOrder = async (req, res) => {
             category: product.category,
         }));
 
-
         // Format date and time
-        const currentDate = new Date();
-        const formattedDate = currentDate.toLocaleDateString('en-US', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        });
-        const formattedTime = currentDate.toLocaleTimeString('en-US', {
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true
-        });
+        const purchaseDate = new Date();
 
+        let shipingTotalAmount = 1500;
+        if (paymentMethod === 'COD' && total > shipingTotalAmount) {
+            res.json({ maxAmount: true });
+            return;
+        }
 
+        console.log(shippingAmount, 'shipping amount--------------------');
         const order = new Order({
             userId: user_id,
             deliveryDetails: address,
             orderProducts: productData,
-            purchaseDate: formattedDate,
-            purchaseTime: formattedTime,
+            purchaseDate: purchaseDate,
             totalAmount: total,
             paymentMethod: paymentMethod,
             shippingMethod: cartData.shippingMethod,
-            shippingAmount: cartData.shippingAmount
+            shippingAmount: shippingAmount,
         });
+
         const orderData = await order.save();
         const orderId = orderData._id;
 
-
         if (orderData.paymentMethod === 'COD') {
-
-
             for (let i = 0; i < cartData.product.length; i++) {
                 let product = cartData.product[i].productId;
                 let count = cartData.product[i].count;
@@ -88,8 +80,6 @@ const placeOrder = async (req, res) => {
 
             await Cart.deleteOne({ userId: user_id });
             return res.json({ codsuccess: true, orderId });
-
-            //----------------onlinePayment----------------------
         } else if (orderData.paymentMethod == "onlinePayment") {
             var options = {
                 amount: orderData.totalAmount * 100,
@@ -97,7 +87,6 @@ const placeOrder = async (req, res) => {
                 receipt: "" + orderId,
             };
             instance.orders.create(options, async function (err, order) {
-
                 // Update the order status to 'placed'
                 await Order.findByIdAndUpdate(
                     { _id: orderId },
@@ -105,20 +94,21 @@ const placeOrder = async (req, res) => {
                 );
                 return res.json({ razorpay: true, order });
             });
-            //-----------------------Wallet-----------------
         } else if (orderData.paymentMethod === "wallet") {
-
             const totalAmount = orderData.totalAmount;
             console.log(totalAmount, 'totalAmount');
 
-            if (walletBalace >= totalAmount) {
+            const TransactuonDate = new Date();
+
+            console.log(formattedDate, 'date', formattedTime, 'time');
+            if (walletBalance >= totalAmount) {
                 const wallet = await User.findOneAndUpdate(
                     { _id: user_id },
                     {
                         $inc: { wallet: -totalAmount },
                         $push: {
                             walletHistory: {
-                                date: new Date(),
+                                transactionDate: TransactuonDate,
                                 amount: totalAmount,
                                 direction: "Debited"
                             },
@@ -128,27 +118,32 @@ const placeOrder = async (req, res) => {
                 );
 
                 if (wallet) {
-                    console.log("amount debited from wallet");
+                    console.log("Amount debited from wallet");
+
+                    for (let i = 0; i < cartData.product.length; i++) {
+                        let product = cartData.product[i].productId;
+                        await Order.updateOne(
+                            { _id: orderId, "orderProducts.productId": product },
+                            { $set: { "orderProducts.$.status": 'placed' } }
+                        );
+                    }
+
+                    // Update the overall order status to 'placed'
+                    const orderUpdate = await Order.findByIdAndUpdate(
+                        { _id: orderId },
+                        { $set: { status: 'placed' } }
+                    );
+                    await Cart.deleteOne({ userId: user_id });
+                    console.log(orderUpdate, 'Order status updated to placed');
+                    return res.json({ placed: true, orderId });
                 } else {
-                    console.log("not debited from wallet");
+                    console.log("Not debited from wallet");
+                    return res.json({ walletFailed: true });
                 }
-
-                for (let i = 0; i < cartData.product.length; i++) {
-                    let product = cartData.product[i].productId;
-                    let count = cartData.product[i].count;
-                    await Product.updateOne({ _id: product }, { $inc: { quantity: -count } });
-                }
-
-               return res.json({ placed: true ,orderId})
-
-
-
-            } else{
-                return res.json({walletFailed: true})
+            } else {
+                return res.json({ walletFailed: true });
             }
-
         }
-
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -230,8 +225,9 @@ const OrderDetailsLoad = async (req, res) => {
         const userId = req.session.user_id;
         const orderId = req.query._id;
         const orderData = await Order.findOne({ _id: orderId }).populate("orderProducts.productId").exec();
+
         const order = await Order.findOne({ _id: orderId })
-        const deliveryDetails = order.deliveryDetails;
+        const deliveryDetails = order && order.deliveryDetails ? order.deliveryDetails : null;
 
         if (orderData) {
             res.render("orderDetails", {
@@ -240,6 +236,7 @@ const OrderDetailsLoad = async (req, res) => {
                 address: deliveryDetails,
             });
         } else {
+            console.log('chekkiung the sdata ');
             res.render("orderDetails", { userId });
         }
     } catch (error) {
@@ -313,22 +310,11 @@ const returnRequest = async (req, res) => {
 
         const orderId = req.body.order;
         const productId = req.body.id;
-        // const returnRequest = new ReturnRequest({
-        //     orderId: orderId,
-        //     productId: productId,
-        //     productImage: req.body   .productImage
-
-        // })
-        // const orderData = await Order.findOne({
-        //     "_id": orderId,
-        //     "orderProducts._id": productId
-        // });
-
+        const returnReason = req.body.returnReason;
         const updateReturn = await Order.updateOne(
             { _id: orderId, "orderProducts._id": productId },
-            { $set: { "orderProducts.$.status": 'request' } }
+            { $set: { "orderProducts.$.status": 'request', "orderProducts.$.returnReason": returnReason } }
         );
-
         if (updateReturn) {
             res.json({ success: true });
         } else {
@@ -340,62 +326,47 @@ const returnRequest = async (req, res) => {
     }
 }
 
+
 const returnOrder = async (req, res) => {
     try {
-
         const productId = req.body.productId;
         const count = req.body.count;
-        const orderId = req.body.orderId
-        console.log(productId, count, orderId, '0000000000000');
+        const orderId = req.body.orderId;
 
-        const chekk = await Order.updateOne(
+        const order = await Order.findById(orderId);
+        const returnedProduct = order.orderProducts.find((val) => val._id.toString() === productId);
+        const productTotalPrice = returnedProduct.totalPrice;
+
+        const totalRefundedAmount = productTotalPrice;
+
+        const updatedOrder = await Order.updateOne(
             { _id: orderId, "orderProducts._id": productId },
             {
-                $set: {
-                    "orderProducts.$.status": "Accepted",
-                },
+                $set: { "orderProducts.$.status": "Accepted" },
             }
         );
-        const productsss = await Product.findByIdAndUpdate(
+
+        const updatedProduct = await Product.findByIdAndUpdate(
             { _id: productId },
             { $inc: { quantity: count } }
         );
 
-        const orderData = await Order.findOne({ _id: orderId });
-        const order = await Order.findById(orderId);
-        const orderProduct = orderData.orderProducts.find((val) => {
-            return val._id.toString() === productId
-        });
-
-        const prodcutTotalPrice = orderProduct.totalPrice;
         const userId = order.userId;
-
 
         const user = await User.findById(userId);
 
-        const currentDate = new Date();
-        const formattedDate = currentDate.toLocaleDateString('en-US', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        });
-        const formattedTime = currentDate.toLocaleTimeString('en-US', {
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true
-        });
-        console.log(formattedDate,'date',formattedTime,'time');
+        const transactionDate = new Date();
 
+        const newTotalAmount = order.totalAmount - totalRefundedAmount;
 
-        const updatedUser = await User.findByIdAndUpdate( userId,
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
             {
-                $inc: { wallet: prodcutTotalPrice },
+                $inc: { wallet: totalRefundedAmount },
                 $push: {
                     walletHistory: {
-                        transactionDate: formattedDate,
-                        transactionTime: formattedTime,
-                        amount: prodcutTotalPrice,
-                        reason: "Refund for returned product",
+                        transactionDate: transactionDate,
+                        amount: totalRefundedAmount,
                         direction: "Credited",
                     },
                 },
@@ -403,20 +374,28 @@ const returnOrder = async (req, res) => {
             { new: true }
         );
 
+        console.log(updatedUser, 'hey the data inserted');
+
+        const updatedOrderTotal = await Order.findByIdAndUpdate(
+            orderId,
+            { $set: { totalAmount: newTotalAmount } },
+            { new: true }
+        );
         res.json({ success: true });
     } catch (error) {
         console.log(error.message);
-
+        res.status(500).json({ error: 'Internal Server Error' });
     }
-}
+};
+
 
 
 const invoice = async (req, res) => {
     try {
         const orderId = req.query._id;
-        
+
         const orderData = await Order.findById({ _id: orderId }).populate('orderProducts._id');
-        
+
         const deliveredOrder = orderData.orderProducts.filter((product) => product.status === "delivered");
         console.log(deliveredOrder, 'checking this ');
 
@@ -426,7 +405,7 @@ const invoice = async (req, res) => {
 
         // Rendering the invoice template with deliveredOrder
         const templatePath = path.join(__dirname, '../views/users/invoice.ejs');
-        const templateContent = await ejs.renderFile(templatePath, { order: orderData, orderProducts:deliveredOrder});
+        const templateContent = await ejs.renderFile(templatePath, { order: orderData, orderProducts: deliveredOrder });
 
         // Generate PDF using puppeteer
         const browser = await puppeteer.launch();
@@ -442,9 +421,8 @@ const invoice = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-
-        // Render the '500' view in case of an error
-        res.status(500)    }
+        res.status(500)
+    }
 };
 
 
@@ -456,14 +434,16 @@ const invoice = async (req, res) => {
 const loadOrderManagement = async (req, res) => {
     try {
 
-        const itemPage = 5
+        const itemPage = 10
         const page = +req.query.page || 1;
         const totalOrders = await Order.countDocuments();
         const totalPages = Math.ceil(totalOrders / itemPage);
-        const orderData = await Order.find()
-            .sort({ purchaseDate: -1 })
+        const orderData = await Order.find({
+            "orderProducts.status": { $nin: ["pending"] }
+        }).sort({ purchaseTime: 1 })
             .skip((page - 1) * itemPage)
             .limit(itemPage);
+
         res.render("orderManagement", { orderData, totalPages, currentPage: page });
     } catch (error) {
         console.log('Error:', error.message);
@@ -485,7 +465,6 @@ const updateOrder = async (req, res) => {
             { 'orderProducts._id': orderId },
             { $set: { 'orderProducts.$.status': orderStatus } }
         );
-        console.log(changeStatus, 'cheange srtatus');
 
         res.json({ success: true });
     } catch (error) {

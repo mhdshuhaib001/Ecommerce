@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const bcrypt = require('bcrypt');
 const Category = require("../models/categoryModel");
 const categoryModel = require("../models/categoryModel");
+const Order = require("../models/orderModel");
 
 
 
@@ -61,17 +62,104 @@ const adminVerify = async (req, res) => {
 
 const loadDashboard = async (req, res) => {
     try {
-        res.render("home")
+        const currentDate = new Date();
+        const startDate = new Date(currentDate - 30 * 24 * 60 * 60 * 1000);
+
+        const userData = await User.find();
+        const userCount = userData.length;
+
+        const orderData = await Order.find({ purchaseDate: { $gte: startDate, $lt: currentDate } });
+
+        const totalOrders = orderData ? orderData.length : 0;
+        let deliveredOrders = 0;
+        let totalRevenue = 0;
+
+        orderData.forEach((order) => {
+            deliveredOrders += order.orderProducts.reduce((acc, delivered) => (delivered.status === 'delivered' ? acc + 1 : acc), 0);
+            totalRevenue += order.orderProducts.reduce((acc, product) => (product.status === 'delivered' ? acc + product.totalPrice : acc), 0);});
+
+        console.log(deliveredOrders, 'Delivered Orders');
+        console.log(totalRevenue, 'Total Revenue');
+
+        const monthlyProductSales = await Order.aggregate([
+            { $match: { 'orderProducts.status': 'delivered' } },
+            { $unwind: '$orderProducts' },
+            { $addFields: { formattedDate: { $dateToString: { format: '%Y-%m-%d', date: '$purchaseDate',},},},},
+            { $group: { _id: { date: '$formattedDate' },revenue: { $sum: '$orderProducts.totalPrice' }, },},
+        ]);
+
+        const salesDataMonthly = Array.from({ length: 12 }, () => 0);
+        const salesDataYearly = Array.from({ length: 12 }, () => 0);
+        const currentYear = currentDate.getFullYear();
+
+
+        for (const entry of monthlyProductSales) {
+            const entryYear = new Date(entry._id.date).getFullYear();
+            const monthIndex = new Date(entry._id.date).getMonth();
+            if (entryYear === currentYear) {
+                salesDataYearly[monthIndex] = entry.revenue;
+            }
+            salesDataMonthly[monthIndex] += entry.revenue;
+        }
+
+        const paymentMethodDatas = await Order.aggregate([{  $match: { 'orderProducts.status': 'delivered' }},{$group: { _id: '$paymentMethod', count: { $sum: 1 } }}]);
+
+        const bestSellingProducts = await Order.aggregate([
+            { $match: { 'orderProducts.status': 'delivered' } },
+            { $unwind: '$orderProducts' },
+            {
+                $group: {
+                    _id: '$orderProducts.productId',
+                    productName: { $first: '$orderProducts.productName' },
+                    totalSold: { $sum: '$orderProducts.count' },
+                },
+            },
+            { $sort: { totalSold: -1 } },
+            { $limit: 5 },
+        ]);
+
+        const bestSellingCategories = await Order.aggregate([
+            { $match: { 'orderProducts.status': 'delivered' } },
+            { $unwind: '$orderProducts' },
+            {
+                $lookup: {
+                    from: 'Products',
+                    localField: 'orderProducts.productId',
+                    foreignField: '_id',
+                    as: 'productDetails',
+                },
+            },
+            { $unwind: '$productDetails' },
+            {
+                $group: {
+                    _id: '$productDetails.category',
+                    totalSold: { $sum: '$orderProducts.count' },
+                    products: { $push: '$productDetails' }, 
+                },
+            },
+            { $sort: { totalSold: -1 } },
+            { $limit: 10 },
+        ]);
+        
+        console.log(bestSellingCategories);
+        
+
+        console.log(paymentMethodDatas, 'payment method data');
+
+        res.render('dashboard', { salesDataMonthly, salesDataYearly, deliveredOrders, totalRevenue, paymentMethodDatas });
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
     }
-}
+};
+
+
+
 
 //-----------------------User Management--------------------
 
 const usermanagementload = async (req, res) => {
     try {
-         const userData = await User.find({ is_admin: false });
+        const userData = await User.find({ is_admin: false });
         res.render("usermanagement", { users: userData });
     } catch (error) {
         console.log(error.message)
@@ -86,17 +174,18 @@ const userBlocked = async (req, res) => {
         const blockedUser = await User.findOne({ _id: userId });
         console.log(blockedUser)
 
-        if (!blockedUser.is_blocked ) {
-             await User.updateOne({ _id: userId }, { $set: { is_blocked: true } });
-            res.json({remove:true})
+        if (!blockedUser.is_blocked) {
+            await User.updateOne({ _id: userId }, { $set: { is_blocked: true } });
+            res.json({ remove: true })
 
         } else {
             await User.updateOne({ _id: userId }, { $set: { is_blocked: false } })
-            res.json({remove:true})        }
+            res.json({ remove: true })
+        }
     } catch (error) {
         console.log(error.message);
     }
-} 
+}
 
 
 //----------------LOAD CATEGORY MANAGEMENT-----------------
@@ -104,9 +193,9 @@ const userBlocked = async (req, res) => {
 const loadcategory = async (req, res) => {
     try {
 
-         const categoryData = await Category.find()
-        res.render("categorymanagement",{ categoryData: categoryData })
-        
+        const categoryData = await Category.find()
+        res.render("categorymanagement", { categoryData: categoryData })
+
 
     } catch (error) {
         console.log(error.message);
@@ -125,30 +214,30 @@ const loadAddCategory = async (req, res) => {
 }
 
 
-const addCategory = async (req,res) =>{
+const addCategory = async (req, res) => {
     try {
 
-        
+
         const name = req.body.categoryname
-      
+
         const data = new categoryModel({
             name: req.body.categoryname
         });
         console.log(data)
 
         const already = await categoryModel.findOne({ name: { $regex: name, $options: "i" } });
-         console.log(already)
-        if(already) {
+        console.log(already)
+        if (already) {
             res.render("addcategory", { message: "Entered category is already exist." });
-        }else {
+        } else {
             const categoryData = await data.save();
             res.redirect("/admin/categorymanagement");
         }
 
-        
+
     } catch (error) {
         console.log(error.message);
-        
+
     }
 }
 
@@ -158,14 +247,14 @@ const blockCategory = async (req, res) => {
     try {
 
         const blockedcategory = await Category.findOne({ _id: req.body.catId })
-        if (!blockedcategory.blocked ) {
+        if (!blockedcategory.blocked) {
             await Category.updateOne({ _id: req.body.catId }, { $set: { blocked: true } })
             // res.redirect("/admin/categorymanagement")
-            res.json({success:true})
+            res.json({ success: true })
         } else {
             await Category.updateOne({ _id: req.body.catId }, { $set: { blocked: false } })
             // res.redirect("/admin/categorymanagement")
-            res.json({success:true})
+            res.json({ success: true })
         }
 
     } catch (error) {
@@ -186,7 +275,7 @@ const loadeditCategory = async (req, res) => {
     } catch (error) {
         console.log(error.message)
 
-        }
+    }
 }
 
 
@@ -224,10 +313,55 @@ const deleteCategory = async (req, res) => {
 
 
 
+const salesReport = async (req, res) => {
+    try {
+        const duration = req.query.sort;
+        const currentDate = new Date();
+        const startDate = new Date(currentDate - duration * 24 * 60 * 60 * 1000);
+
+        const orders = await Order.aggregate([
+            {
+                $unwind: "$orderProducts",
+            },
+            {
+                $match: {
+                    'orderProducts.status': "delivered",
+                    'purchaseDate': { $gte: startDate, $lte: currentDate },
+                },
+            },
+            {
+                $lookup: {
+                    from: "Products",
+                    localField: "orderProducts.productId",
+                    foreignField: "_id",
+                    as: "orderProducts.productDetails",
+                },
+            },
+            {
+                $addFields: {
+                    "orderProducts.productDetails": {
+                        $arrayElemAt: ["$orderProducts.productDetails", 0],
+                    },
+                },
+            },
+            {
+                $sort: { purchaseDate: -1 },
+            },
+        ]);
+console.log(orders,'------------------');
+        res.render('salesReport', { orders });
+    } catch (error) {
+        console.error(error.message);
+        // res.render('500Error');
+    }
+};
+
+
 
 
 
 module.exports = {
+
     adminLoginPage,
     adminVerify,
     loadDashboard,
@@ -240,5 +374,6 @@ module.exports = {
     loadeditCategory,
     blockCategory,
     updateCategory,
-    deleteCategory,  
+    deleteCategory,
+    salesReport
 }

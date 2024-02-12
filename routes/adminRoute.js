@@ -28,14 +28,15 @@ const orderController = require("../controllers/orderController");
 const couponController = require("../controllers/couponController")
 
 
-admin_Rout.get("/", auth.isLogout, adminController.adminLoginPage);
-admin_Rout.post("/", adminController.adminVerify);
+admin_Rout.get("/",auth.isLogout,adminController.adminLoginPage);
+admin_Rout.post("/",auth.isLogout, adminController.adminVerify);
 admin_Rout.get("/home", auth.isLogin, adminController.loadDashboard);
+admin_Rout.get("/logout", auth.isLogin, adminController.logout);
+
 
 // USER-MANAGEMENT
 admin_Rout.get('/usermanagement', auth.isLogin, adminController.usermanagementload);
 admin_Rout.post("/userBlocked", auth.isLogin, adminController.userBlocked);
-admin_Rout.get("/logout", auth.isLogin, adminController.logout);
 
 
 // CATEGORY-MANAGEMENT
@@ -69,14 +70,7 @@ admin_Rout.delete("/couponDelet",couponController.deletCouopon);
 // admin_Rout.get("/editCoupon",couponController.loadEditCoupon);
 
 
-
-
-
-
-
-
-
-
+admin_Rout.get("/salesReport",adminController.salesReport)
 
 
 

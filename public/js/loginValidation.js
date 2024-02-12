@@ -14,7 +14,6 @@ document.getElementById('log-btn-1').addEventListener('click', function(e){
       },
       method: "POST",
       success: (response) => {
-        console.log(response,'checking response')
         if ((response.register)) {
           email_message.style.display = "block";
           email_message.textContent = " This account is not registered please register."

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 mongoose.connect("mongodb://127.0.0.1:27017/Mazia", console.log("DB connected"));
 //-----------------------------------------------------
 
+
 const express = require('express');
 const app = express();
 const noCache = require('nocache');
@@ -37,8 +38,9 @@ app.set('views', path.join(__dirname, 'views'));
 const userRoute = require('./routes/userRoute');
 app.use('/', userRoute);
 
-const adminRout = require('./routes/adminRoute')
-app.use('/admin', adminRout)
+const adminRout = require('./routes/adminRoute');
+app.use('/admin',adminRout); 
+
 
 
 
