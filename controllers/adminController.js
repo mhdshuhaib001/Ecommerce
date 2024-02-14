@@ -84,7 +84,6 @@ const loadDashboard = async (req, res) => {
         let walletAmount = 0;
 
 
-
         orderData.forEach((order) => {
             deliveredOrders += order.orderProducts.reduce((acc, delivered) => (delivered.status === 'delivered' ? acc + 1 : acc), 0);
             totalRevenue += order.orderProducts.reduce((acc, product) => (product.status === 'delivered' ? acc + product.totalPrice : acc), 0);
@@ -144,7 +143,7 @@ const loadDashboard = async (req, res) => {
             { $sort: { totalSold: -1 } },
             { $limit: 5 },
         ]);
-
+        console.log(bestSellingProducts,'bestSellingProducts');
         const bestSellingCategories = await Order.aggregate([
             { $match: { 'orderProducts.status': 'delivered' } },
             { $unwind: '$orderProducts' },

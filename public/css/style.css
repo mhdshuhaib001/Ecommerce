@@ -247,9 +247,9 @@ img {
 }
 
 .pagination .page-item.active .page-link {
-  background-color: var(--blue);
+  background-color: black;
   color: #fff;
-  border: 1px solid var(--blue);
+  border: 1px solid white;
 }
 
 .pagination .page-link-prev,

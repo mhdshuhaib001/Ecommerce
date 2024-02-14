@@ -124,21 +124,16 @@
 
                             <ul class="text-right">
 
-                                <% if (locals.user) { %>
-                                    <li><a href="/logout" class="account"><i class="fal fa-user-friends"></i>
-                                            <article class="account-registar d-inline-block" onclick="confirmLogout()">
-                                                LogOut</article>
+                                <% if(locals.userId){ %>
+                                    <li><a href="userProfile" class="account"><i class="fal fa-user-friends"></i>
+                                            <article class="account-registar d-inline-block"></article>
                                         </a></li>
-
-
-                                    <% } else { %>
+                                    <% }else { %>
                                         <li><a href="login" class="account"><i class="fal fa-user-friends"></i>
-                                                <article class="account-registar d-inline-block">Login/Signup</article>
+                                                <article class="account-registar d-inline-block">Login/signup</article>
                                             </a></li>
                                         <% } %>
                                             <li><a href="javascript:void(0)"><i class="fal fa-search"></i></a>
-
-                                                <!-- search popup -->
                                                 <div id="search-popup">
                                                     <div class="close-search-popup">
                                                         <i class="fal fa-times"></i>
@@ -263,30 +258,18 @@
 
                                             <!-- Your HTML code ... -->
 
-                                            <% if (locals.user) { %>
                                                 <li>
                                                     <a href="cart">
                                                         <i class="fal fa-shopping-bag">
                                                             <span>
-                                                                <%= cartCount %>
+                                                                <%= (typeof cartCount !=='undefined' && cartCount !==null &&
+                                                                    cartCount !=="" ) ? cartCount : '0' %>
                                                             </span>
                                                         </i>
                                                     </a>
 
                                                 </li>
-                                                <% } else { %>
-                                                    <li>
-                                                        <a href="cart">
-                                                            <i class="fal fa-shopping-bag">
-                                                                <span>
-                                                                    Cart
-                                                                </span>
-                                                            </i>
-                                                        </a>
-
-                                                    </li>
-                                                    <% } %>
-
+                                               
                                                         <!-- Your HTML code ... -->
                                                         <!-- <div class="minicart">
                                                             <div class="minicart-body">
@@ -519,7 +502,7 @@
                                                     <%= product.status %>
                                                 </td>
                                                 <td>
-                                                    <% if(product.status !=="cancelled" && product.status !=="delivered"
+                                                    <% if(product.status !=="Cancelled" && product.status !=="delivered"
                                                         && product.status !=="request" && product.status !=="Accepted" )
                                                         { %>
                                                         <button type="button"
@@ -537,7 +520,9 @@
                                                                 <% } else if (product.status=="request" ) { %>
                                                                     <label
                                                                         style="color: rgb(221, 221, 27);">Requested</label>
-                                                                    <% } else {%>
+                                                                    <% } else if(product.status == "Cancelled") {%>
+                                                                        <label  style="color: rgb(221, 27, 27);">Cancelled</label>
+                                                                        <% } else {%>
                                                                         <label style="color: red;">Requested</label>
                                                                         <% } %>
                                                 </td>

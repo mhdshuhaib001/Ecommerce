@@ -543,37 +543,41 @@ const resetPassword = async (req, res) => {
 const loadShop = async (req, res) => {
   try {
     const userData = req.session.user_id;
+    const categoryId = req.query.category;
     const page = parseInt(req.query.page) || 1;
     const limit = 8;
     const totalProducts = await Product.countDocuments({});
     const totalPages = Math.ceil(totalProducts / limit);
     const skip = (page - 1) * limit;
-    const productData = await Product.find({})
-      .skip(skip)
-      .limit(limit);
-    const cart = await Cart.findOne({ userId: req.session.user_id })
+    const categoryData = await Category.find();
+    const cart = await Cart.findOne({ userId: req.session.user_id });
     let cartCount = 0;
-    if (cart) { cartCount = cart.product.length }
+    if (cart) {
+      cartCount = cart.product.length;
+    }
+    const categoryDoc = await Category.findById(categoryId);
+    const category = categoryDoc ? categoryDoc.name : null;
 
-    res.render("shop", {
-      user: userData,
-      products: productData,
-      currentPage: page,
-      totalPages,
-      limit,
-      totalProducts,
-      cartCount
-    });
+    if (category) {
+      const productData = await Product.find({ category: category }).skip(skip).limit(limit);
+      res.render("shop", { user: userData, products: productData, currentPage: page, totalPages, limit, totalProducts, cartCount, category: categoryData });
+    } else {
+      const productData = await Product.find({}).skip(skip).limit(limit);
+      res.render("shop", { user: userData, products: productData, currentPage: page, totalPages, limit, totalProducts, cartCount, category: categoryData });
+    }
   } catch (error) {
     console.log(error.message);
   }
 };
 
-const searchProducts = async (req , res)=>{
+
+
+
+
+const searchProducts = async (req, res) => {
   try {
 
-    console.log(req.query,'monte quarryy');
-    const category = await Category.find({blocked:0 });
+    const category = await Category.find({ blocked: 0 });
     const serchQuary = req.query.searchQuary;
     const searchRegex = new RegExp(`^${serchQuary}`, "i");
     const page = parseInt(req.query.page) || 1;
@@ -581,19 +585,12 @@ const searchProducts = async (req , res)=>{
     const totalProducts = await Product.countDocuments({});
     const totalPages = Math.ceil(totalProducts / limit);
     const skip = (page - 1) * limit;
-    const productData = await Product.find({})
-      .skip(skip)
-      .limit(limit);
+    const productData = await Product.find({}).skip(skip).limit(limit);
+    const products = await Product.find({ name: { $regex: searchRegex }, blocked: 0 });
 
-
-    const products = await Product.find({name:{$regex:searchRegex},blocked:0});
-
-    console.log(searchRegex,'suiii');
-    console.log(serchQuary);
-    console.log('ividay okey ahne');
-    res.render("shop",{
+    res.render("shop", {
       products,
-      currentPage:page,
+      currentPage: page,
       totalPages,
       limit,
       totalProducts
@@ -607,8 +604,7 @@ const searchProducts = async (req , res)=>{
 // ------------Logout------------
 const logout = async (req, res) => {
   try {
-    req.session.destroy();
-    console.log(req.session);
+    req.session.user_id=null
     res.redirect("/");
   } catch (error) {
     console.log(error.message);

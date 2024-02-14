@@ -38,13 +38,12 @@
                         <h2 class="cart-title mt-40">Cart</h2>
                     </div>
                     <div class="cart-body-content">
-
                         <% if( typeof products !="undefined" ){ %>
-                            <div class="row">
+                        <div class="row">
                             <div class="col-xl-8">
                                 <div class="product-content">
-                                    
-                                    <form action="#">
+
+                                    <form action>
                                         <div class="table-responsive">
                                             <table class="table table-2">
                                                 <thead>
@@ -128,7 +127,9 @@
                                                             <div
                                                                 class="table-data">
                                                                 <span
-                                                                    class="total"><span>₹</span>&nbsp;<%= product.totalPrice %>
+                                                                    class="total"><span>₹</span>&nbsp;<%=
+                                                                    product.totalPrice
+                                                                    %>
 
                                                                 </span>
                                                             </div>
@@ -148,24 +149,9 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <!-- <div class="cupon">
-                                                <form action="#" method="POST">
-                                                    <input type="text" placeholder="Cupon code" class="text-left pl-3"
-                                                        style="margin-right: 20px; width: 119px;">
-                                                    <button
-                                                        class="generic-btn border-0 red-hover-btn text-uppercase">Apply
-                                                        Cupon</button>
-                                                    <button
-                                                        class="generic-btn border-0 red-hover-btn text-uppercase float-right">Update
-                                                        Cart
-                                                    </button>
-                                                </form>
-                                            </div> -->
                                     </form>
                                 </div>
-
                             </div>
-
                             <div class="col-xl-4">
                                 <div class="cart-widget">
                                     <h4 class="title">Cart Totals</h4>
@@ -211,24 +197,30 @@
                     <%} else { %>
 
                     <div class="error-content text-center">
-                        <div class="container" style="text-align: center; padding: 50px;">
-                            <h1 class="error-title" style="font-size: 3em; color: #333; margin-bottom: 20px;">Empty Cart</h1>
-                            <p style="font-size: 1.2em; color: #555;  text-align: center;">Your cart is empty.</p>
-                            <a href="/shop" class="btn btn-outline-primary-2 btn-minwidth-lg" style="text-decoration: none; background-color: #3498db; color: #fff; padding: 15px 30px; border-radius: 8px; font-size: 1.2em;">
+                        <div class="container"
+                            style="text-align: center; padding: 50px;">
+                            <h1 class="error-title"
+                                style="font-size: 3em; color: #333; margin-bottom: 20px;">Empty
+                                Cart</h1>
+                            <p
+                                style="font-size: 1.2em; color: #555;  text-align: center;">Your
+                                cart is empty.</p>
+                            <a href="/shop"
+                                class="btn btn-outline-primary-2 btn-minwidth-lg"
+                                style="text-decoration: none; background-color: #3498db; color: #fff; padding: 15px 30px; border-radius: 8px; font-size: 1.2em;">
                                 <span>FILL YOUR CART</span>
-                                <i class="icon-long-arrow-right" style="margin-left: 10px;"></i>
+                                <i class="icon-long-arrow-right"
+                                    style="margin-left: 10px;"></i>
                             </a>
                         </div>
-                        
-                        <!-- End .container -->
                     </div>
                     <% } %>
                 </div>
             </div>
+        </div>
         </section>
 
         <!-- shop body section end -->
-
 
         <!-- JS here -->
         <script>
@@ -314,6 +306,5 @@
             }
 
         </script>
-   
 
         <%- include('../layouts/user/footer.ejs') -%>

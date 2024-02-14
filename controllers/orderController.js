@@ -247,6 +247,7 @@ const orderCancel = async (req, res) => {
         const userId = req.session.user_id;
         const productId = req.body.productId;
         const orderId = req.body.orderId;
+        console.log('halooooooooo');
 
         const orderData = await Order.findOne({ _id: orderId });
 
@@ -255,7 +256,6 @@ const orderCancel = async (req, res) => {
         });
 
         const prodcutTotalPrice = orderProduct.totalPrice;
-
 
         if (orderData.paymentMethod !== "COD") {
 
@@ -275,7 +275,14 @@ const orderCancel = async (req, res) => {
                 { new: true }
             );
 
+
             if (walletUpdate) {
+                
+            const updateResult = await Order.findOneAndUpdate(
+                { _id: orderId, 'orderProducts._id': productId },
+                { $set: { 'orderProducts.$.status': 'Cancelled' } }
+            );
+            console.log(updateResult,'---------Cancelled');
                 console.log(`Added ${prodcutTotalPrice} to the wallet.`);
             } else {
                 console.log("User not found.");

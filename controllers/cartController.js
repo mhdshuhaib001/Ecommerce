@@ -199,12 +199,7 @@ const loadCheckOut = async (req, res) => {
       const cartData = await Cart.findOne({ userId: user_id }).populate("product.productId");
       const cartTotal = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
       const addressData = await Address.findOne({ user: user_id });
-      const state = addressData.state;
-      const district = addressData.district;
-      console.log(state, 'oooooo', district, '==========');
-      const couponData = await Coupon.find({
-          usedUser: { $nin: [user_id] }
-      });
+      const couponData = await Coupon.find({ usedUser: { $nin: [user_id] }});
 
       let couponDiscountAmount = 0;
       if (cartData.couponDiscount) {

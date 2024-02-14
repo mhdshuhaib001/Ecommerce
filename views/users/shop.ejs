@@ -380,22 +380,18 @@
                     <div class="row">
                         <div class="col-xl-3 hidden-xl">
                             <!-- filter area  -->
-                            <!-- <div class="widget mt-50">
+                            <div class="widget mt-50">
                                 <h4 class="mb-30">Popular Tags</h4>
                                 <div class="category-list">
                                     <ul>
-                                        <li><a href="shop2.html">Accessories</a></li>
-                                        <li><a href="shop2.html">Clothing</a></li>
-                                        <li><a href="shop2.html">fashion</a></li>
-                                        <li><a href="shop2.html">Fly</a></li>
-                                        <li><a href="shop2.html">Glasses</a></li>
-                                        <li><a href="shop2.html">men</a></li>
-                                        <li><a href="shop2.html">Product</a></li>
-                                        <li><a href="shop2.html">version</a></li>
-                                        <li><a href="shop2.html">women</a></li>
+                                        <li><a href="shop">All</a></li>
+                                        <% category.forEach((category,ind)=>{ %>
+                                        <li><a href="shop?category=<%= category._id %>"><%= category.name %></a></li>
+                                        <% }) %>
+                                    
                                     </ul>
                                 </div>
-                            </div> -->
+                            </div>
     
     
                             <div class="widget mt-50">
@@ -505,7 +501,7 @@
                                                                             <%= product.category %>
                                                                         </span></a>
                                                                 </div>
-                                                                <a href="wishlist.html"
+                                                                <a href="wishlist"
                                                                     class="wishlist float-right"><span><i
                                                                             class="fal fa-heart"></i></span></a>
                                                             </div>
