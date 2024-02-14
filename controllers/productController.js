@@ -3,7 +3,9 @@ const Products = require("../models/productsModel");
 const Cart = require("../models/cartModel")
 const sharp = require("sharp");
 const fs = require("fs")
-const path = require("path")
+const path = require("path");
+const User = require("../models/userModel")
+const { userBlocked } = require("./adminController");
 
 
 
@@ -260,63 +262,60 @@ const loadProduct = async (req, res) => {
 
 
 
-
-
-const filterProduct = async (req, res) => {
+const filterProducts = async (req, res) => {
     try {
+        const priceRange = req.body.price;  
+        const category = await Category.find({ blocked: 0 });
 
-        console.log(req.body, 'testing req .body');
-        const user_id = req.session.user_id
-        const price = req.query.price;
-        console.log(price, 'chekkuing price ');
-        const page = req.query.page ? req.query.page : 1;
-        const prevPage = page - 1
-        const splitPrice = price.split('-')
-        const minimum = parseInt(splitPrice[0])
-        const maximum = parseInt(splitPrice[1])
-        const sortOptions = {
-            'low-to-high': 1,
-            'high-to-low': -1,
-            'default': 1
-        };
+        const page = parseInt(req.query.page) || 1;
+        const limit = 8;
+        const skip = (page - 1) * limit;
 
-        // Use the defined sort options
-        const sort = sortOptions[req.query.sort] || sortOptions['default'];
-        console.log(sort, 'sort'); const searchQuery = req.query.search ? req.query.search : "";
-        const category = req.query.category
-        const categoryData = await Category.find()
-        const totalDoc = await Products.countDocuments();
-        //   const wishlistData = await Wishlist.findOne({user:req.session.user_id})
-        //   const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
+        let filtered;
+        let count;
 
-        console.log(user_id, 'user_id');
-        console.log(price, 'price');
-        console.log(page, 'page');
-        console.log(searchQuery, 'searchQuery')
-        console.log(prevPage);
-        console.log(splitPrice, 'splitPrice');
-        console.log(minimum, 'minimum');
-        console.log(maximum, 'maximum');
-        console.log(sort, 'sort');
-        console.log(category, 'category');
-        console.log(categoryData, 'categoryData');
-        console.log(totalDoc, 'totalDoc');
+        const cart = await Cart.findOne({ userId: req.session.user_id });
+        let cartCount = cart ? cart.product.length : 0;
 
+        const user = await User.findOne({ _id: req.session.user_id });
+        let wishCount = 0;
 
+        if (priceRange !== undefined) {
+            const [minPrice, maxPrice] = priceRange.split('-').map(Number);
 
-        const productData = await Products.find({
-            name: { $regex: searchQuery, $options: 'i' },
-            price: { $gte: minimum, $lte: maximum }
-        }).sort({ price: sort }).skip(prevPage * 4).limit(4)
+            filtered = await Products.find({
+                blocked: 0,
+                price: { $gte: minPrice, $lte: maxPrice }
+            }).sort({ price: 1 })
+            .skip(skip)
+            .limit(limit);
 
-        res.render('shop', { products: productData, categorys: categoryData, user_id, totalDoc, page })
+            count = await Products.find({
+                blocked: 0,
+                price: { $gte: minPrice, $lte: maxPrice }
+            }).count();
+        } else {
+            filtered = await Products.find({ blocked: 0 }).skip(skip).limit(limit);
+            count = await Products.find({ blocked: 0 }).count();
+        }
 
-
+        res.render("shop", {
+            category,
+            count,
+            name: req.session.name,
+            products: filtered,
+            cartCount,
+            currentPage: page,
+            totalPages: Math.ceil(count / limit),
+            limit,
+            totalProducts: count,
+        });
     } catch (error) {
-        console.error(error.message);
-        res.status(500).json({ error: "Internal server error nthoo" });
+        console.log(error.message);
+        res.status(500).render(500).send("Internal Server Error");
     }
 };
+
 
 module.exports = {
     loadproduct,
@@ -327,5 +326,5 @@ module.exports = {
     loadEditProduct,
     editedProduct,
     loadProduct,
-    filterProduct,
+    filterProducts,
 }

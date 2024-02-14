@@ -178,16 +178,16 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th>Delevery</th>
+                                                <!-- <th>Delevery</th>
                                                 <td>
-                                                    <!-- <h6>Delevery</h6> -->
-                                                    <!-- <p>Shipping options will be updated
-                                                                during checkout.</p> -->
+                                                    <h6>Delevery</h6>
+                                                     <p>Shipping options will be updated
+                                                                during checkout.</p>
                                                     <a href="javascript:void(0)"
                                                         class="price-calculate">Free
                                                         shipping : ₹ &nbsp;00.0</a>
 
-                                                </td>
+                                                </td> -->
                                             </tr>
                                             <tr>
                                                 <th>Total</th>
@@ -211,16 +211,15 @@
                     <%} else { %>
 
                     <div class="error-content text-center">
-                        <div class="container">
-                            <h1 class="error-title">Empty Cart</h1>
-                            <!-- End .error-title -->
-                            <p>Your cart is empty.</p>
-                            <a href="/shop"
-                                class="btn btn-outline-primary-2 btn-minwidth-lg">
+                        <div class="container" style="text-align: center; padding: 50px;">
+                            <h1 class="error-title" style="font-size: 3em; color: #333; margin-bottom: 20px;">Empty Cart</h1>
+                            <p style="font-size: 1.2em; color: #555;  text-align: center;">Your cart is empty.</p>
+                            <a href="/shop" class="btn btn-outline-primary-2 btn-minwidth-lg" style="text-decoration: none; background-color: #3498db; color: #fff; padding: 15px 30px; border-radius: 8px; font-size: 1.2em;">
                                 <span>FILL YOUR CART</span>
-                                <i class="icon-long-arrow-right"></i>
+                                <i class="icon-long-arrow-right" style="margin-left: 10px;"></i>
                             </a>
                         </div>
+                        
                         <!-- End .container -->
                     </div>
                     <% } %>

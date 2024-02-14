@@ -57,20 +57,23 @@ admin_Rout.post("/editProduct", auth.isLogin, multer2.productImagesUpload2, prod
 admin_Rout.delete("/admin/removeImage", auth.isLogin, productController.removeImage);
 
 admin_Rout.get("/order", auth.isLogin, orderController.loadOrderManagement);
-admin_Rout.put("/updateOrder", orderController.updateOrder);
-admin_Rout.get("/orderSummery", auth.isLogin, orderController.orderDetails);
+admin_Rout.put("/updateOrder",auth.isLogin,orderController.updateOrder);
+admin_Rout.get("/orderSummery", auth.isLogin,orderController.orderDetails);
 admin_Rout.post("/returnOrder",auth.isLogin,orderController.returnOrder)
 
 
-admin_Rout.get("/coupon",couponController.loadCouponManagement);
-admin_Rout.get("/addCoupon",couponController.addCouponLoad);
-admin_Rout.post("/addCoupon",couponController.addCoupon);
-admin_Rout.put("/blockCoupon",couponController.blockCoupon);
-admin_Rout.delete("/couponDelet",couponController.deletCouopon);
+admin_Rout.get("/coupon",auth.isLogin,couponController.loadCouponManagement);
+admin_Rout.get("/addCoupon",auth.isLogin,couponController.addCouponLoad);
+admin_Rout.post("/addCoupon",auth.isLogin,couponController.addCoupon);
+admin_Rout.put("/blockCoupon",auth.isLogin,couponController.blockCoupon);
+admin_Rout.delete("/couponDelet",auth.isLogin,couponController.deletCouopon);
 // admin_Rout.get("/editCoupon",couponController.loadEditCoupon);
 
 
-admin_Rout.get("/salesReport",adminController.salesReport)
+admin_Rout.get("/salesReport",auth.isLogin,adminController.salesReport)
+admin_Rout.get('/pdfDown',auth.isLogin,adminController.pdfDownload)
+admin_Rout.get('/exelDown',auth.isLogin,adminController.excelDownload)
+
 
 
 

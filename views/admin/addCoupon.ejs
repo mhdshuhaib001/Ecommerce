@@ -125,59 +125,47 @@
         } else if (criteriaAmount > discount) {
             criteriaError.textContent =  "Criteria amount should be greater than discount amount.";
         } else {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "Do you want to add this Coupon?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, Add",
-                cancelButtonText: "Cancel",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "/admin/addCoupon",
-                        data: {
-                            name,
-                            code,
-                            discount,
-                            activeDate,
-                            expiryDate,
-                            criteriaAmount,
-                            userLimit,
-                        },
-                        method: "POST",
-                        success: (response) => {
-                            if (response.exist) {
-                                codeLengthError.textContent = "Coupon code already exists.";
-                            } else if (response.success) {
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: "top-end",
-                                    showConfirmButton: false,
-                                    timer: 3000,
-                                });
-
-                                Toast.fire({
-                                    icon: "success",
-                                    title: "Coupon Added.",
-                                });
-                                setTimeout(() => {
-                                    window.location.href = "/admin/coupon";
-                                }, 3000);
-                            } else {
-                                console.error("Unexpected response:", response);
-                                alert("Unexpected response. Please try again later.");
-                            }
-                        },
-                        error: (error) => {
-                            console.error("AJAX request failed:", error);
-                            alert("Failed to add Coupon. Please try again later.");
-                        },
-                    });
-                }
+            $.ajax({
+    url: "/admin/addCoupon",
+    data: {
+        name,
+        code,
+        discount,
+        activeDate,
+        expiryDate,
+        criteriaAmount,
+        userLimit,
+    },
+    method: "POST",
+    success: (response) => {
+        if (response.exist) {
+            codeLengthError.textContent = "Coupon code already exists.";
+        } else if (response.success) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 4000,
             });
+
+            Toast.fire({
+                icon: "success",
+                title: "Coupon Added.",
+            });
+            setTimeout(() => {
+                window.location.href = "/admin/coupon";
+            }, 3000);
+        } else {
+            console.error("Unexpected response:", response);
+            alert("Unexpected response. Please try again later.");
+        }
+    },
+    error: (error) => {
+        console.error("AJAX request failed:", error);
+        alert("Failed to add Coupon. Please try again later.");
+    },
+});
+
         }
     });
 </script>

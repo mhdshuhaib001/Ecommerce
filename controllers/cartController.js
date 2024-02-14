@@ -53,6 +53,9 @@ const addToCart = async (req, res) => {
     const productData = await Products.findById({ _id: productId });
     const productQuantity = productData.quantity;
     const count = req.body.count ? parseInt(req.body.count) : 1;
+    const category= productData.category;
+    console.log(category,'haloooooooooooo');
+    
     
     // Check if the product quantity is greater than 0
     if (productQuantity <= 0) {
@@ -66,6 +69,7 @@ const addToCart = async (req, res) => {
       productPrice: productData.price,
       productName: productData.name,
       totalPrice: totalPrice,
+      category:category,
       count: count,
       image: productData.images.image1
     };
@@ -189,64 +193,70 @@ const quantityUpdate = async (req, res) => {
 
 const loadCheckOut = async (req, res) => {
   try {
-    const user_id = req.session.user_id;
+      const user_id = req.session.user_id;
 
-    const userData = await User.findOne({ _id: user_id });
-    const cartData = await Cart.findOne({ userId: user_id }).populate("product.productId");
-    const cartTotal = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
-    const addressData = await Address.findOne({ user: user_id });
-    const state = addressData.state; 
-    const district = addressData.district; 
-    console.log(state, 'oooooo', district, '==========');
-    const couponData = await Coupon.find({
-      usedUser: { $nin: [user_id] }
-    });
+      const userData = await User.findOne({ _id: user_id });
+      const cartData = await Cart.findOne({ userId: user_id }).populate("product.productId");
+      const cartTotal = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
+      const addressData = await Address.findOne({ user: user_id });
+      const state = addressData.state;
+      const district = addressData.district;
+      console.log(state, 'oooooo', district, '==========');
+      const couponData = await Coupon.find({
+          usedUser: { $nin: [user_id] }
+      });
 
-    let couponDiscount = 0;
-    if (cartData.couponDiscount) {
-      couponDiscount = cartData.couponDiscount;
-    }
-    const discountAmount = cartTotal - couponDiscount;
-
-    const cartCount = cartData.product.length;
-    let instock = true;
-
-    for (const product of cartData.product) {
-      if (product.productId.quantity < product.count) {
-        instock = false;
-        proName = product.productId.name;
-        break;
+      let couponDiscountAmount = 0;
+      if (cartData.couponDiscount) {
+          const coupon = await Coupon.findOne({ _id: cartData.couponDiscount });
+          if (coupon) {
+            couponDiscountAmount = Math.round((coupon.discountAmount / 100) * cartTotal);
+          }
       }
-    }
+      console.log(couponDiscountAmount);
 
-    let shippingAmount = 0;
-    if (cartTotal < 1300) {
-      shippingAmount = 90;
-    } else {
-      shippingAmount = 0;
-    }
+      const discountAmount = cartTotal - couponDiscountAmount;
 
-    const Total = cartTotal;
-    let totalamount = cartTotal;
-    const userId = userData._id;
+      const cartCount = cartData.product.length;
+      let instock = true;
 
-    res.render("checkout", {
-      user: userData,
-      addressData,
-      userId,
-      cartData,
-      products: cartData.product,
-      Total,
-      totalamount,
-      cartCount,
-      couponData,
-      cartTotal, 
-      discountAmount, 
-      shippingAmount
-    });
+      for (const product of cartData.product) {
+          if (product.productId.quantity < product.count) {
+              instock = false;
+              proName = product.productId.name;
+              break;
+          }
+      }
+
+      let shippingAmount = 0;
+      if (cartTotal < 1300) {
+          shippingAmount = 90;
+      } else {
+          shippingAmount = 0;
+      }
+
+      const Total = cartTotal;
+      let totalamount = cartTotal;
+      const userId = userData._id;
+
+      res.render("checkout", {
+          user: userData,
+          addressData,
+          userId,
+          cartData,
+          products: cartData.product,
+          Total,
+          totalamount,
+          cartCount,
+          couponData,
+          cartTotal,
+          couponDiscountAmount,
+          discountAmount,
+          shippingAmount
+      });
   } catch (error) {
-    console.error(error.message);
-    res.status(500).send('Internal Server Error');
+      console.error(error.message);
+      res.status(500).send('Internal Server Error');
   }
 };
 

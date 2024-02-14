@@ -3,6 +3,13 @@ const bcrypt = require('bcrypt');
 const Category = require("../models/categoryModel");
 const categoryModel = require("../models/categoryModel");
 const Order = require("../models/orderModel");
+const puppeteer = require('puppeteer')
+const path = require('path')
+const fs = require('fs')
+const ejs = require('ejs');
+const ExcelJS = require('exceljs');
+
+
 
 
 
@@ -66,43 +73,63 @@ const loadDashboard = async (req, res) => {
         const startDate = new Date(currentDate - 30 * 24 * 60 * 60 * 1000);
 
         const userData = await User.find();
-        const userCount = userData.length;
-
+        // const userCount = userData.length;
         const orderData = await Order.find({ purchaseDate: { $gte: startDate, $lt: currentDate } });
-
-        const totalOrders = orderData ? orderData.length : 0;
+         const totalProduct = orderData ? orderData.length : 0;
+        const verifiedUserCount = await User.countDocuments({ is_verified: true });
         let deliveredOrders = 0;
         let totalRevenue = 0;
+        let razorpayAmount = 0;
+        let codAmount = 0;
+        let walletAmount = 0;
+
+
 
         orderData.forEach((order) => {
             deliveredOrders += order.orderProducts.reduce((acc, delivered) => (delivered.status === 'delivered' ? acc + 1 : acc), 0);
-            totalRevenue += order.orderProducts.reduce((acc, product) => (product.status === 'delivered' ? acc + product.totalPrice : acc), 0);});
+            totalRevenue += order.orderProducts.reduce((acc, product) => (product.status === 'delivered' ? acc + product.totalPrice : acc), 0);
 
-        console.log(deliveredOrders, 'Delivered Orders');
-        console.log(totalRevenue, 'Total Revenue');
-
+            order.orderProducts.forEach((product) => {
+                if (product.status === 'delivered') {
+                    if (order.paymentMethod === 'razorpay') {
+                        razorpayAmount += product.totalPrice;
+                    } else if (order.paymentMethod === 'COD') {
+                        codAmount += product.totalPrice;
+                    } else if (order.paymentMethod === 'wallet') {
+                        walletAmount += product.totalPrice;
+                    }
+                }
+            });
+        });
         const monthlyProductSales = await Order.aggregate([
             { $match: { 'orderProducts.status': 'delivered' } },
             { $unwind: '$orderProducts' },
-            { $addFields: { formattedDate: { $dateToString: { format: '%Y-%m-%d', date: '$purchaseDate',},},},},
-            { $group: { _id: { date: '$formattedDate' },revenue: { $sum: '$orderProducts.totalPrice' }, },},
+            { $addFields: { formattedDate: { $dateToString: { format: '%Y-%m-%d', date: '$purchaseDate', }, }, }, },
+            { $group: { _id: { date: '$formattedDate' }, revenue: { $sum: '$orderProducts.totalPrice' }, }, },
         ]);
 
         const salesDataMonthly = Array.from({ length: 12 }, () => 0);
         const salesDataYearly = Array.from({ length: 12 }, () => 0);
         const currentYear = currentDate.getFullYear();
-
+        const years = [];
 
         for (const entry of monthlyProductSales) {
             const entryYear = new Date(entry._id.date).getFullYear();
             const monthIndex = new Date(entry._id.date).getMonth();
+
+            if (!years.includes(entryYear)) {
+                years.push(entryYear);
+            }
+
             if (entryYear === currentYear) {
                 salesDataYearly[monthIndex] = entry.revenue;
             }
             salesDataMonthly[monthIndex] += entry.revenue;
         }
 
-        const paymentMethodDatas = await Order.aggregate([{  $match: { 'orderProducts.status': 'delivered' }},{$group: { _id: '$paymentMethod', count: { $sum: 1 } }}]);
+        const yearlyLabels = years.map(String);
+
+        const paymentMethodDatas = await Order.aggregate([{ $match: { 'orderProducts.status': 'delivered' } }, { $group: { _id: '$paymentMethod', count: { $sum: 1 } } }]);
 
         const bestSellingProducts = await Order.aggregate([
             { $match: { 'orderProducts.status': 'delivered' } },
@@ -134,19 +161,14 @@ const loadDashboard = async (req, res) => {
                 $group: {
                     _id: '$productDetails.category',
                     totalSold: { $sum: '$orderProducts.count' },
-                    products: { $push: '$productDetails' }, 
+                    products: { $push: '$productDetails' },
                 },
             },
             { $sort: { totalSold: -1 } },
             { $limit: 10 },
         ]);
-        
-        console.log(bestSellingCategories);
-        
 
-        console.log(paymentMethodDatas, 'payment method data');
-
-        res.render('dashboard', { salesDataMonthly, salesDataYearly, deliveredOrders, totalRevenue, paymentMethodDatas });
+        res.render('dashboard', {totalProduct,verifiedUserCount, yearlyLabels, salesDataMonthly, salesDataYearly, deliveredOrders, totalRevenue, paymentMethodDatas, razorpayAmount, codAmount });
     } catch (error) {
         console.log(error.message);
     }
@@ -348,13 +370,164 @@ const salesReport = async (req, res) => {
                 $sort: { purchaseDate: -1 },
             },
         ]);
-console.log(orders,'------------------');
+
         res.render('salesReport', { orders });
     } catch (error) {
         console.error(error.message);
         // res.render('500Error');
     }
 };
+
+const pdfDownload = async (req, res) => {
+    try {
+        const duration = req.query.sort;
+        const currentDate = new Date();
+        const startDate = new Date(currentDate - duration * 24 * 60 * 60 * 1000);
+
+        const orders = await Order.aggregate([
+            {
+                $unwind: "$orderProducts",
+            },
+            {
+                $match: {
+                    'orderProducts.status': "delivered",
+                    'purchaseDate': { $gte: startDate, $lte: currentDate },
+                },
+            },
+            {
+                $lookup: {
+                    from: "Products",
+                    localField: "orderProducts.productId",
+                    foreignField: "_id",
+                    as: "orderProducts.productDetails",
+                },
+            },
+            {
+                $addFields: {
+                    "orderProducts.productDetails": {
+                        $arrayElemAt: ["$orderProducts.productDetails", 0],
+                    },
+                },
+            },
+            {
+                $sort: { purchaseDate: -1 },
+            },
+        ]);
+
+        const totalRevenue = orders.reduce((acc, order) => {
+            const orderProductsArray = Array.isArray(order.orderProducts) ? order.orderProducts : [order.orderProducts];
+            return acc + orderProductsArray.reduce((acc, product) => {
+                return acc + (product.status === 'delivered' ? product.totalPrice : 0);
+            }, 0);
+        }, 0);
+
+        const totalDeliveredProductsCount = orders.reduce((acc, order) => {
+            const orderProductsArray = Array.isArray(order.orderProducts) ? order.orderProducts : [order.orderProducts];
+            return acc + orderProductsArray.reduce((acc, product) => {
+                return acc + (product.status === 'delivered' ? 1 : 0);
+            }, 0);
+        }, 0);
+
+        const ejsPagePath = path.join(__dirname, '../views/admin/reportPdf.ejs');
+        const ejsPage = await ejs.renderFile(ejsPagePath, { orders, totalRevenue, totalDeliveredProductsCount });
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.setContent(ejsPage);
+        const pdfBuffer = await page.pdf();
+        await browser.close();
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
+        res.send(pdfBuffer);
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
+const excelDownload = async (req, res) => {
+    try {
+        const duration = req.query.sort;
+        const currentDate = new Date();
+        const startDate = new Date(currentDate - duration * 24 * 60 * 60 * 1000);
+
+        const orders = await Order.aggregate([
+            {
+                $unwind: "$orderProducts",
+            },
+            {
+                $match: {
+                    'orderProducts.status': "delivered",
+                    'purchaseDate': { $gte: startDate, $lte: currentDate },
+                },
+            },
+            {
+                $lookup: {
+                    from: "Products",
+                    localField: "orderProducts.productId",
+                    foreignField: "_id",
+                    as: "orderProducts.productDetails",
+                },
+            },
+            {
+                $addFields: {
+                    "orderProducts.productDetails": {
+                        $arrayElemAt: ["$orderProducts.productDetails", 0],
+                    },
+                },
+            },
+            {
+                $sort: { purchaseDate: -1 },
+            },
+        ]);
+
+        const totalRevenue = orders.reduce((acc, order) => {
+            const orderProductsArray = Array.isArray(order.orderProducts) ? order.orderProducts : [order.orderProducts];
+            return acc + orderProductsArray.reduce((acc, product) => {
+                return acc + (product.status === 'delivered' ? product.totalPrice : 0);
+            }, 0);
+        }, 0);
+
+        const totalDeliveredProductsCount = orders.reduce((acc, order) => {
+            const orderProductsArray = Array.isArray(order.orderProducts) ? order.orderProducts : [order.orderProducts];
+            return acc + orderProductsArray.reduce((acc, product) => {
+                return acc + (product.status === 'delivered' ? 1 : 0);
+            }, 0);
+        }, 0);
+
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Sales Report');
+
+        worksheet.addRow(['Order ID', 'Billing Name', 'Date', 'Total', 'Payment Method']);
+
+        orders.forEach(order => {
+            worksheet.addRow([
+                order._id,
+                order.deliveryDetails.fullname,
+                order.orders,
+                // order.subtotal,
+                // order.payment
+            ]);
+        });
+
+        worksheet.addRow(['', '', '', 'Total Products:', totalDeliveredProductsCount]);
+        worksheet.addRow(['', '', '', 'Total Revenue:', totalRevenue]);
+
+        const buffer = await workbook.xlsx.writeBuffer();
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', 'attachment; filename=sales_report.xlsx');
+
+        res.send(buffer);
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500);
+    }
+}
 
 
 
@@ -375,5 +548,7 @@ module.exports = {
     blockCategory,
     updateCategory,
     deleteCategory,
-    salesReport
+    salesReport,
+    pdfDownload,
+    excelDownload
 }

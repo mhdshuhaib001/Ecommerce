@@ -81,7 +81,7 @@ user_Rout.post('/returnRequest', orderControllers.returnRequest)
 user_Rout.post('/orderCancel',orderControllers.orderCancel);
 user_Rout.get('/invoice',orderControllers.invoice);
 
-user_Rout.get('/filter',productController.filterProduct);
+user_Rout.post('/filterProduct',productController.filterProducts);
 user_Rout.get('/seachProduct',userController.searchProducts)
 
 user_Rout.post('/appliCopuon',couponController.applyCoupon);
@@ -99,5 +99,7 @@ user_Rout.get("/wishlist", userController.loadWishlist);
 user_Rout.get("/contact", userController.loadContact);
 
 user_Rout.get("/404", userController.loadError404);
+user_Rout.get("/500", userController.loadError500);
+
 
 module.exports = user_Rout;

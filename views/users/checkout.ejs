@@ -13,7 +13,7 @@
 
         .coupon-card {
             width: 400px;
-            height: 210px;
+            height: 248px;
             border-radius: 5px;
             box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
             background-color: #fff;
@@ -167,12 +167,14 @@
                                                                 <div class="coupon-vertical"></div>
                                                                 <div class="coupon-content">
                                                                     <h2><%= coupon.name %></h2>
+                                                                    <span>Criteria Amount: <%= coupon.criteriaAmount %></span>
                                                                     <h1><%= coupon.discountAmount %>% <span>Coupon</span></h1>
                                                                     <p>Valid till <%= coupon.expiryDate %></p>
+                                                                    
                                                                 </div>
                                                             </div>
                                                             <div class="coupon-copy-button">
-                                                                <% if (coupon.usedUser.toString() === userId.toString()) { %>
+                                                                <% if (cartData && cartData.couponDiscount && coupon._id.toString() === cartData.couponDiscount.toString()) { %>
                                                                     <input id="apply-value" type="text" readonly value="<%= coupon.couponCode %>" />
                                                                     <button onclick="removeCoupon('<%= coupon._id %>')" class="coupon-copy-btn">Remove</button>
                                                                 <% } else { %>
@@ -180,6 +182,7 @@
                                                                     <button onclick="couponApplied('<%= coupon._id %>')" class="coupon-copy-btn">Apply</button>
                                                                 <% } %>
                                                             </div>
+                                                            
                                                         </div>
                                                     </div>
                                                 <% }); %>
@@ -360,15 +363,15 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% if (cartData.couponDiscount !=="undefined" &&
-                                                    cartData.couponDiscount> 0) { %>
+                                                <% if (cartData.couponDiscount !== undefined && cartData.couponDiscount > 0) { %>
                                                     <tr style="color: green;">
                                                         <td>Discount:</td>
                                                         <td>
-                                                            <span>-</span><%= cartData.couponDiscount %>
+                                                            <span>-</span><%= cartData.couponDiscountAmount %>
                                                         </td>
                                                     </tr>
-                                                    <% } %>
+                                                <% } %>
+                                                
 
                                                     <tr>
                                                         <td>Shipping Fee:</td>

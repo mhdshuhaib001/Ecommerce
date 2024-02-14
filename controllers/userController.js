@@ -645,14 +645,6 @@ const loadContact = async (req, res) => {
 
 
 
-// Error404
-const loadError404 = async (req, res) => {
-  try {
-    res.render("404");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
 
 const loadprofile = async (req, res) => {
   try {
@@ -661,8 +653,6 @@ const loadprofile = async (req, res) => {
     const addressData = await Address.findOne({ user: userId });
     const orderData = await Order.find({ userId: userId }).sort({ purchaseDate: -1 });
     const walletData = await User.findOne({ _id: userId }).sort({ 'walletHistory.transactionDate': -1 });
-  console.log(orderData,'------------------------');
-  console.log(walletData,'0000000000000000000000000');
     const cart = await Cart.findOne({ userId: req.session.user_id });
     let cartCount = 0;
     if (cart) {
@@ -704,6 +694,25 @@ const changePassword = async (req, res) => {
 
 
 
+// Error404
+const loadError404 = async (req, res) => {
+  try {
+    res.render("404");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+
+// Error404
+const loadError500 = async (req, res) => {
+  try {
+    res.render("500");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 
 
 
@@ -720,9 +729,9 @@ module.exports = {
   loadContact,
   loadUserOtp,
   verifyOTP,
-  // veryfyPost,
   insertUser,
   loadError404,
+  loadError500,
   logout,
   resendOtp,
   forgetLoad,

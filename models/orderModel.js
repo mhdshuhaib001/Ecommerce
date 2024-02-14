@@ -68,7 +68,6 @@ const orderSchema = new mongoose.Schema({
       },
       status: {
         type: String,
-        // enum: ['Pending', 'Placed', 'Shipped', 'Delivered', 'Cancelled', 'Return Rejected', 'Return Requested', 'Out For Delivery', 'Returned'],
         default: "Placed",
       },
       returnReason: {

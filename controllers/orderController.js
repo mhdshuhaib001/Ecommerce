@@ -3,7 +3,6 @@ const User = require("../models/userModel");
 const Address = require("../models/addressModel");
 const Cart = require("../models/cartModel");
 const Product = require("../models/productsModel");
-const ReturnRequest = require("../models/returnRequestsModel");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const puppeteer = require('puppeteer');
@@ -30,7 +29,7 @@ const placeOrder = async (req, res) => {
         const cartData = await Cart.findOne({ userId: user_id });
         const paymentMethod = req.body.formData.payment;
         const total = req.body.formData.total;
-        const shippingAmount = req.body.formData.shippingAmount; // Corrected this line
+        const shippingAmount = req.body.formData.shippingAmount; 
         const status = paymentMethod === 'COD' ? 'placed' : 'pending';
         const userData = await User.findById(user_id);
         const walletBalance = userData.wallet;
@@ -56,7 +55,6 @@ const placeOrder = async (req, res) => {
             return;
         }
 
-        console.log(shippingAmount, 'shipping amount--------------------');
         const order = new Order({
             userId: user_id,
             deliveryDetails: address,
@@ -100,7 +98,6 @@ const placeOrder = async (req, res) => {
 
             const TransactuonDate = new Date();
 
-            console.log(formattedDate, 'date', formattedTime, 'time');
             if (walletBalance >= totalAmount) {
                 const wallet = await User.findOneAndUpdate(
                     { _id: user_id },

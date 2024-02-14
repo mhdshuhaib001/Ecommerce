@@ -58,7 +58,7 @@
                                         <div class="form-group">
                                             <label for="editEmail">Email *</label>
                                             <input type="email" class="form-control" name="editEmail" id="editEmail"
-                                                required>
+                                                readonly>
                                             <p style="color: red; display: none;" id="editEmailError"></p>
                                         </div>
                                         <div class="form-group">
@@ -69,7 +69,7 @@
                                             <p style="color: red; display: none;" id="editMobileError"></p>
                                         </div>
 
-                                        <button type="submit" id="editProfile" class="btn btn-outline-primary">Save
+                                        <button type="submit" id="editProfile" class="btn " style="background-color: #000000; color: white;">Save
                                             Changes</button>
                                     </form>
 
@@ -137,7 +137,7 @@
                                         <div id="conpassError" style="display: none; color: red;"></div>
                                     </div>
 
-                                    <button class="btn btn-primary" type="submit" id="changePass">Submit</button>
+                                    <button class="btn " style="background-color: #0f9ba2; color: white;" type="submit" id="changePass">Submit</button>
                                 </form>
                             </div>
                         </div>
@@ -180,7 +180,7 @@
                                                             <%= index + 1 %>
                                                         </td>
                                                         <td>
-                                                            <%= order.purchaseDate %>
+                                                            <%= order.purchaseDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
                                                             <small class="text-muted"></small>
                                                         </td>
                                                         
@@ -261,9 +261,7 @@
                                                 <td>
                                                     <%= i + 1 %>
                                                 </td>
-                                                <td>
-                                                    <%= transaction.transactionDate %> <small><%= transaction.transactionTime %></small>
-                                                </td>
+                                               
                                                 <td>
                                                     <%= transaction.direction %>
                                                 </td>

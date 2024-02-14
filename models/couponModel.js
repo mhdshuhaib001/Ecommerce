@@ -29,7 +29,7 @@ const  couponSchema = new  mongoos.Schema({
         type: Array,
         required: true
     },
-    usersLimit:{
+    userLimit:{
         type: Number,
         required: true 
     },

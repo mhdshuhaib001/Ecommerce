@@ -48,7 +48,7 @@ const addCoupon = async (req, res) => {
             activeDate: formattedActiveDate,
             expiryDate: formattedExpiryDate,
             criteriaAmount: req.body.criteriaAmount,
-            usersLimit: req.body.usersLimit
+            userLimit: req.body.userLimit
         });
 
         await CouponData.save();
@@ -118,13 +118,13 @@ const deletCouopon = async (req, res) => {
 const applyCoupon = async (req, res) => {
     try {
         const couponId = req.body.couponId;
+        console.log(couponId,'halooo');
         const userId = req.session.user_id;
         const cartData = await Cart.findOne({ userId: userId })
         const cartTotal = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0)
         const currentDate = new Date();
         const couponData = await Coupon.findOne({ _id: couponId });
         const existUser = couponData.usedUser.includes(userId);
-
 
 
         if (existUser) {
@@ -134,7 +134,7 @@ const applyCoupon = async (req, res) => {
 
                 const couponData = await Coupon.findOne({ _id: couponId });
                 if (couponData) {
-                    if (couponData.usersLimit <= 0) {
+                    if (couponData.userLimit <= 0) {
                         res.json({ limit: true });
 
                     } else {
@@ -146,8 +146,8 @@ const applyCoupon = async (req, res) => {
                             } else {
                                 const discountPercentage = couponData.discountAmount;
                                 const discountAmount = Math.round((discountPercentage / 100) * cartTotal);
-                                await Coupon.findOneAndUpdate({ _id: couponId }, { $push: { usedUser: userId } });
-                                await Cart.findOneAndUpdate({ userId: userId }, { $set: { couponDiscount: discountAmount } });
+                                // await Coupon.findOneAndUpdate({ _id: couponId }, { $push: { usedUser: userId } });
+                                await Cart.findOneAndUpdate({ userId: userId }, { $set: { couponDiscount: couponId } });
                                 res.json({ coupon: true });
                             }
                         }

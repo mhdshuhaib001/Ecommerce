@@ -14,7 +14,7 @@
                       <th>OrderId</th>
                       <th>Order Date</th>
                       <th>Amount</th>
-                      <th>Status</th>
+                      <!-- <th>Status</th> -->
                        <th>Status</th> 
                     </tr>
                   </thead>
@@ -24,13 +24,13 @@
                                 <tr>
                                     <td><%= index + 1 %></td>
                                     <td><%= order._id %></td>
-                                    <td><%= order.purchaseDate %></td>
+                                    <td><%= order.purchaseDate.toISOString().split('T')[0] %></td>
                                     <td><span>₹</span><i class="fa-solid fa-indian-rupee-sign"></i><%= order.totalAmount %></td>
                                   
                                     <td>
                                         <a href="/admin/orderSummery?_id=<%= order._id %>" class="btn btn-outline-primary block-button">Details</a>
                                     </td>
-                                    <td></td>
+                                    <!-- <td></td> -->
                                 </tr>
                             <% }) %>
                     <% } else { %>

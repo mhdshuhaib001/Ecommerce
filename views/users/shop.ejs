@@ -113,9 +113,15 @@
 
                             <ul class="text-right">
 
-                                <li><a href="login" class="account"><i class="fal fa-user-friends"></i>
+                                <% if(locals.user){ %>
+                                <li><a href="userProfile" class="account"><i class="fal fa-user-friends"></i>
+                                        <article class="account-registar d-inline-block"></article>
+                                    </a></li>
+                                <% }else {%>
+                                    <li><a href="login" class="account"><i class="fal fa-user-friends"></i>
                                         <article class="account-registar d-inline-block">Login/signup</article>
                                     </a></li>
+                                    <% } %>
 
                                 <li><a href="javascript:void(0)"><i class="fal fa-search"></i></a>
 
@@ -368,14 +374,13 @@
     </header>
     <!-- header section end -->
     <!-- preloader -->
-    <% if(products.length !=0) {%>
         <div class="shop-body mb-90">
             <div class="container-fluid">
                 <div class="shop-wrapper">
                     <div class="row">
                         <div class="col-xl-3 hidden-xl">
                             <!-- filter area  -->
-                            <div class="widget mt-50">
+                            <!-- <div class="widget mt-50">
                                 <h4 class="mb-30">Popular Tags</h4>
                                 <div class="category-list">
                                     <ul>
@@ -390,26 +395,32 @@
                                         <li><a href="shop2.html">women</a></li>
                                     </ul>
                                 </div>
-                            </div>
+                            </div> -->
     
     
                             <div class="widget mt-50">
                                 <h4 class="mb-30">Filter By Price</h4>
-                                <form action="#">
+                                <form action="/filterProduct" method="POST">
                                     <div class="filter-form-submit mt-35">
                                         <label>
-                                            <input type="radio" name="price-range" value="0-50"> $0 - $50
+                                            <input type="radio" name="price" value="0-50"> All price
                                         </label>
                                         <label>
-                                            <input type="radio" name="price-range" value="51-100"> $51 - $100
+                                            <input type="radio" name="price" value="999-1999"> ₹999 - ₹1999
                                         </label>
                                         <label>
-                                            <input type="radio" name="price-range" value="101-150"> $101 - $150
+                                            <input type="radio" name="price" value="2000-3999"> ₹2000 - ₹3999
                                         </label>
-                                        <!-- Add more radio buttons as needed -->
+                                        <label>
+                                            <input type="radio" name="price" id="lowToHigh" value="1"> LowToHigh
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="price" id="highToLow" value="-1"> High to Low
+                                        </label>
                                         <button type="submit">Filter</button>
                                     </div>
-                                </form>  
+                                </form>
+                                
                             </div>
                             <!-- <div class="widget mt-50">
                              
@@ -462,6 +473,8 @@
                             </div>
     
                             <!-- /. filter heading -->
+                            <% if(products.length !=0) {%>
+
                             <div>
                                 <div class="product-wrapper mt-55">
                                     <div class="row">
@@ -546,6 +559,15 @@
                                     </div>
                                 </div>
                             </div>
+                            <% }else{ %>
+                                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 50vh; background-color: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px;">
+                                    <h4 style="color: #333;">No product</h4>
+                                    <p style="color: #666; margin-top: 10px; text-align: center;">Explore our amazing collection and find something you'll love!</p>
+                                    <a href="/shop" style="text-decoration: none; background-color: #3498db; color: #fff; padding: 10px 20px; border-radius: 5px; margin-top: 15px;">Go Shop</a>
+                                </div>
+                                
+                            <% } %>
+
     
                             <!-- /. filter content -->
                         </div>
@@ -554,7 +576,6 @@
                 </div>
             </div>
         </div>
-        <% } %>
 
 
 
