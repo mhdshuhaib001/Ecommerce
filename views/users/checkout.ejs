@@ -388,7 +388,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% if (cartData.couponDiscount !==null ) { %>
+                                                <% if (cartData.couponDiscount !==null && couponDiscountAmount > 0 ) { %>
                                                     <tr style="color: green;">
                                                         <td>Discount:</td>
                                                         <td>
@@ -417,7 +417,7 @@
                                                             <td class="text-primary">Total:</td>
                                                             <td>
                                                                 ₹
-                                                                <span id="total1">
+                                                                <span >
                                                                     <%= totalamount %>
                                                                 </span>
                                                             </td>
@@ -496,19 +496,15 @@
         $("#checkout-form").submit(function (e) {
             e.preventDefault();
 
-            const total = $("#total1").text().trim();
             const selectedAddress = $("input[name='address']:checked").val();
             const address = selectedAddress ? JSON.parse(selectedAddress) : {};
             const paymentMethod = $("input[name='payment']:checked").val();
-            const shippingAmount = $("#shippingAmount").text().trim()
 
             console.log(shippingAmount, '------------');
 
             const formData = {
-                total: total,
                 address: address,
                 payment: paymentMethod,
-                shippingAmount: shippingAmount
             };
 
 

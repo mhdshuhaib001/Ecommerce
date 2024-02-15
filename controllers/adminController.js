@@ -138,6 +138,7 @@ const loadDashboard = async (req, res) => {
                     _id: '$orderProducts.productId',
                     productName: { $first: '$orderProducts.productName' },
                     totalSold: { $sum: '$orderProducts.count' },
+                    status: { $first: '$orderProducts.status' },
                 },
             },
             { $sort: { totalSold: -1 } },
@@ -167,7 +168,9 @@ const loadDashboard = async (req, res) => {
             { $limit: 10 },
         ]);
 
-        res.render('dashboard', {totalProduct,verifiedUserCount, yearlyLabels, salesDataMonthly, salesDataYearly, deliveredOrders, totalRevenue, paymentMethodDatas, razorpayAmount, codAmount });
+        const bestProduct = bestSellingProducts.map(product=> product.productName);
+        console.log(bestProduct,'bestProduct');
+        res.render('dashboard', {bestSellingProducts, totalProduct,verifiedUserCount, yearlyLabels, salesDataMonthly, salesDataYearly, deliveredOrders, totalRevenue, paymentMethodDatas, razorpayAmount, codAmount });
     } catch (error) {
         console.log(error.message);
     }

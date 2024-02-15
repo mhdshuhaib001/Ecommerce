@@ -27,15 +27,29 @@ const placeOrder = async (req, res) => {
     try {
         const user_id = req.session.user_id;
         const cartData = await Cart.findOne({ userId: user_id }).populate('couponDiscount');
-        console.log(cartData,'cartData==================================');
         const paymentMethod = req.body.formData.payment;
         const total = req.body.formData.total;
-        const shippingAmount = req.body.formData.shippingAmount; 
         const status = paymentMethod === 'COD' ? 'placed' : 'pending';
         const userData = await User.findById(user_id);
         const walletBalance = userData.wallet;
         const address = req.body.formData.address;
+        const subtotalAmount = cartData.product.reduce((acc, val) => acc + (val.totalPrice || 0), 0);
         const uniqId = crypto.randomBytes(4).toString('hex').toUpperCase().slice(0, 8);
+
+        let totalAmount = 0;
+        if( cartData.couponDiscount){
+            const CouponDiscountPercentage = cartData.couponDiscount.discountAmount;
+            const discountAmount = Math.round(CouponDiscountPercentage/100 * subtotalAmount);
+            totalAmount =  subtotalAmount - discountAmount;
+        }else {
+            totalAmount = subtotalAmount;
+        }
+        console.log(totalAmount,'=totalAmount======================');
+
+
+        
+
+
 
         const productData = cartData.product.map(product => ({
             orderId: uniqId,
@@ -52,11 +66,12 @@ const placeOrder = async (req, res) => {
         const purchaseDate = new Date();
 
         let shipingTotalAmount = 1500;
-        if (paymentMethod === 'COD' && total > shipingTotalAmount) {
+        let shippingAmount = 0;
+        if (paymentMethod === 'COD' && totalAmount > shipingTotalAmount) {
+             shippingAmount =shipingTotalAmount
             res.json({ maxAmount: true });
             return;
         }
-        console.log(uniqId,'orderId');
 
 
         const order = new Order({
@@ -64,7 +79,7 @@ const placeOrder = async (req, res) => {
             deliveryDetails: address,
             orderProducts: productData,
             purchaseDate: purchaseDate,
-            totalAmount: total,
+            totalAmount: totalAmount,
             paymentMethod: paymentMethod,
             shippingMethod: cartData.shippingMethod,
             shippingAmount: shippingAmount,
@@ -98,8 +113,6 @@ const placeOrder = async (req, res) => {
             });
         } else if (orderData.paymentMethod === "wallet") {
             const totalAmount = orderData.totalAmount;
-            console.log(totalAmount, 'totalAmount');
-
             const TransactuonDate = new Date();
 
             if (walletBalance >= totalAmount) {
