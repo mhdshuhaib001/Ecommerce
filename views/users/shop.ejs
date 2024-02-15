@@ -408,10 +408,10 @@
                                             <input type="radio" name="price" value="2000-3999"> ₹2000 - ₹3999
                                         </label>
                                         <label>
-                                            <input type="radio" name="price" id="lowToHigh" value="1"> LowToHigh
+                                            <input type="radio" name="price" id="lowToHigh" value="0-1000000000"> LowToHigh
                                         </label>
                                         <label>
-                                            <input type="radio" name="price" id="highToLow" value="-1"> High to Low
+                                            <input type="radio" name="price" id="highToLow" value="1000000000-1"> High to Low
                                         </label>
                                         <button type="submit">Filter</button>
                                     </div>
@@ -474,56 +474,47 @@
                             <div>
                                 <div class="product-wrapper mt-55">
                                     <div class="row">
-                                        <% products.forEach(product=> { %>
+                                        <% products.forEach(product => { %>
                                             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12">
-                                                <div class="product-box mb-40">
-                                                    <div class="product-box-wrapper">
-                                                        <div class="product-img">
-                                                            <img src="/products/crops/<%= product.images.image1 %>"
-                                                                class="w-100" alt>
-                                                            <a href="/product?id=<%= product._id %>"
-                                                                class="d-block">
-                                                                <div class="second-img">
-                                                                    <img src="/products/crops/<%= product.images.image2 %>"
-                                                                        alt class="w-100">
-                                                                </div>
-                                                            </a>
-                                                            <a href="javascript:void(0)"
-                                                                class="product-img-link quick-view-1 text-capitalize">Quick
-                                                                view</a>
-                                                        </div>
-    
-                                                        <div class="product-desc pb-20">
-                                                            <div class="product-desc-top">
-                                                                <div class="categories">
-                                                                    <a href="shop2.html"
-                                                                        class="product-category"><span>
-                                                                            <%= product.category %>
-                                                                        </span></a>
-                                                                </div>
-                                                                <a href="wishlist"
-                                                                    class="wishlist float-right"><span><i
-                                                                            class="fal fa-heart"></i></span></a>
+                                              <div class="product-box mb-40">
+                                                <div class="product-box-wrapper">
+                                                  <div class="product-img">
+                                                    <img src="/products/crops/<%= product.images.image1 %>" class="w-100" alt>
+                                                    <a href="/product?id=<%= product._id %>" class="d-block">
+                                                      <div class="second-img">
+                                                        <img src="/products/crops/<%= product.images.image2 %>" alt class="w-100">
+                                                      </div>
+                                                    </a>
+                                                    <a href="javascript:void(0)" class="product-img-link quick-view-1 text-capitalize">Quick view</a>
+                                                  </div>
+                                                  <div class="product-desc pb-20">
+                                                    <div class="product-desc-top">
+                                                        <% if (product.category && product.category.name) { %>
+                                                            <div class="categories">
+                                                              <a href="shop2.html" class="product-category">
+                                                                <span><%= product.category.name %></span>
+                                                              </a>
                                                             </div>
-                                                            <a href="/product" class="product-title">
-                                                                <%= product.name %>
-                                                            </a>
-                                                            <div class="price-switcher">
-                                                                <span class="price switcher-item">₹<%=
-                                                                        product.price %>
-                                                                </span>
-                                                                <a onclick="addToCart('<%= product._id %>')"
-                                                                    class="add-cart text-capitalize switcher-item"
-                                                                    style="cursor: pointer;">+
-                                                                    Add to
-                                                                    Cart</a>
-    
-                                                            </div>
-                                                        </div>
+                                                          <% } %>
+                                                      <a href="wishlist" class="wishlist float-right">
+                                                        <span><i class="fal fa-heart"></i></span>
+                                                      </a>
                                                     </div>
+                                                    <a href="/product" class="product-title">
+                                                      <%= product.name %>
+                                                    </a>
+                                                    <div class="price-switcher">
+                                                      <span class="price switcher-item">₹<%= product.price %></span>
+                                                      <a onclick="addToCart('<%= product._id %>')" class="add-cart text-capitalize switcher-item" style="cursor: pointer;">
+                                                        + Add to Cart
+                                                      </a>
+                                                    </div>
+                                                  </div>
                                                 </div>
+                                              </div>
                                             </div>
-                                            <% }); %>
+                                          <% }); %>
+                                          
                                     </div>
                                     <div class="text-center mt-20">
                                         <nav aria-label="Page navigation">

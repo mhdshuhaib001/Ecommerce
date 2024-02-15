@@ -50,14 +50,12 @@ const addToCart = async (req, res) => {
     const userId = req.session.user_id;
     const productId = req.body.id;
     const userData = await User.findOne({ _id: userId });
-    const productData = await Products.findById({ _id: productId });
+    const productData = await Products.findById({ _id: productId }).populate("category");
+    console.log(productData,'-------');
     const productQuantity = productData.quantity;
     const count = req.body.count ? parseInt(req.body.count) : 1;
-    const category= productData.category;
-    console.log(category,'haloooooooooooo');
     
     
-    // Check if the product quantity is greater than 0
     if (productQuantity <= 0) {
       return res.json({ success: false, newProduct: true, message: "Product is out of stock" });
     }
@@ -69,7 +67,7 @@ const addToCart = async (req, res) => {
       productPrice: productData.price,
       productName: productData.name,
       totalPrice: totalPrice,
-      category:category,
+      category:productData.category.name,
       count: count,
       image: productData.images.image1
     };
@@ -194,7 +192,6 @@ const quantityUpdate = async (req, res) => {
 const loadCheckOut = async (req, res) => {
   try {
       const user_id = req.session.user_id;
-
       const userData = await User.findOne({ _id: user_id });
       const cartData = await Cart.findOne({ userId: user_id }).populate("product.productId");
       const cartTotal = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
@@ -208,13 +205,12 @@ const loadCheckOut = async (req, res) => {
             couponDiscountAmount = Math.round((coupon.discountAmount / 100) * cartTotal);
           }
       }
-      console.log(couponDiscountAmount);
 
       const discountAmount = cartTotal - couponDiscountAmount;
+      console.log(discountAmount,'total maount 2 ');
 
       const cartCount = cartData.product.length;
       let instock = true;
-
       for (const product of cartData.product) {
           if (product.productId.quantity < product.count) {
               instock = false;
@@ -223,6 +219,7 @@ const loadCheckOut = async (req, res) => {
           }
       }
 
+      // calculatte the shipping amount 
       let shippingAmount = 0;
       if (cartTotal < 1300) {
           shippingAmount = 90;
@@ -230,17 +227,22 @@ const loadCheckOut = async (req, res) => {
           shippingAmount = 0;
       }
 
-      const Total = cartTotal;
-      let totalamount = cartTotal;
-      const userId = userData._id;
+      let totalamount = 0;
+
+      if(couponDiscountAmount> 0){
+        console.log('hallooooo');
+        totalamount = cartTotal - couponDiscountAmount;
+      }else {
+        totalamount +=cartTotal;
+      }
+     console.log(totalamount,'totalamount');
 
       res.render("checkout", {
           user: userData,
           addressData,
-          userId,
+          userId:user_id,
           cartData,
           products: cartData.product,
-          Total,
           totalamount,
           cartCount,
           couponData,

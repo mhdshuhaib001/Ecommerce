@@ -44,6 +44,10 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
+      orderId: {
+        type: String,
+
+      },
       productId: {
         type: mongoose.Types.ObjectId,
         required: true,
@@ -73,6 +77,7 @@ const orderSchema = new mongoose.Schema({
       returnReason: {
         type: String,
       },
+      
     },
   ],
   totalAmount: {

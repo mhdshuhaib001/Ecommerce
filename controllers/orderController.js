@@ -8,7 +8,7 @@ const crypto = require("crypto");
 const puppeteer = require('puppeteer');
 const ejs = require('ejs');
 const path = require('path');
-const fs = require('fs').promises;
+const fs = require('fs');
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -26,7 +26,8 @@ var instance = new Razorpay({
 const placeOrder = async (req, res) => {
     try {
         const user_id = req.session.user_id;
-        const cartData = await Cart.findOne({ userId: user_id });
+        const cartData = await Cart.findOne({ userId: user_id }).populate('couponDiscount');
+        console.log(cartData,'cartData==================================');
         const paymentMethod = req.body.formData.payment;
         const total = req.body.formData.total;
         const shippingAmount = req.body.formData.shippingAmount; 
@@ -34,8 +35,10 @@ const placeOrder = async (req, res) => {
         const userData = await User.findById(user_id);
         const walletBalance = userData.wallet;
         const address = req.body.formData.address;
+        const uniqId = crypto.randomBytes(4).toString('hex').toUpperCase().slice(0, 8);
 
         const productData = cartData.product.map(product => ({
+            orderId: uniqId,
             productId: product.productId,
             count: product.count,
             productPrice: product.productPrice,
@@ -46,7 +49,6 @@ const placeOrder = async (req, res) => {
             category: product.category,
         }));
 
-        // Format date and time
         const purchaseDate = new Date();
 
         let shipingTotalAmount = 1500;
@@ -54,6 +56,8 @@ const placeOrder = async (req, res) => {
             res.json({ maxAmount: true });
             return;
         }
+        console.log(uniqId,'orderId');
+
 
         const order = new Order({
             userId: user_id,

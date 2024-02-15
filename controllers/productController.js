@@ -289,7 +289,6 @@ const filterProducts = async (req, res) => {
             }).sort({ price: 1 })
             .skip(skip)
             .limit(limit);
-
             count = await Products.find({
                 blocked: 0,
                 price: { $gte: minPrice, $lte: maxPrice }

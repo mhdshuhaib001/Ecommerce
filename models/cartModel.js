@@ -48,7 +48,7 @@ const cartSchema = new mongoose.Schema({
     },
   ],
   couponDiscount: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "coupon",
   }
 });

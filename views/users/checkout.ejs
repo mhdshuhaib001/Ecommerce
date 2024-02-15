@@ -120,7 +120,6 @@
             pointer-events: none;
         }
 
-        /* Add media query for responsive styling */
 @media screen and (max-width: 768px) {
     .coupon-card {
         display: flex;
@@ -184,12 +183,12 @@
                             <!-- ACCORDION START -->
                             <h3>Have a coupon? <span id="couponShow">Click here
                                     to get your code</span></h3>
-                                    <div id="checkout_coupon" class="coupon-checkout-content" style="width: 100%;">
-                                        <div class="coupon-info d-flex justify-content-center" id="reloadArea">
+                                    <div id="checkout_coupon" class="coupon-checkout-content" style="width: 100%;" >
+                                        <div class="coupon-info d-flex justify-content-center" id="reloadArea"  style="overflow: auto;">
                                             <% if (couponData && couponData.length > 0) { %>
                                                 <% couponData.forEach(function (coupon) { %>
-                                                    <div class="coupon-container">
-                                                        <div class="coupon-card <%= (totalamount < coupon.criteriaAmount) ? 'not-accessible' : '' %>"
+                                                    <div class="coupon-container"  >
+                                                        <div class="coupon-card "
                                                             data-coupon-id="<%= coupon._id %>">
                                                             <div class="coupon-main">
                                                                 <div class="coupon-img">
@@ -384,7 +383,7 @@
                                                     <th>Sub Total</th>
 
                                                     <th>
-                                                        ₹<%= totalamount %>
+                                                        ₹<%= cartTotal %>
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -419,7 +418,7 @@
                                                             <td>
                                                                 ₹
                                                                 <span id="total1">
-                                                                    <%= discountAmount + shippingAmount %>
+                                                                    <%= totalamount %>
                                                                 </span>
                                                             </td>
                                                         </tr>

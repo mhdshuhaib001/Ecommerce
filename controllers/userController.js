@@ -544,32 +544,41 @@ const loadShop = async (req, res) => {
   try {
     const userData = req.session.user_id;
     const categoryId = req.query.category;
+    const categoryData = await Category.find();
+
+
     const page = parseInt(req.query.page) || 1;
     const limit = 8;
     const totalProducts = await Product.countDocuments({});
     const totalPages = Math.ceil(totalProducts / limit);
     const skip = (page - 1) * limit;
-    const categoryData = await Category.find();
+
     const cart = await Cart.findOne({ userId: req.session.user_id });
     let cartCount = 0;
     if (cart) {
       cartCount = cart.product.length;
     }
-    const categoryDoc = await Category.findById(categoryId);
-    const category = categoryDoc ? categoryDoc.name : null;
+    
 
-    if (category) {
-      const productData = await Product.find({ category: category }).skip(skip).limit(limit);
+    if (categoryId) {
+      const productData = await Product.find({ category: categoryId })
+        .populate('category') 
+        .skip(skip)
+        .limit(limit);
+      
       res.render("shop", { user: userData, products: productData, currentPage: page, totalPages, limit, totalProducts, cartCount, category: categoryData });
     } else {
-      const productData = await Product.find({}).skip(skip).limit(limit);
+      const productData = await Product.find({})
+        .populate('category') 
+        .skip(skip)
+        .limit(limit);
+
       res.render("shop", { user: userData, products: productData, currentPage: page, totalPages, limit, totalProducts, cartCount, category: categoryData });
     }
   } catch (error) {
     console.log(error.message);
   }
 };
-
 
 
 
