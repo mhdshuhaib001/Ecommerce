@@ -37,18 +37,13 @@ const placeOrder = async (req, res) => {
         const uniqId = crypto.randomBytes(4).toString('hex').toUpperCase().slice(0, 8);
 
         let totalAmount = 0;
-        if( cartData.couponDiscount){
+        if (cartData.couponDiscount) {
             const CouponDiscountPercentage = cartData.couponDiscount.discountAmount;
-            const discountAmount = Math.round(CouponDiscountPercentage/100 * subtotalAmount);
-            totalAmount =  subtotalAmount - discountAmount;
-        }else {
+            const discountAmount = Math.round(CouponDiscountPercentage / 100 * subtotalAmount);
+            totalAmount = subtotalAmount - discountAmount;
+        } else {
             totalAmount = subtotalAmount;
         }
-        console.log(totalAmount,'=totalAmount======================');
-
-
-        
-
 
 
         const productData = cartData.product.map(product => ({
@@ -60,7 +55,6 @@ const placeOrder = async (req, res) => {
             totalPrice: product.totalPrice,
             status: status,
             productName: product.productName,
-            category: product.category,
         }));
 
         const purchaseDate = new Date();
@@ -68,7 +62,7 @@ const placeOrder = async (req, res) => {
         let shipingTotalAmount = 1500;
         let shippingAmount = 0;
         if (paymentMethod === 'COD' && totalAmount > shipingTotalAmount) {
-             shippingAmount =shipingTotalAmount
+            shippingAmount = shipingTotalAmount
             res.json({ maxAmount: true });
             return;
         }
@@ -105,10 +99,12 @@ const placeOrder = async (req, res) => {
             };
             instance.orders.create(options, async function (err, order) {
                 // Update the order status to 'placed'
-                await Order.findByIdAndUpdate(
+                const update = await Order.findByIdAndUpdate(
                     { _id: orderId },
                     { $set: { status: 'placed' } }
                 );
+                console.log(update, '---------------');
+
                 return res.json({ razorpay: true, order });
             });
         } else if (orderData.paymentMethod === "wallet") {
@@ -294,12 +290,12 @@ const orderCancel = async (req, res) => {
 
 
             if (walletUpdate) {
-                
-            const updateResult = await Order.findOneAndUpdate(
-                { _id: orderId, 'orderProducts._id': productId },
-                { $set: { 'orderProducts.$.status': 'Cancelled' } }
-            );
-            console.log(updateResult,'---------Cancelled');
+
+                const updateResult = await Order.findOneAndUpdate(
+                    { _id: orderId, 'orderProducts._id': productId },
+                    { $set: { 'orderProducts.$.status': 'Cancelled' } }
+                );
+                console.log(updateResult, '---------Cancelled');
                 console.log(`Added ${prodcutTotalPrice} to the wallet.`);
             } else {
                 console.log("User not found.");

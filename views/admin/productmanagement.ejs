@@ -37,7 +37,7 @@
                                 <td>
                                   <img src="/products/images/<%= productData[i].images.image1 %>" alt="" class="square-image">
                                 </td>
-                                <td><%= productData[i].category %></td>
+                                <td><%= productData[i].category.name %></td>
                                 <td><%= productData[i].quantity %></td>
                                 <td><%= productData[i].price %></td>
                                 <%  if(productData[i].blocked==0){ %>
@@ -49,7 +49,7 @@
                               <% } %>
                                 <td><a href="/admin/edit-product-page?id=<%= productData [i]._id %>" class="badge badge-warning">Update</a></td>
                                 
-                                 <td><a href="/admin/delete-product?id=<%= productData [i]._id %>"><button class="btn-inverse-danger">Delete</button></a></td> 
+                                 <!-- <td><a href="/admin/delete-product?id=<%= productData [i]._id %>"><button class="btn-inverse-danger">Delete</button></a></td>  -->
                               </tr>
                               <% } %>
                               <% }else{ %>

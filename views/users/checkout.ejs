@@ -500,15 +500,11 @@
             const address = selectedAddress ? JSON.parse(selectedAddress) : {};
             const paymentMethod = $("input[name='payment']:checked").val();
 
-            console.log(shippingAmount, '------------');
 
             const formData = {
                 address: address,
                 payment: paymentMethod,
             };
-
-
-            console.log(formData, 'checking form data');
 
             $.ajax({
                 url: "/placeOrder",

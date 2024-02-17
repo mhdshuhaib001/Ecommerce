@@ -547,7 +547,7 @@
                     </div>
                 </div>
 
-                <!-- <div class="col-lg-4">
+                <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body">
                             <h4 class="header-title mb-3">Track Order</h4>
@@ -596,7 +596,7 @@
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
         </div>
         <!-- end row -->
@@ -1045,6 +1045,7 @@
             cancelButtonText: "Not now",
         }).then((result) => {
             if (result.isConfirmed) {
+                console.log('00000000000000');
                 $.ajax({
                     url: "/orderCancel",
                     data: { productId: orderProductId, orderId: orderId },

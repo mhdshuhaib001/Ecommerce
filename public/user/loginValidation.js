@@ -38,7 +38,7 @@ document.getElementById('log-btn-1').addEventListener('click', function(e){
         }else if(response.blocked){
           email_message.style.display = "block";
           email_message.textContent = "You can't access this account."
-        }else if(response.is_block){
+        }else if(response.is_blocked){
           
           Swal.fire({
             title: "This account is restricted, You can't access with this account. ",

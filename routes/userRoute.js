@@ -78,7 +78,7 @@ user_Rout.post('/verify-payment',auth.isLogin,orderControllers.verifyPayment);
 user_Rout.get('/orderSuccess/:id',auth.isLogin,orderControllers.success);
 user_Rout.get('/orderDetails',auth.isLogin,orderControllers.OrderDetailsLoad );
 user_Rout.post('/returnRequest', orderControllers.returnRequest)
-user_Rout.post('/orderCancel',orderControllers.orderCancel);
+user_Rout.post('/orderCancel',auth.isLogin,orderControllers.orderCancel);
 user_Rout.get('/invoice',orderControllers.invoice);
 
 user_Rout.post('/filterProduct',productController.filterProducts);

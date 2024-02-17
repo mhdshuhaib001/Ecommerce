@@ -1,4 +1,5 @@
 <%-include("../layouts/admin/header.ejs")%>
+
   <style>
     /* Style for the file input container */
     .file-input-container {
@@ -152,7 +153,7 @@
         const imagePreviews = document.getElementById('imagePreviews');
 
         imageInput.addEventListener('change', function () {
-          imagePreviews.innerHTML = ''; // Clear existing previews
+          imagePreviews.innerHTML = ''; 
 
           const files = this.files;
           for (let i = 0; i < files.length; i++) {

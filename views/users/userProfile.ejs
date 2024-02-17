@@ -261,8 +261,11 @@
                                                 <td>
                                                     <%= i + 1 %>
                                                 </td>
-                                               
                                                 <td>
+                                                    <%= new Date(transaction.transactionDate).toLocaleDateString() %> <small><%= new Date(transaction.transactionDate).toLocaleTimeString() %></small>
+                                                </td>
+                                              
+                                                 <td>
                                                     <%= transaction.direction %>
                                                 </td>
                                                 <td> <span>₹</span>

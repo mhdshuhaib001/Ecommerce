@@ -594,13 +594,7 @@
                                         timer: 1500,
                                     });
                                 } else {
-                                    swal.fire({
-                                        position: "center",
-                                        icon: "info",
-                                        title: "Product already in the cart. Increasing quantity.",
-                                        showConfirmButton: false,
-                                        timer: 2000,
-                                    });
+                                    window.location.href = "/cart";
                                 }
                                 $("#cartDiv").load("/ #cartDiv");
                             } else {

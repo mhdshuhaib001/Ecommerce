@@ -28,5 +28,5 @@ document.getElementById('addproductsubmit').addEventListener('click',function(ev
       }else if(description.length < 10){
         message.style.display = "block"
         message.textContent = "Description should contain atleast 10 letters."
-      }
+      } 
 })  

@@ -212,7 +212,7 @@ const verifyOTP = async (req, res) => {
           { new: true }
         );
         if (verified) {
-          req.session.reqSucces = true;
+          req.session.regSuccess = true;
           res.json({ success: true });
         } else {
           req.json({ error: true });
@@ -305,7 +305,9 @@ const resendOtp = async (req, res) => {
 const loadLogin = async (req, res) => {
   try {
     const userId = req.session.user_id;
-    res.render("login", { user: userId });
+    let regSuccess = req.session.regSuccess;
+console.log(regSuccess,'------------');
+    res.render("login", regSuccess);
   } catch (error) {
     console.log(error.message);
   }

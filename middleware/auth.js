@@ -5,12 +5,11 @@ const isLogin = async (req,res,next)=>{
         
         if(req.session.user_id){
             const blockedUser = await User.findOne({ _id: req.session.user_id });
-            if(blockedUser.is_blocked == false){
+            if(blockedUser.is_blocked === false){
                 next()
             }else{
-                req.session.user_id = false;
-                req.session.name = false;
-                res.redirect('/')
+                let regSuccess = false
+                res.render('login',{is_blocked: true ,regSuccess})
             }
         }else{
             res.redirect('/')

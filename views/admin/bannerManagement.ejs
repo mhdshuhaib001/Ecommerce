@@ -1,0 +1,60 @@
+<%-include("../layouts/admin/header.ejs")%>
+
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-lg-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Coupon Management</h4>
+                            <p class="card-description"> Manage your coupon </p>
+                            <p><a href="/admin/addBanner" class="badge badge-success"> + Add Banner </a></p>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Image</th>
+                                            <th>Title</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                            <th>Updation</th>
+                                            <th>Action</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Dummy data for template -->
+                                        <tr>
+                                            <td>1</td>
+                                            <td><img src="/placeholder-image.jpg" alt=""></td>
+                                            <td>Banner Title</td>
+                                            <td>Banner Description</td>
+                                            <td>
+                                                <p class="text-success">Active</p>
+                                            </td>
+                                            <td><a href="/admin/loadeditBanner?id=1"
+                                                    class="badge badge-warning">Update</a></td>
+                                            <td onclick="bannerBlock('1')"><a class="badge badge-danger">Block</a></td>
+                                            <td onclick="deleteBanner('1')"><a class="badge badge-danger">Delete</a>
+                                            </td>
+                                        </tr>
+                                        <!-- Dummy data end -->
+
+                                        <!-- Additional rows can be added for more dummy data or copy the existing row -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- </div> -->
+
+    <!-- page-body-wrapper ends -->
+    <!-- </div> -->
+
+<%-include("../layouts/admin/footer.ejs") %>

@@ -14,28 +14,42 @@ const loadCart = async (req, res) => {
     const cartData = await Cart.findOne({ userId: userId }).populate("product.productId");
 
     if (cartData && cartData.product.length > 0) {
-      const product = cartData.product;
+      const products = cartData.product;
       let total = 0;
-      for (let i = 0; i < product.length; i++) {
-        total += product[i].totalPrice;
+
+
+      for (let i = 0; i < products.length; i++) {
+        const productId = products[i].productId;
+        const product = await Products.findById(productId).select("price");
+
+        const count = products[i].count;
+        const productPrice = product.price;
+        const totalPrice = productPrice * count;
+
+        total += totalPrice;
+        cartData.product[i].totalPrice = totalPrice;
       }
 
       const subTotal = total;
       const cart = await Cart.findOne({ userId: req.session.user_id })
       let cartCount = 0;
-      if (cart) { cartCount = cart.product.length }
+
+      if (cart) {
+        cartCount = cart.product.length;
+      }
+console.log(subTotal,'subTotal');
 
       res.render("cart", {
         user: userId,
         userId,
         cart: cartData,
-        products: product,
+        products: cartData.product,
         total: total,
         subTotal,
         cartCount
       });
     } else {
-      res.render("cart", { userId });
+      res.render("cart", { userId , cartCount });
     }
   } catch (error) {
     console.error(error.message);
@@ -47,67 +61,57 @@ const loadCart = async (req, res) => {
 
 const addToCart = async (req, res) => {
   try {
-    const userId = req.session.user_id;
-    const productId = req.body.id;
-    const userData = await User.findOne({ _id: userId });
-    const productData = await Products.findById({ _id: productId }).populate("category");
-    console.log(productData,'-------');
-    const productQuantity = productData.quantity;
-    const count = req.body.count ? parseInt(req.body.count) : 1;
-    
-    
-    if (productQuantity <= 0) {
-      return res.json({ success: false, newProduct: true, message: "Product is out of stock" });
-    }
+      const userId = req.session.user_id;
+      const productId = req.body.id;
+      const userData = await User.findOne({ _id: userId });
+      const productData = await Products.findById({ _id: productId }).populate("category");
+      const productQuantity = productData.quantity;
+      const count = req.body.count ? parseInt(req.body.count) : 1;
 
-    const totalPrice = productData.price * count;
-
-    const products = {
-      productId: productId,
-      productPrice: productData.price,
-      productName: productData.name,
-      totalPrice: totalPrice,
-      category:productData.category.name,
-      count: count,
-      image: productData.images.image1
-    };
-
-    const existCartData = await Cart.findOne({ userId: userId });
-
-    if (!existCartData) {
-      const newCartData = await Cart.create({
-        userId: userId,
-        userName: userData.name,
-        product: [products]
-      });
-      return res.json({ success: true, newProduct: true });
-    }
-
-    const existProductIndex = existCartData.product.findIndex((p) => p.productId == productId);
-
-    if (existProductIndex !== -1) {
-      // Check if adding the count exceeds available quantity
-      if (productQuantity < count + existCartData.product[existProductIndex].count) {
-        return res.json({ success: false, newProduct: false, message: "Quantity limit reached!" });
+      if (productQuantity <= 0) {
+          return res.json({ success: false, newProduct: true, message: "Product is out of stock" });
       }
 
-      existCartData.product[existProductIndex].count += count;
-      await existCartData.save();
-      return res.json({ success: true, newProduct: false });
-    } else {
+      const totalPrice = productData.price * count;
+
+      const products = {
+          productId: productId,
+          productName: productData.name,
+          totalPrice: totalPrice,
+          count: count,
+          image: productData.images.image1
+      };
+
+      const existCartData = await Cart.findOne({ userId: userId });
+
+      if (!existCartData) {
+          const newCartData = await Cart.create({
+              userId: userId,
+              userName: userData.name,
+              product: [products]
+          });
+          return res.json({ success: true, newProduct: true });
+      }
+
+      const existProductIndex = existCartData.product.findIndex((p) => p.productId == productId);
+
+      if (existProductIndex !== -1) {
+          // Product is already in the cart, return a response without updating the count
+          return res.json({ success: true, newProduct: false });
+      }
+
       // Check if adding the count exceeds available quantity
       if (productQuantity < count) {
-        return res.json({ success: false, newProduct: true, message: "Quantity limit reached!" });
+          return res.json({ success: false, newProduct: true, message: "Quantity limit reached!" });
       }
 
       existCartData.product.push(products);
       await existCartData.save();
       return res.json({ success: true, newProduct: true });
-    }
 
   } catch (error) {
-    console.error(error.message);
-    return res.status(500).json({ error: "Internal Server Error" });
+      console.error(error.message);
+      return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

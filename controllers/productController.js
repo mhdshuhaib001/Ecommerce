@@ -21,7 +21,9 @@ const loadproduct = async (req, res) => {
         const productData = await Products.find()
             .sort({ price: -1 })
             .skip((page - 1) * itemPage)
-            .limit(itemPage);
+            .limit(itemPage)
+            .populate('category')
+            
 
         res.render("productmanagement", { productData, totalPages, currentPage: page });
     } catch (error) {
@@ -237,26 +239,36 @@ const editedProduct = async (req, res) => {
 // product
 const loadProduct = async (req, res) => {
     try {
-
-        const productView = await Products.findOne({ _id: req.query.id });
-        console.log(productView, 'chcek')
-        const userData = req.session.user_id;
-        const products = await Products.find({ blocked: 0 });
-        const category = await Products.find({ blocked: 0 });
-        const cart = await Cart.findOne({ userId: req.session.user_id })
-        let cartCount = 0;
-        if (cart) { cartCount = cart.product.length }
-
-
-
-        if (productView) {
-            res.render("product", { productView, category, products, cartCount, user: userData });
-        } else {
-            res.status(404).render("404");
-
+        const productView = await Products.findOne({ _id: req.query.id, blocked: 0 });
+        if (!productView) {
+            return res.status(404).render("404");
         }
+
+        const categoryId = productView.category;
+        console.log(categoryId, 'categoryId');
+
+        const userData = req.session.user_id;
+        
+        const products = await Products.find({ blocked: 0 });
+        const category = await Category.find({ blocked: 0 });  // Assuming Category is the model for categories
+
+        console.log(userData, '========00');
+        console.log(productView, ']]]]]]]]]]]]]]]]]]');
+        
+        const cart = await Cart.findOne({ userId: req.session.user_id });
+        const relatedProduct = await Products.find({ category: categoryId, blocked: 0 }).populate('category')
+
+        console.log(relatedProduct,'sinnnn');
+
+        let cartCount = 0;
+        if (cart) {
+            cartCount = cart.product.length;
+        }
+
+        res.render("product", { productView, category, products, cartCount, user: userData, relatedProduct });
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
+        res.status(500).render("500"); 
     }
 };
 
