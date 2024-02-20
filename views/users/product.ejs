@@ -420,62 +420,27 @@
             count: count,
         },
         success: (response) => {
-             if(response.success) {
-                if (response.newProduct) {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 1500,
-                    });
+    if (response.success) {
+        if (response.newProduct) {
+            // Product added to cart
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 1500,
+            });
 
-                    Toast.fire({
-                        icon: "success",
-                        title: "Product added to cart"
-                    });
-                } else if(response.exist) {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 2000,
-                    });
+            Toast.fire({
+                icon: "success",
+                title: "Product added to cart"
+            });
+        } else if (response.exist) {
+            console.log('suiiiiiiiii');
+            window.location.href = "/cart";
+        }
+    } 
+},
 
-                    Toast.fire({
-                        icon: "info",
-                        title: "Product already in the cart."
-                    });
-                }
-            } else {
-                if (response.message && response.message.toLowerCase().includes("out of stock")) {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 2000,
-                    });
-
-                    Toast.fire({
-                        icon: "error",
-                        title: "Sorry! Out of stock.",
-                        text: response.message,
-                    });
-                } else {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 2000,
-                    });
-
-                    Toast.fire({
-                        icon: "error",
-                        title: "Error",
-                        text: "An error occurred while adding the product to the cart.",
-                    });
-                }
-            }
-        },
         error: (error) => {
             console.error("Error adding product to cart:", error);
 

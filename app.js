@@ -1,5 +1,9 @@
+const dotenv = require('dotenv');
+dotenv.config()
+
+
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1:27017/Mazia", console.log("DB connected"));
+mongoose.connect(process.env.DBCOLLECTION, console.log("DB connected"));
 //-----------------------------------------------------
 
 
@@ -7,6 +11,7 @@ const express = require('express');
 const app = express();
 const noCache = require('nocache');
 const morgan = require('morgan');
+;
 
 
 const path = require("path");
@@ -22,7 +27,7 @@ app.use(session({
   store: new MemoryStore()
 }))
 
-app.use(morgan('dev')); // Choose a suitable format (e.g., dev, combined, common)
+app.use(morgan('dev')); 
 
 
 app.use(noCache())
