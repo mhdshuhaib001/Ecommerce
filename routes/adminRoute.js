@@ -55,7 +55,7 @@ admin_Rout.post("/addProduct", auth.isLogin, multer.productImagesUpload, product
 admin_Rout.post("/block-product", auth.isLogin, productController.blockProduct);
 admin_Rout.get("/edit-product-page", auth.isLogin, productController.loadEditProduct)
 admin_Rout.post("/editProduct", auth.isLogin, multer2.productImagesUpload2, productController.editedProduct);
-admin_Rout.delete("/admin/removeImage", auth.isLogin, productController.removeImage);
+// admin_Rout.delete("/admin/removeImage", auth.isLogin, productController.removeImage);
 
 admin_Rout.get("/order", auth.isLogin, orderController.loadOrderManagement);
 admin_Rout.put("/updateOrder",auth.isLogin,orderController.updateOrder);

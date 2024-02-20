@@ -333,7 +333,7 @@ module.exports = {
     loadAddProduct,
     addProduct,
     blockProduct,
-    deleteProduct,
+    // deleteProduct,
     loadEditProduct,
     editedProduct,
     loadProduct,
