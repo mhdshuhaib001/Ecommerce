@@ -72,12 +72,16 @@ const orderSchema = new mongoose.Schema({
       },
       status: {
         type: String,
+        enum: ["Placed", "Shipped", "Delivered", "Cancelled"], 
         default: "Placed",
-      },
+      },      
       returnReason: {
         type: String,
       },
-      
+      statusChangeTime: {
+        type: Date,
+        default: Date.now,
+      },      
     },
   ],
   totalAmount: {

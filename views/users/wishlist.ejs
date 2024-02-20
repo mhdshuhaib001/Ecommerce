@@ -53,7 +53,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <!-- <tr>
                                     <td class="product-thumbnail"><a href="single-product-4.html"><img src="img/product/pro1.jpg"
                                                 alt=""></a></td>
                                     <td class="product-name"><a href="single-product-4.html">Bakix Furniture</a></td>
@@ -63,18 +63,34 @@
                                     </td>
                                     <td class="product-subtotal"><span class="amount">$130.00</span></td>
                                     <td class="product-remove"><a href="javascript:void(0)"><i class="fa fa-times"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td class="product-thumbnail"><a href="single-product-4.html"><img src="img/product/pro2.jpg"
-                                                alt=""></a></td>
-                                    <td class="product-name"><a href="single-product-4.html">Sujon Chair Set</a></td>
-                                    <td class="product-price"><span class="amount">$120.50</span></td>
-                                    <td class="product-quantity">
-                                        <button class="btn theme-btn-2" type="submit">Add TO Cart</button>
-                                    </td>
-                                    <td class="product-subtotal"><span class="amount">$120.50</span></td>
-                                    <td class="product-remove"><a href="javascript:void(0)"><i class="fa fa-times"></i></a></td>
-                                </tr>
+                                </tr> -->
+                                <% if (wishData != null && wishData.products && wishData.products.length > 0) { %>
+                                    <% wishData.products.forEach(function(wishlist) { %>
+                                        <tr>
+                                            <td class="product-thumbnail"><a href="/products/crops/<%= wishlist._id %>"><img src="img/product/pro2.jpg" alt=""></a></td>
+                                            <td class="product-name"><a href="/products/crops/<%= wishlist._id %>"><%= wishlist.name %></a></td>
+                                            <td class="product-price"><span class="amount"><%= wishlist.price %></span></td>
+                                            <td class="product-quantity">
+                                                <button class="btn theme-btn-2" type="submit">Add TO Cart</button>
+                                            </td>
+                                            <!-- <td class="product-subtotal"><span class="amount">$120.50</span></td> -->
+                                            <td>
+                                                <button class="btn theme-btn-2" type="submit">Add TO Cart</button>
+                                            </td>
+                                            <td class="product-remove"><a href="javascript:void(0)"><i class="fa fa-times"></i></a></td>
+                                        </tr>
+                                    <% }) %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="7">
+                                            <div>
+                                                <h3>No product </h3>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% } %>
+                                
+                                
                             </tbody>
                         </table>
                     </div>

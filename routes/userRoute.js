@@ -21,6 +21,7 @@ const cartController = require("../controllers/cartController");
 const productController = require("../controllers/productController");
 const orderControllers = require("../controllers/orderController");
 const couponController = require("../controllers/couponController");
+const wishController = require("../controllers/wishListController");
 //======= View Engine ========//
 user_Rout.set("views", "./views/users");
 
@@ -94,7 +95,8 @@ user_Rout.get('/product', productController.loadProduct);
 
 user_Rout.get("/shop",userController.loadShop);
 
-user_Rout.get("/wishlist", userController.loadWishlist);
+user_Rout.get("/wishlist", auth.isLogin,wishController.loadWishlist);
+user_Rout.post("/addWishlist",auth.isLogin,wishController.addWishList)
 
 user_Rout.get("/contact", userController.loadContact);
 

@@ -5,6 +5,7 @@ const Cart = require("../models/cartModel");
 const Address = require("../models/addressModel");
 const Category = require('../models/categoryModel');
 const Order = require("../models/orderModel");
+const wishList = require("../models/wishListModel");
 const nodemailer = require("nodemailer");
 const randomString = require("randomstring");
 const config = require("../config/config");
@@ -632,14 +633,7 @@ const loadSignup = async (req, res) => {
   }
 };
 
-// Wishlist
-const loadWishlist = async (req, res) => {
-  try {
-    res.render("wishlist");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+
 // Contact
 const loadContact = async (req, res) => {
   try {
@@ -732,7 +726,6 @@ module.exports = {
   loadSignup,
   loadLogin,
   verifylogin,
-  loadWishlist,
   loadContact,
   loadUserOtp,
   verifyOTP,

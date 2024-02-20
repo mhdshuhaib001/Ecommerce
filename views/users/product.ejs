@@ -166,7 +166,7 @@
                                     </div>
                                     <div class="single-product-action mt-35">
                                         <ul>
-                                            <li><a href="wishlist.html"><i class="fal fa-heart"></i>
+                                            <li><a onclick="addToWishlist('<%=productView._id%>')"><i class="fal fa-heart"></i>
                                                     add to wishlist</a></li>
                                         </ul>
                                     </div>
@@ -411,7 +411,6 @@
 
     <script>
     
-    
     function addToCart(productId, count = 1) {
     $.ajax({
         url: "/addToCart",
@@ -421,36 +420,55 @@
             count: count,
         },
         success: (response) => {
-            if (response.login == true) {
-                // Handle login logic if needed
-            } else if (response.success) {
+             if(response.success) {
                 if (response.newProduct) {
-                    swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: "Product added to cart",
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
                         showConfirmButton: false,
                         timer: 1500,
                     });
-                } else {
-                    swal.fire({
-                        position: "center",
-                        icon: "info",
-                        title: "Product already in the cart. Increasing quantity.",
+
+                    Toast.fire({
+                        icon: "success",
+                        title: "Product added to cart"
+                    });
+                } else if(response.exist) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
                         showConfirmButton: false,
                         timer: 2000,
                     });
+
+                    Toast.fire({
+                        icon: "info",
+                        title: "Product already in the cart."
+                    });
                 }
-                $("#cartDiv").load("/ #cartDiv");
             } else {
                 if (response.message && response.message.toLowerCase().includes("out of stock")) {
-                    swal.fire({
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 2000,
+                    });
+
+                    Toast.fire({
                         icon: "error",
                         title: "Sorry! Out of stock.",
                         text: response.message,
                     });
                 } else {
-                    swal.fire({
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 2000,
+                    });
+
+                    Toast.fire({
                         icon: "error",
                         title: "Error",
                         text: "An error occurred while adding the product to the cart.",
@@ -460,7 +478,15 @@
         },
         error: (error) => {
             console.error("Error adding product to cart:", error);
-            swal.fire({
+
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "center",
+                showConfirmButton: false,
+                timer: 2000,
+            });
+
+            Toast.fire({
                 icon: "error",
                 title: "Error",
                 text: "An error occurred while processing your request.",
@@ -468,6 +494,55 @@
         },
     });
 }
+
+
+
+function addToWishlist(productId) {
+    console.log(productId, 'wishId');
+    const wishId = { productId: productId };
+    console.log(wishId);
+    $.ajax({
+        method: "POST",
+        url: '/addWishlist',
+        data: JSON.stringify(wishId),
+        contentType: 'application/json',
+        success: function (response) {
+            console.log(response);
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+            });
+
+            if (response.added) {
+                Toast.fire({
+                    icon: 'success',
+                    title: response.message
+                });
+            } else if (response.remove) {
+                Toast.fire({
+                    icon: 'success',
+                    title: response.message
+                });
+            } else {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Please log in to perform this action.',
+                    timer: 2000
+                });
+                setTimeout(function () {
+                    window.location.href = '/login';
+                }, 1000);
+            }
+        },
+        error: function (error) {
+            console.error(error.responseText);
+        }
+    });
+}
+
+
 
     </script>
 

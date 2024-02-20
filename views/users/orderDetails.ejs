@@ -502,18 +502,18 @@
                                                     <%= product.status %>
                                                 </td>
                                                 <td>
-                                                    <% if(product.status !=="Cancelled" && product.status !=="delivered"
+                                                    <% if(product.status !=="Cancelled" && product.status !=="Delivered"
                                                         && product.status !=="request" && product.status !=="Accepted" )
                                                         { %>
                                                         <button type="button"
                                                             onclick="cancelProduct('<%= product._id %>', '<%= orderData._id %>')"
                                                             class="btn btn-warning"
                                                             style="color: rgb(215, 44, 44)">Cancel</button>
-                                                        <% } else if (product.status=="delivered" ) { %>
-                                                            <button type="button" class="btn btn-warning"
+                                                        <% } else if (product.status=="Delivered" ) { %>
+                                                            <button type="button" class="btn "
                                                                 id="requestStatus"
                                                                 onclick="returnRequest('<%= product._id %>','<%= orderData._id%>')"
-                                                                style="color: rgb(128, 44, 5)">Return</button>
+                                                                style=" background-color: #B6410F; color: rgb(239, 190, 167)">Return</button>
 
                                                             <% } else if (product.status=="Accepted" ) { %>
                                                                 <label style="color: red;">OrderReturned</label>
@@ -634,10 +634,14 @@
                         <ul class="list-unstyled mb-0">
                             <li>
                                 <p class="mb-2"><span class="fw-semibold me-2">Order ID:</span>
-                                    <%= orderData._id %>
+                                    <%= orderData.orderId %>
                                 </p>
                                 <p class="mb-2"><span class="fw-semibold me-2">Date:</span>
-                                    <%= orderData.purchaseDate %> <small>
+                                    <%= orderData.purchaseDate.toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                    })%> <small>
                                             <%= orderData.purchaseTime %>
                                         </small>
                                 </p>

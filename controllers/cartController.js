@@ -96,13 +96,11 @@ const addToCart = async (req, res) => {
       const existProductIndex = existCartData.product.findIndex((p) => p.productId == productId);
 
       if (existProductIndex !== -1) {
-          // Product is already in the cart, return a response without updating the count
-          return res.json({ success: true, newProduct: false });
+          return res.json({ exist: true, newProduct: false });
       }
 
-      // Check if adding the count exceeds available quantity
       if (productQuantity < count) {
-          return res.json({ success: false, newProduct: true, message: "Quantity limit reached!" });
+          return res.json({ success: false, limit: true, message: "Quantity limit reached!" });
       }
 
       existCartData.product.push(products);
@@ -114,6 +112,8 @@ const addToCart = async (req, res) => {
       return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
 
 //------------- Remove Cart ----------------//
 const removeCartItem = async (req, res) => {

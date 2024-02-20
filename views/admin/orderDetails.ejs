@@ -74,7 +74,7 @@
                                                 </td>
                                                 <% if (product.status=="pending" ) { %>
                                                     <td style="color: yellow;">Pending</td>
-                                                    <% } else if (product.status=='delivered' ) { %>
+                                                    <% } else if (product.status=='Delivered' ) { %>
                                                         <td style="color: limegreen;">Delivered</td>
                                                         <% } else if (product.status=="request" ) {%>
                                                             <td>
@@ -101,17 +101,17 @@
                                                                                 <div class="dropdown-menu">
                                                                                     <button class="dropdown-item"
                                                                                         type="button"
-                                                                                        onclick="updateOrder('<%= product._id %>','placed')">Placed</button>
+                                                                                        onclick="updateOrder('<%= product._id %>','Placed')">Placed</button>
                                                                                     <button class="dropdown-item"
                                                                                         type="button"
                                                                                         onclick="updateOrder('<%= product._id %>','Shipped')">Shipped</button>
-                                                                                    <button class="dropdown-item"
+                                                                                    <!-- <button class="dropdown-item"
                                                                                         type="button"
                                                                                         onclick="updateOrder('<%= product._id %>','Out for Delivery')">Out
-                                                                                        for Delivery</button>
+                                                                                        for Delivery</button> -->
                                                                                     <button class="dropdown-item"
                                                                                         type="button"
-                                                                                        onclick="updateOrder('<%= product._id %>','delivered')">Delivered</button>
+                                                                                        onclick="updateOrder('<%= product._id %>','Delivered')">Delivered</button>
                                                                                     <button class="dropdown-item"
                                                                                         type="button"
                                                                                         onclick="updateOrder('<%= product._id %>','cancel')">Cancel</button>

@@ -8815,10 +8815,11 @@ pre {
     .table-responsive-xl > .table-bordered {
       border: 0; } }
 
+      /* here to .table-responsive */
 .table-responsive {
   display: block;
   width: 100%;
-  overflow-x: auto;
+  /* overflow-x: auto; */
   -webkit-overflow-scrolling: touch; }
   .table-responsive > .table-bordered {
     border: 0; }

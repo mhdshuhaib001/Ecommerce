@@ -472,23 +472,30 @@ const loadOrderManagement = async (req, res) => {
 
 const updateOrder = async (req, res) => {
     try {
-
         const orderId = req.body.orderId;
         const orderStatus = req.body.status;
 
+        const orderData = await Order.findOne({ 'orderProducts._id': orderId });
 
-        const orderData = await Order.findOne({ _id: orderId });
-        const changeStatus = await Order.updateOne(
-            { 'orderProducts._id': orderId },
-            { $set: { 'orderProducts.$.status': orderStatus } }
-        );
+        const orderProductIndex = orderData.orderProducts.findIndex(product => product._id.toString() === orderId);
+        const status= orderData.orderProducts[orderProductIndex].status = orderStatus;
+        const date = orderData.orderProducts[orderProductIndex].statusChangeTime = new Date();
+        console.log(orderProductIndex,'orderProductIndex');
 
-        res.json({ success: true });
+        console.log(status,'status');
+        console.log(date,'date ');
+
+        await orderData.save();
+
+
+
+        res.json({ success: true, orderData });
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
+
 
 
 
