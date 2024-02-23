@@ -23,8 +23,6 @@ const loadproduct = async (req, res) => {
             .skip((page - 1) * itemPage)
             .limit(itemPage)
             .populate('category')
-            
-
         res.render("productmanagement", { productData, totalPages, currentPage: page });
     } catch (error) {
         console.log(error.message);
@@ -239,7 +237,7 @@ const editedProduct = async (req, res) => {
 // product
 const loadProduct = async (req, res) => {
     try {
-        const productView = await Products.findOne({ _id: req.query.id, blocked: 0 });
+        const productView = await Products.findOne({ _id: req.query.id, blocked: 0 }).populate("category");
         if (!productView) {
             return res.status(404).render("404");
         }
@@ -250,15 +248,13 @@ const loadProduct = async (req, res) => {
         const userData = req.session.user_id;
         
         const products = await Products.find({ blocked: 0 });
-        const category = await Category.find({ blocked: 0 });  // Assuming Category is the model for categories
+        const category = await Category.find({ blocked: 0 }); 
 
-        console.log(userData, '========00');
         console.log(productView, ']]]]]]]]]]]]]]]]]]');
         
         const cart = await Cart.findOne({ userId: req.session.user_id });
         const relatedProduct = await Products.find({ category: categoryId, blocked: 0 }).populate('category')
 
-        console.log(relatedProduct,'sinnnn');
 
         let cartCount = 0;
         if (cart) {

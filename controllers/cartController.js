@@ -17,7 +17,6 @@ const loadCart = async (req, res) => {
       const products = cartData.product;
       let total = 0;
 
-
       for (let i = 0; i < products.length; i++) {
         const productId = products[i].productId;
         const product = await Products.findById(productId).select("price");
@@ -31,13 +30,19 @@ const loadCart = async (req, res) => {
       }
 
       const subTotal = total;
-      const cart = await Cart.findOne({ userId: req.session.user_id })
+
+      const shippingCharge = total < 1300 ? 90 : 0;
+      const grandTotal = total + shippingCharge;
+
+      const cart = await Cart.findOne({ userId: req.session.user_id });
       let cartCount = 0;
 
       if (cart) {
         cartCount = cart.product.length;
       }
-console.log(subTotal,'subTotal');
+
+      console.log(subTotal, 'subTotal');
+      console.log(grandTotal, 'grandTotal');
 
       res.render("cart", {
         user: userId,
@@ -46,70 +51,80 @@ console.log(subTotal,'subTotal');
         products: cartData.product,
         total: total,
         subTotal,
+        shippingCharge,
+        grandTotal,
         cartCount
       });
     } else {
-      res.render("cart", { userId , cartCount });
+      res.render("cart", { user: userId, cartCount: 0 });
     }
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Internal Server Error");
+    res.status(500).render("500").send("Internal Server Error cart");
   }
 };
 
 
-
 const addToCart = async (req, res) => {
   try {
-      const userId = req.session.user_id;
-      const productId = req.body.id;
-      const userData = await User.findOne({ _id: userId });
-      const productData = await Products.findById({ _id: productId }).populate("category");
-      const productQuantity = productData.quantity;
-      const count = req.body.count ? parseInt(req.body.count) : 1;
+    const userId = req.session.user_id;
+    const productId = req.body.id;
+    const userData = await User.findOne({ _id: userId });
+    const productData = await Products.findById({ _id: productId }).populate("category");
+    const productQuantity = productData.quantity;
+    const count = req.body.count ? parseInt(req.body.count) : 1;
 
-      if (productQuantity <= 0) {
-          return res.json({ success: false, newProduct: true, message: "Product is out of stock" });
-      }
+    if (!userId) {
+      return res.json({ login: false, message: "Please log in to add products to your cart." });
+    }
 
-      const totalPrice = productData.price * count;
+    if (productQuantity <= 0) {
+      return res.json({ stock: true, message: "Product is out of stock." });
+      console.log('haeloooooooooooooooo');
+    }
 
-      const products = {
-          productId: productId,
-          productName: productData.name,
-          totalPrice: totalPrice,
-          count: count,
-          image: productData.images.image1
-      };
+    const totalPrice = productData.price * count;
 
-      const existCartData = await Cart.findOne({ userId: userId });
+    const products = {
+      productId: productId,
+      productName: productData.name,
+      totalPrice: totalPrice,
+      count: count,
+      image: productData.images.image1
+    };
 
-      if (!existCartData) {
-          const newCartData = await Cart.create({
-              userId: userId,
-              userName: userData.name,
-              product: [products]
-          });
-          return res.json({ success: true, newProduct: true });
-      }
+    const existCartData = await Cart.findOne({ userId: userId });
 
-      const existProductIndex = existCartData.product.findIndex((p) => p.productId == productId);
-
-      if (existProductIndex !== -1) {
-          return res.json({ exist: true, newProduct: false });
-      }
-
-      if (productQuantity < count) {
-          return res.json({ success: false, limit: true, message: "Quantity limit reached!" });
-      }
-
-      existCartData.product.push(products);
-      await existCartData.save();
+    if (!existCartData) {
+      // If cart doesn't exist for the user, create a new one
+      const newCartData = await Cart.create({
+        userId: userId,
+        userName: userData.name,
+        product: [products]
+      });
       return res.json({ success: true, newProduct: true });
+    }
+
+    const existProductIndex = existCartData.product.findIndex((p) => p.productId == productId);
+
+    if (existProductIndex !== -1) {
+      // If the same product is already in the cart, redirect to the cart page
+      return res.json({ exist: true, newProduct: false, message: "Product is already in your cart." });
+    }
+
+    if (productQuantity < count) {
+      // If quantity exceeds the available stock, show a message
+      return res.json({ success: false, limit: true, message: "Quantity limit reached!" });
+    }
+
+    // Add the product to the existing cart
+    existCartData.product.push(products);
+    await existCartData.save();
+    return res.json({ success: true, newProduct: true });
 
   } catch (error) {
-      console.error(error.message);
-      return res.status(500).json({ error: "Internal Server Error" });
+    console.error(error.message);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -211,7 +226,6 @@ const loadCheckOut = async (req, res) => {
       }
 
       const discountAmount = cartTotal - couponDiscountAmount;
-      console.log(discountAmount,'total maount 2 ');
 
       const cartCount = cartData.product.length;
       let instock = true;
@@ -223,7 +237,6 @@ const loadCheckOut = async (req, res) => {
           }
       }
 
-      // calculatte the shipping amount 
       let shippingAmount = 0;
       if (cartTotal < 1300) {
           shippingAmount = 90;
@@ -234,13 +247,12 @@ const loadCheckOut = async (req, res) => {
       let totalamount = 0;
 
       if(couponDiscountAmount> 0){
-        console.log('hallooooo');
         totalamount = cartTotal - couponDiscountAmount;
       }else {
         totalamount +=cartTotal;
       }
-     console.log(totalamount,'totalamount');
 
+      if(cartData){
       res.render("checkout", {
           user: userData,
           addressData,
@@ -255,9 +267,12 @@ const loadCheckOut = async (req, res) => {
           discountAmount,
           shippingAmount
       });
+    } else {
+      res.render("shop")
+    }
   } catch (error) {
       console.error(error.message);
-      res.status(500).send('Internal Server Error');
+      res.status(500).send('Internal Server Error ');
   }
 };
 

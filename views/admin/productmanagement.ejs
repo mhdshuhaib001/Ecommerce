@@ -37,7 +37,11 @@
                                 <td>
                                   <img src="/products/images/<%= productData[i].images.image1 %>" alt="" class="square-image">
                                 </td>
-                                <td><%= productData[i].category.name %></td>
+                                <td>
+                                  <% if (productData[i].category && productData[i].category.name) { %>
+                                    <%= productData[i].category.name %>
+                                <% }  %>
+                                                               </td>
                                 <td><%= productData[i].quantity %></td>
                                 <td><%= productData[i].price %></td>
                                 <%  if(productData[i].blocked==0){ %>
@@ -62,7 +66,37 @@
                     </div>
                   </div>
                 </div>
+                
               </div>
+              <div class="pagination-container">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <!-- Previous Page Link -->
+                        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                            <a class="page-link" href="/admin/productmanagement=<%= currentPage - 1 %>" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <!-- Page Numbers -->
+                        <% for (let i = 1; i <= totalPages; i++) { %>
+                            <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                <a class="page-link" href="/admin/productmanagement?page=<%= i %>">
+                                    <%= i %>
+                                </a>
+                            </li>
+                        <% } %>
+
+                        <!-- Next Page Link -->
+                        <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                            <a class="page-link" href="/admin/productmanagement?page=<%= currentPage + 1 %>" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+              
             
           <!-- partial -->
         </div>

@@ -43,6 +43,9 @@
 
 <body>
 
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+    </div>
     <!-- header section start -->
     <header class="header pt-30 pb-30  header-sticky header-static"
         style="padding-top: 30px; padding-bottom: 15px; top: 0px;">
@@ -79,23 +82,12 @@
                                                 <li><a href="blog5.html">No sidebar</a></li>
                                             </ul> -->
                                     </li>
-                                    <li><a href="javascript:void(0)"><span>Portfolio
-                                                <i class="fal fa-angle-down"></i></span>
-                                        </a>
-                                        <!-- <ul class="submenu">
-                                                <li><a href="portfolio.html">Single project</a></li>
-                                                <li><a href="portfolio2.html">Two Columns</a></li>
-                                                <li><a href="portfolio3.html">Three Columns</a></li>
-                                            </ul> -->
-                                    </li>
+                                  
                                     <li><a href="javascript:void(0)"><span>Page</span>
                                             <i class="fal fa-angle-down"></i></a>
                                         <ul class="submenu">
-                                            <li><a href="about.html">About</a></li>
-                                            <li><a href="question.html">Frequently
-                                                    Questions</a></li>
-                                            <li><a href="contact.html">Contact</a></li>
-                                        </ul>
+                                            <li><a href="about">About</a></li>
+                                             </ul>
                                     </li>
                                     <li><a href="/contact"><span>Contact</span></a></li>
                                 </ul>
@@ -104,7 +96,7 @@
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-3">
                         <div class="logo">
-                            <a href="index3.html"><img src="img/logo/logo1.png" alt></a>
+                            <a href="home"><img src="img/logo/loomLogo.png" alt=""></a>
                         </div>
                     </div>
 
@@ -114,51 +106,54 @@
                             <ul class="text-right">
 
                                 <% if(locals.user){ %>
-                                <li><a href="userProfile" class="account"><i class="fal fa-user-friends"></i>
-                                        <article class="account-registar d-inline-block"></article>
-                                    </a></li>
-                                <% }else {%>
-                                    <li><a href="login" class="account"><i class="fal fa-user-friends"></i>
-                                        <article class="account-registar d-inline-block">Login/signup</article>
-                                    </a></li>
-                                    <% } %>
+                                    <li><a href="userProfile" class="account"><i class="fal fa-user-friends"></i>
+                                            <article class="account-registar d-inline-block"></article>
+                                        </a></li>
+                                    <% }else {%>
+                                        <li><a href="login" class="account"><i class="fal fa-user-friends"></i>
+                                                <article class="account-registar d-inline-block">Login/signup</article>
+                                            </a></li>
+                                        <% } %>
 
-                                <li><a href="javascript:void(0)"><i class="fal fa-search"></i></a>
+                                            <li><a href="javascript:void(0)"><i class="fal fa-search"></i></a>
 
-                                    <!-- search popup -->
-                                    <div id="search-popup">
-                                        <div class="close-search-popup">
-                                            <i class="fal fa-times"></i>
-                                        </div>
-                                        <div class="search-popup-inner mt-135">
-                                            <div class="search-title text-center">
-                                                <h2>Search</h2>
-                                            </div>
+                                                <!-- search popup -->
+                                                <div id="search-popup">
+                                                    <div class="close-search-popup">
+                                                        <i class="fal fa-times"></i>
+                                                    </div>
+                                                    <div class="search-popup-inner mt-135">
+                                                        <div class="search-title text-center">
+                                                            <h2>Search</h2>
+                                                        </div>
 
-                                            <div class="search-content pt-55">
-                                                <ul class="text-center">
-                                                    <li><a href="javascript:void(0)" class="active">All
-                                                            categories</a>
-                                                    </li>
-                                                    <!-- <li><a href="javascript:void(0)">Clothing</a></li>
+                                                        <div class="search-content pt-55">
+                                                            <ul class="text-center">
+                                                                <li><a href="javascript:void(0)" class="active">All
+                                                                        categories</a>
+                                                                </li>
+                                                                <!-- <li><a href="javascript:void(0)">Clothing</a></li>
                                                                 <li><a href="javascript:void(0)">Gift Cards</a></li>
                                                                 <li><a href="javascript:void(0)">Handbag</a></li>
                                                                 <li><a href="javascript:void(0)">Kids</a></li>
                                                                 <li><a href="javascript:void(0)">Shoes</a></li>
                                                                 <li><a href="javascript:void(0)">Sneaker</a></li>
                                                                 <li><a href="javascript:void(0)">Women</a></li> -->
-                                                </ul>
+                                                            </ul>
 
-                                                <div class="search-form mt-35">
-                                                    <form id="search-form" action="/seachProduct" method="get">
-                                                        <input type="search" name="searchQuary" id="searchQuary"
-                                                            placeholder="search product" required>
+                                                            <div class="search-form mt-35">
+                                                                <form id="search-form" action="/seachProduct"
+                                                                    method="get">
+                                                                    <input type="search" name="searchQuary"
+                                                                        id="searchQuary" placeholder="search product"
+                                                                        required>
 
-                                                        <button type="submit"><i class="fal fa-search"></i></button>
-                                                    </form>
-                                                </div>
+                                                                    <button type="submit"><i
+                                                                            class="fal fa-search"></i></button>
+                                                                </form>
+                                                            </div>
 
-                                                <!-- <div class="search-result-list">
+                                                            <!-- <div class="search-result-list">
                                                     <ul class="text-left">
                                                         <li class="d-block d-flex align-items-center">
                                                             <div class="search-result-img">
@@ -175,30 +170,30 @@
                                                         </li>
                                                     </ul>
                                                 </div> -->
-                                            </div>
+                                                        </div>
 
-                                        </div>
-                                    </div>
-                                </li>
-                                <li><a href="wishlist" data-toggle="tooltip" data-placement="bottom" title
-                                        data-original-title="view wishlist"><i
-                                            class="fal fa-heart"><span>0</span></i></a></li>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li><a href="wishlist" data-toggle="tooltip" data-placement="bottom" title
+                                                    data-original-title="view wishlist"><i
+                                                        class="fal fa-heart"><span>0</span></i></a></li>
 
-                                <!-- Your HTML code ... -->
+                                            <!-- Your HTML code ... -->
 
-                                <li>
-                                    <a href="cart">
-                                        <i class="fal fa-shopping-bag">
-                                            <span>
-                                                <%= (typeof cartCount !=='undefined' && cartCount !==null && cartCount
-                                                    !=="" ) ? cartCount : '0' %>
-                                            </span>
-                                        </i>
-                                    </a>
-                                </li>
+                                            <li>
+                                                <a href="cart">
+                                                    <i class="fal fa-shopping-bag">
+                                                        <span>
+                                                            <%= (typeof cartCount !=='undefined' && cartCount !==null &&
+                                                                cartCount !=="" ) ? cartCount : '0' %>
+                                                        </span>
+                                                    </i>
+                                                </a>
+                                            </li>
 
-                                <!-- Your HTML code ... -->
-                                <!-- <div class="minicart">
+                                            <!-- Your HTML code ... -->
+                                            <!-- <div class="minicart">
                                                             <div class="minicart-body">
                                                                 <div class="minicart-content">
                                                                     <ul class="text-left">
@@ -274,18 +269,18 @@
                                                                 </div>
                                                             </div>
                                                         </div> -->
-                                </li>
-                                <li><a href="javascript:void(0)"><i class="fal fa-align-right"></i></a>
-                                    <ul class="submenu bold-content text-right">
-                                        <li><a href="userProfile">My
-                                                Account</a></li>
-                                        <li><a href="checkout.html">Checkout</a></li>
-                                        <li><a href="shop.html">Shop</a></li>
-                                        <li><a href="wishlist.html">Wishlist</a></li>
-                                        <li><a href="/logout"><i class="bi bi-box-arrow-right"></i>
-                                                LogOut</a></li>
-                                    </ul>
-                                </li>
+                                            </li>
+                                            <li><a href="javascript:void(0)"><i class="fal fa-align-right"></i></a>
+                                                <ul class="submenu bold-content text-right">
+                                                    <li><a href="userProfile">My
+                                                            Account</a></li>
+                                                    <li><a href="checkout.html">Checkout</a></li>
+                                                    <li><a href="shop.html">Shop</a></li>
+                                                    <li><a href="wishlist.html">Wishlist</a></li>
+                                                    <li><a href="/logout"><i class="bi bi-box-arrow-right"></i>
+                                                            LogOut</a></li>
+                                                </ul>
+                                            </li>
                             </ul>
                         </div>
                     </div>
@@ -374,54 +369,57 @@
     </header>
     <!-- header section end -->
     <!-- preloader -->
-        <div class="shop-body mb-90">
-            <div class="container-fluid">
-                <div class="shop-wrapper">
-                    <div class="row">
-                        <div class="col-xl-3 hidden-xl">
-                            <!-- filter area  -->
-                            <div class="widget mt-50">
-                                <h4 class="mb-30">Popular Tags</h4>
-                                <div class="category-list">
-                                    <ul>
-                                        <li><a href="shop">All</a></li>
-                                        <% category.forEach((category,ind)=>{ %>
-                                        <li><a href="shop?category=<%= category._id %>"><%= category.name %></a></li>
+    <div class="shop-body mb-90">
+        <div class="container-fluid">
+            <div class="shop-wrapper">
+                <div class="row">
+                    <div class="col-xl-3 hidden-xl">
+                        <!-- filter area  -->
+                        <div class="widget mt-50">
+                            <h4 class="mb-30">Popular Tags</h4>
+                            <div class="category-list">
+                                <ul>
+                                    <li><a href="shop">All</a></li>
+                                    <% category.forEach((category,ind)=>{ %>
+                                        <li><a href="shop?category=<%= category._id %>">
+                                                <%= category.name %>
+                                            </a></li>
                                         <% }) %>
-                                    
-                                    </ul>
+
+                                </ul>
+                            </div>
+                        </div>
+
+
+                        <div class="widget mt-50">
+                            <h4 class="mb-30">Filter By Price</h4>
+                            <form action="/filterProduct" method="POST">
+                                <div class="filter-form-submit mt-35">
+                                    <label>
+                                        <input type="radio" name="price" value="0-50"> All price
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="price" value="999-1999"> ₹999 - ₹1999
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="price" value="2000-3999"> ₹2000 - ₹3999
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="price" id="lowToHigh" value="0-1000000000"> LowToHigh
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="price" id="highToLow" value="100000-0"> High to
+                                        Low
+                                    </label>
+                                    <button type="submit">Filter</button>
                                 </div>
-                            </div>
-    
-    
-                            <div class="widget mt-50">
-                                <h4 class="mb-30">Filter By Price</h4>
-                                <form action="/filterProduct" method="POST">
-                                    <div class="filter-form-submit mt-35">
-                                        <label>
-                                            <input type="radio" name="price" value="0-50"> All price
-                                        </label>
-                                        <label>
-                                            <input type="radio" name="price" value="999-1999"> ₹999 - ₹1999
-                                        </label>
-                                        <label>
-                                            <input type="radio" name="price" value="2000-3999"> ₹2000 - ₹3999
-                                        </label>
-                                        <label>
-                                            <input type="radio" name="price" id="lowToHigh" value="0-1000000000"> LowToHigh
-                                        </label>
-                                        <label>
-                                            <input type="radio" name="price" id="highToLow" value="1000000000-1"> High to Low
-                                        </label>
-                                        <button type="submit">Filter</button>
-                                    </div>
-                                </form>
-                                
-                            </div>
-                            <!-- <div class="widget mt-50">
+                            </form>
+
+                        </div>
+                        <!-- <div class="widget mt-50">
                              
                             </div> -->
-                            <!-- <div class="widget mt-50">
+                        <!-- <div class="widget mt-50">
                                 <h4 class="mb-30">Filter By Size</h4>
                                 <div class="size-link">
                                     <a href="shop2.html">3xl</a>
@@ -432,89 +430,96 @@
                                     <a href="shop2.html">xxl</a>
                                 </div>
                             </div> -->
-    
-    
-                        </div>
-    
-                        <!-- end filter herre  -->
-    
-                        <!-- /. widget -->
-                        <div class="col-xl-9">
-                            <div class="filter-heading">
-                                <div class="row">
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-12">
-                                        <div class="filter-shown-item">
-                                            <p class="mb-0">
-                                                Showing <span>
-                                                    <%= (currentPage - 1) * limit + 1 %>
-                                                </span>–
-                                                <span>
-                                                    <%= Math.min(currentPage * limit, totalProducts) %>
-                                                </span>
-                                                of <span class="total_count">
-                                                    <%= totalProducts %>
-                                                </span> results
-                                            </p>
-                                            <p class="mb-0">
-                                                Page <span>
-                                                    <%= currentPage %>
-                                                </span>
-                                                of <span>
-                                                    <%= totalPages %>
-                                                </span>
-                                            </p>
-                                        </div>
+
+
+                    </div>
+
+                    <!-- end filter herre  -->
+
+                    <!-- /. widget -->
+                    <div class="col-xl-9">
+                        <div class="filter-heading">
+                            <div class="row">
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-12">
+                                    <div class="filter-shown-item">
+                                        <p class="mb-0">
+                                            Showing <span>
+                                                <%= (currentPage - 1) * limit + 1 %>
+                                            </span>–
+                                            <span>
+                                                <%= Math.min(currentPage * limit, totalProducts) %>
+                                            </span>
+                                            of <span class="total_count">
+                                                <%= totalProducts %>
+                                            </span> results
+                                        </p>
+                                        <p class="mb-0">
+                                            Page <span>
+                                                <%= currentPage %>
+                                            </span>
+                                            of <span>
+                                                <%= totalPages %>
+                                            </span>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
-    
-                            <!-- /. filter heading -->
-                            <% if(products.length !=0) {%>
+                        </div>
+
+                        <!-- /. filter heading -->
+                        <% if(products.length !=0) {%>
 
                             <div>
                                 <div class="product-wrapper mt-55">
                                     <div class="row">
-                                        <% products.forEach(product => { %>
+                                        <% products.forEach(product=> { %>
                                             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12">
-                                              <div class="product-box mb-40">
-                                                <div class="product-box-wrapper">
-                                                  <div class="product-img">
-                                                    <img src="/products/crops/<%= product.images.image1 %>" class="w-100" alt>
-                                                    <a href="/product?id=<%= product._id %>" class="d-block">
-                                                      <div class="second-img">
-                                                        <img src="/products/crops/<%= product.images.image2 %>" alt class="w-100">
-                                                      </div>
-                                                    </a>
-                                                    <a href="javascript:void(0)" class="product-img-link quick-view-1 text-capitalize">Quick view</a>
-                                                  </div>
-                                                  <div class="product-desc pb-20">
-                                                    <div class="product-desc-top">
-                                                        <% if (product.category && product.category.name) { %>
-                                                            <div class="categories">
-                                                              <a href="shop2.html" class="product-category">
-                                                                <span><%= product.category.name %></span>
-                                                              </a>
+                                                <div class="product-box mb-40">
+                                                    <div class="product-box-wrapper">
+                                                        <div class="product-img">
+                                                            <img src="/products/crops/<%= product.images.image1 %>"
+                                                                class="w-100" alt>
+                                                            <a href="/product?id=<%= product._id %>" class="d-block">
+                                                                <div class="second-img">
+                                                                    <img src="/products/crops/<%= product.images.image2 %>"
+                                                                        alt class="w-100">
+                                                                </div>
+                                                            </a>
+                                                            <a href="javascript:void(0)"
+                                                                class="product-img-link quick-view-1 text-capitalize">Quick
+                                                                view</a>
+                                                        </div>
+                                                        <div class="product-desc pb-20">
+                                                            <div class="product-desc-top">
+                                                                <!-- <div class="categories">
+                                                                        <a href="shop2.html" class="product-category">
+                                                                            <span>
+                                                                            </span>
+                                                                        </a>
+                                                                    </div> -->
+                                                                <a onclick="addToWishlist('<%=product._id%>')"
+                                                                    class="wishlist float-right">
+                                                                    <span><i class="fal fa-heart"></i></span>
+                                                                </a>
                                                             </div>
-                                                          <% } %>
-                                                      <a href="wishlist" class="wishlist float-right">
-                                                        <span><i class="fal fa-heart"></i></span>
-                                                      </a>
+                                                            <a href="/product" class="product-title">
+                                                                <%= product.name %>
+                                                            </a>
+                                                            <div class="price-switcher">
+                                                                <span class="price switcher-item">₹<%= product.price %>
+                                                                </span>
+                                                                <a onclick="addToCart('<%= product._id %>')"
+                                                                    class="add-cart text-capitalize switcher-item"
+                                                                    style="cursor: pointer;">
+                                                                    + Add to Cart
+                                                                </a>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <a href="/product" class="product-title">
-                                                      <%= product.name %>
-                                                    </a>
-                                                    <div class="price-switcher">
-                                                      <span class="price switcher-item">₹<%= product.price %></span>
-                                                      <a onclick="addToCart('<%= product._id %>')" class="add-cart text-capitalize switcher-item" style="cursor: pointer;">
-                                                        + Add to Cart
-                                                      </a>
-                                                    </div>
-                                                  </div>
                                                 </div>
-                                              </div>
                                             </div>
-                                          <% }); %>
-                                          
+                                            <% }); %>
+
                                     </div>
                                     <div class="text-center mt-20">
                                         <nav aria-label="Page navigation">
@@ -525,7 +530,7 @@
                                                         <span aria-hidden="true">&laquo;</span>
                                                     </a>
                                                 </li>
-    
+
                                                 <% for (let i=1; i <=totalPages; i++) { %>
                                                     <li class="page-item <%= i === currentPage ? 'active' : '' %>">
                                                         <a class="page-link" href="/shop?page=<%= i %>">
@@ -540,29 +545,33 @@
                                                                 aria-label="Next">
                                                                 <span aria-hidden="true">&raquo;</span>
                                                             </a>
-                                                </li>
+                                                        </li>
                                             </ul>
                                         </nav>
                                     </div>
                                 </div>
                             </div>
                             <% }else{ %>
-                                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 50vh; background-color: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px;">
+                                <div
+                                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 50vh; background-color: #f8f8f8; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px;">
                                     <h4 style="color: #333;">No product</h4>
-                                    <p style="color: #666; margin-top: 10px; text-align: center;">Explore our amazing collection and find something you'll love!</p>
-                                    <a href="/shop" style="text-decoration: none; background-color: #3498db; color: #fff; padding: 10px 20px; border-radius: 5px; margin-top: 15px;">Go Shop</a>
+                                    <p style="color: #666; margin-top: 10px; text-align: center;">Explore our amazing
+                                        collection and find something you'll love!</p>
+                                    <a href="/shop"
+                                        style="text-decoration: none; background-color: #3498db; color: #fff; padding: 10px 20px; border-radius: 5px; margin-top: 15px;">Go
+                                        Shop</a>
                                 </div>
-                                
-                            <% } %>
 
-    
-                            <!-- /. filter content -->
-                        </div>
-                        <!-- /. shop products -->
+                                <% } %>
+
+
+                                    <!-- /. filter content -->
                     </div>
+                    <!-- /. shop products -->
                 </div>
             </div>
         </div>
+    </div>
 
 
 
@@ -573,41 +582,117 @@
 
 
 
-            <script>
-                function addToCart(productId, count = 1) {
-                    $.ajax({
-                        url: "/addToCart",
-                        method: "post",
-                        data: {
-                            id: productId,
-                            count: count,
-                        },
-                        success: (response) => {
-                            if (response.login == true) {
-                            } else if (response.success) {
-                                if (response.newProduct) {
-                                    swal.fire({
-                                        position: "center",
-                                        icon: "success",
-                                        title: "Product added to cart",
-                                        showConfirmButton: false,
-                                        timer: 1500,
-                                    });
-                                } else {
-                                    window.location.href = "/cart";
-                                }
-                                $("#cartDiv").load("/ #cartDiv");
-                            } else {
-                                swal.fire({
-                                    icon: "error",
-                                    title: "Sorry! Out of stock.",
-                                    text: response.message,
-                                });
-                            }
-                        },
+    <script>
+        function addToCart(productId, count = 1) {
+            $.ajax({
+                url: "/addToCart",
+                method: "post",
+                data: {
+                    id: productId,
+                    count: count,
+                },
+                success: (response) => {
+                    if (response.login === false) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "bottom-end",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                        Toast.fire({
+                            icon: "error",
+                            title: response.message
+                        });
+                        setTimeout(function () {
+                            window.location.href = '/login';
+                        }, 1000);
+
+                    } else if (response.success) {
+                        if (response.newProduct) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "bottom-end",
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
+
+                            Toast.fire({
+                                icon: "success",
+                                title: "Product added to cart"
+                            });
+                        }
+                        $("#cartDiv").load("/ #cartDiv");
+                    } else if (response.exist) {
+                        window.location.href = "/cart";
+                    } else if (response.stock) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                        Toast.fire({
+                            icon: "error", 
+                            title: response.message,
+                        });
+                    }
+                },
+                error: (error) => {
+                    console.error("Error adding to cart:", error);
+                },
+            });
+        }
+
+
+
+
+        function addToWishlist(productId) {
+            console.log(productId, 'wishId');
+            const wishId = { productId: productId };
+            console.log(wishId);
+            $.ajax({
+                method: "POST",
+                url: '/addWishlist',
+                data: JSON.stringify(wishId),
+                contentType: 'application/json',
+                success: function (response) {
+                    console.log(response);
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2000,
                     });
+
+                    if (response.added) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.message
+                        });
+                    } else if (response.remove) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.message
+                        });
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Please log in to perform this action.',
+                            timer: 2000
+                        });
+                        setTimeout(function () {
+                            window.location.href = '/login';
+                        }, 1000);
+                    }
+                },
+                error: function (error) {
+                    console.error(error.responseText);
                 }
+            });
+        }
 
-            </script>
+    </script>
 
-            <%- include('../layouts/user/footer.ejs') -%>
+    <%- include('../layouts/user/footer.ejs') -%>

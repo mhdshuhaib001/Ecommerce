@@ -164,22 +164,28 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <!-- <th>Delevery</th>
+                                                <th>Delivery fee</th>
                                                 <td>
-                                                    <h6>Delevery</h6>
-                                                     <p>Shipping options will be updated
-                                                                during checkout.</p>
+                                                    <!-- <h6>Delevery</h6> -->
+                                                     <!-- <p>Shipping options will be updated
+                                                                during checkout.</p> -->
+                                                                <% if(shippingCharge!==0){ %>
                                                     <a href="javascript:void(0)"
+                                                        class="price-calculate">
+                                                        Shipping Fee : ₹ &nbsp;<%=shippingCharge %></a>
+                                                        <% } else{ %>
+                                                            <a href="javascript:void(0)"
                                                         class="price-calculate">Free
                                                         shipping : ₹ &nbsp;00.0</a>
+                                                        <% } %>
 
-                                                </td> -->
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th>Total</th>
                                                 <td>
                                                     <span>₹</span>&nbsp;<strong>
-                                                        <%=subTotal%>
+                                                        <%=grandTotal%>
                                                     </strong></td>
                                             </tr>
                                         </tbody>

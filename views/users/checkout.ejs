@@ -270,10 +270,10 @@
                                             </div><!-- End .col-lg-6 -->
                                             <% })} %> <!-- End Address Cards Loop -->
                                     </div><!-- Row end -->
-                                    <button class="btn btn-primary" id="addBtn">
-                                        Ship to another address</button>
+                                    <button class="btn" style="background-color: #6895D2; color: white;">
+                                        Add another address</button>
 
-                                    <form action id="addAddressForm" style="display: none;">
+                                    <form  id="addAddressForm" style="display: none;">
                                         <!-- Address Details Form -->
                                     </form>
                                 </div><!-- End .col-lg-9 -->
@@ -526,6 +526,8 @@
                         toastr.error('Insufficient balance in your wallet');
                     } else if (response.razorpay) {
                         razorPayment(response.order, formData);
+                    } else if (response.pending){
+                        toastr.error('Payment Failed');
                     }
                 },
             });
@@ -537,7 +539,7 @@
                 key: "rzp_test_ewQ5RiYCmaDgeL",
                 amount: formData.total,
                 currency: "INR",
-                name: "Loom Fasion",
+                name: "Loom Fahsion",
                 description: "Test Transaction",
                 image: "/user/images/icons/logo.png",
                 order_id: order.id,
@@ -566,15 +568,14 @@
 
 
         function verifyPayment(payment, order) {
+            console.log('edasasaaaaaaaaaaaa');
 
-            const amount2 = document.getElementById("total1").innerHTML;
             const orderId = order.id;
             $.ajax({
                 url: "/verify-payment",
                 method: "post",
                 data: {
                     payment: payment,
-                    amount2: amount2,
                     order: order,
                 },
                 success: (response) => {

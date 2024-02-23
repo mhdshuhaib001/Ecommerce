@@ -304,6 +304,118 @@
 
 <!-- JS here -->
 
+<script>
+   function addToCart(productId, count = 1) {
+            $.ajax({
+                url: "/addToCart",
+                method: "post",
+                data: {
+                    id: productId,
+                    count: count,
+                },
+                success: (response) => {
+                    if (response.login === false) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "bottom-end",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                        Toast.fire({
+                            icon: "error",
+                            title: response.message
+                        });
+                        setTimeout(function () {
+                            window.location.href = '/login';
+                        }, 1000);
+
+                    } else if (response.success) {
+                        if (response.newProduct) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "bottom-end",
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
+
+                            Toast.fire({
+                                icon: "success",
+                                title: "Product added to cart"
+                            });
+                        }
+                        $("#cartDiv").load("/ #cartDiv");
+                    } else if (response.exist) {
+                        window.location.href = "/cart";
+                    } else if (response.stock) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                        Toast.fire({
+                            icon: "error", 
+                            title: response.message,
+                        });
+                    }
+                },
+                error: (error) => {
+                    console.error("Error adding to cart:", error);
+                },
+            });
+        }
+
+
+
+
+        function addToWishlist(productId) {
+            console.log(productId, 'wishId');
+            const wishId = { productId: productId };
+            console.log(wishId);
+            $.ajax({
+                method: "POST",
+                url: '/addWishlist',
+                data: JSON.stringify(wishId),
+                contentType: 'application/json',
+                success: function (response) {
+                    console.log(response);
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2000,
+                    });
+
+                    if (response.added) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.message
+                        });
+                    } else if (response.remove) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.message
+                        });
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Please log in to perform this action.',
+                            timer: 2000
+                        });
+                        setTimeout(function () {
+                            window.location.href = '/login';
+                        }, 1000);
+                    }
+                },
+                error: function (error) {
+                    console.error(error.responseText);
+                }
+            });
+        }
+
+    </script>
 
 <script src="js/vendor/jquery-1.12.4.min.js"></script>
 <script src="js/popper.min.js"></script>

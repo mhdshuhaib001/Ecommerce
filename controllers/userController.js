@@ -30,20 +30,26 @@ const securePassword = async password => {
 
 const loadHome = async (req, res) => {
   try {
-
     const user_id = req.session.user_id;
     const cartData = await Cart.findOne({ user: user_id }).populate("product.productId");
     const userData = await User.findOne({ _id: user_id });
-    const cart = await Cart.findOne({ userId: req.session.user_id })
-    let cartCount = 0;
-    if (cart) { cartCount = cart.product.length }
+    const productData = await Product.find({}).populate("category");
+    const categoryData = await Category.find({});
 
-    res.render("home", { user: userData, cart: cartData, cartCount });
+    // Slice the productData array to get only the first 10 products
+    const limitedProductData = productData.slice(0, 10);
+console.log(limitedProductData,'jbhhhhhhhhhhhhhhhhh');
+    const cart = await Cart.findOne({ userId: req.session.user_id });
+    let cartCount = 0;
+    if (cart) {
+      cartCount = cart.product.length;
+    }
+
+    res.render("home", { user: userData, cart: cartData, cartCount, productData: limitedProductData });
   } catch (error) {
     console.log(error.message);
   }
 };
-
 
 
 // Signup and Storing data to database
@@ -543,11 +549,13 @@ const resetPassword = async (req, res) => {
 };
 
 //-------------Shop-------------------
+
 const loadShop = async (req, res) => {
   try {
-    const userData = req.session.user_id;
+    const userId = req.session.user_id;
     const categoryId = req.query.category;
     const categoryData = await Category.find();
+    const wishlistData = await wishList.findOne({ user: userId });
 
 
     const page = parseInt(req.query.page) || 1;
@@ -561,23 +569,34 @@ const loadShop = async (req, res) => {
     if (cart) {
       cartCount = cart.product.length;
     }
-    
+
+    let products;
 
     if (categoryId) {
-      const productData = await Product.find({ category: categoryId })
-        .populate('category') 
+      products = await Product.find({ category: categoryId })
+        .populate('category')
         .skip(skip)
         .limit(limit);
-      
-      res.render("shop", { user: userData, products: productData, currentPage: page, totalPages, limit, totalProducts, cartCount, category: categoryData });
     } else {
-      const productData = await Product.find({})
-        .populate('category') 
+      products = await Product.find({})
+        .populate('category')
         .skip(skip)
         .limit(limit);
-
-      res.render("shop", { user: userData, products: productData, currentPage: page, totalPages, limit, totalProducts, cartCount, category: categoryData });
     }
+
+    
+    
+    res.render("shop", {
+      user: userId,
+      products,
+      currentPage: page,
+      totalPages,
+      limit,
+      totalProducts,
+      cartCount,
+      category: categoryData,
+      
+    });
   } catch (error) {
     console.log(error.message);
   }
@@ -643,6 +662,15 @@ const loadContact = async (req, res) => {
   }
 };
 
+const aboutLoad = async (req,res)=>{
+  try{
+    res.render("about");
+  }catch {
+    console.log(error.message);
+    res.render("404");
+  }
+}
+
 
 
 
@@ -653,7 +681,12 @@ const loadprofile = async (req, res) => {
     const userData = await User.findOne({ _id: userId });
     const addressData = await Address.findOne({ user: userId });
     const orderData = await Order.find({ userId: userId }).sort({ purchaseDate: -1 });
-    const walletData = await User.findOne({ _id: userId }).sort({ 'walletHistory.transactionDate': -1 });
+
+    const walletData = await User.findOne({ _id: userId });
+    if (walletData && Array.isArray(walletData.walletHistory)) {
+      walletData.walletHistory.sort((a, b) => new Date(b.transactionDate) - new Date(a.transactionDate));
+    }
+
     const cart = await Cart.findOne({ userId: req.session.user_id });
     let cartCount = 0;
     if (cart) {
@@ -740,4 +773,5 @@ module.exports = {
   resetPassword,
   loadprofile,
   changePassword,
+  aboutLoad
 };

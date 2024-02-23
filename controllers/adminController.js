@@ -183,12 +183,29 @@ const loadDashboard = async (req, res) => {
 
 const usermanagementload = async (req, res) => {
     try {
-        const userData = await User.find({ is_admin: false });
-        res.render("usermanagement", { users: userData });
+        const itemPage = 8;
+        const page = +req.query.page || 1;
+        const totalUsers = await User.countDocuments({ is_admin: false });
+
+        const totalPages = Math.ceil(totalUsers / itemPage);
+
+        const userData = await User.find({ is_admin: false })
+            .sort({ purchaseTime: 1 })
+            .skip((page - 1) * itemPage)
+            .limit(itemPage)
+            .lean(); 
+
+        res.render("usermanagement", { users: userData, totalPages, currentPage: page ,itemPage});
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
+        res.status(500).send("Internal Server Error");
     }
-}
+};
+
+module.exports = {
+    usermanagementload,
+};
+
 
 //-------------------- Block Or Unblock User -------------
 

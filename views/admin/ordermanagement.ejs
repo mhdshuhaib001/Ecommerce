@@ -19,27 +19,27 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <% if (orderData ) { %>
+                    <% if (orderData && orderData.length > 0) { %>
                         <% orderData.forEach((order, index) => { %>
+                            <% order.orderProducts.forEach((product) => { %>
                                 <tr>
                                     <td><%= index + 1 %></td>
-                                    <td><%= order.orderId %></td>
+                                    <td><%= product.orderId %></td>
                                     <td><%= order.purchaseDate.toISOString().split('T')[0] %></td>
                                     <td><span>₹</span><i class="fa-solid fa-indian-rupee-sign"></i><%= order.totalAmount %></td>
-                                  
                                     <td>
                                         <a href="/admin/orderSummery?_id=<%= order._id %>" class="btn btn-outline-primary block-button">Details</a>
                                     </td>
-                                    <!-- <td></td> -->
                                 </tr>
                             <% }) %>
+                        <% }) %>
                     <% } else { %>
                         <tr>
-                            <td colspan="6">No orders found</td>
+                            <td colspan="5">No orders found</td>
                         </tr>
                     <% } %>
                 </tbody>
-
+                
                 
                 
                 </table>

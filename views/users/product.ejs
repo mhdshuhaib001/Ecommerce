@@ -170,15 +170,15 @@
                                                     add to wishlist</a></li>
                                         </ul>
                                     </div>
-                                    <div class="sku"><span>Sku: </span>
+                                    <!-- <div class="sku"><span>Sku: </span>
                                         <strong>M-Hat-8</strong>
-                                    </div>
+                                    </div> -->
                                     <div class="single-product-category">
                                         <ul>
                                             <li class="mb-0"><a href="javascript:void(0)" class="title">Categories:
                                                 </a></li>
-                                            <li class="mb-0"><a href="single-product-4.html">
-                                                    <%= productView.category %>
+                                            <li class="mb-0"><a>
+                                                    <%= productView.category.name %>
                                                 </a></li>
                                         </ul>
                                     </div>
@@ -411,54 +411,69 @@
 
     <script>
     
+   
     function addToCart(productId, count = 1) {
-    $.ajax({
-        url: "/addToCart",
-        method: "post",
-        data: {
-            id: productId,
-            count: count,
-        },
-        success: (response) => {
-    if (response.success) {
-        if (response.newProduct) {
-            // Product added to cart
-            const Toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 1500,
-            });
+            $.ajax({
+                url: "/addToCart",
+                method: "post",
+                data: {
+                    id: productId,
+                    count: count,
+                },
+                success: (response) => {
+                    if (response.login === false) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
 
-            Toast.fire({
-                icon: "success",
-                title: "Product added to cart"
+                        Toast.fire({
+                            icon: "error",
+                            title: response.message
+                        });
+                        // setTimeout(function () {
+                        //     window.location.href = '/login';
+                        // }, 1000);
+
+                    } else if (response.success) {
+                        if (response.newProduct) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "bottom-end",
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
+
+                            Toast.fire({
+                                icon: "success",
+                                title: "Product added to cart"
+                            });
+                        }
+                        $("#cartDiv").load("/ #cartDiv");
+                    } else if (response.exist) {
+                        window.location.href = "/cart";
+                    } else if (response.stock) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                        Toast.fire({
+                            icon: "error", 
+                            title: response.message,
+                        });
+                    }
+                },
+                error: (error) => {
+                    console.error("Error adding to cart:", error);
+                },
             });
-        } else if (response.exist) {
-            console.log('suiiiiiiiii');
-            window.location.href = "/cart";
         }
-    } 
-},
 
-        error: (error) => {
-            console.error("Error adding product to cart:", error);
-
-            const Toast = Swal.mixin({
-                toast: true,
-                position: "center",
-                showConfirmButton: false,
-                timer: 2000,
-            });
-
-            Toast.fire({
-                icon: "error",
-                title: "Error",
-                text: "An error occurred while processing your request.",
-            });
-        },
-    });
-}
 
 
 

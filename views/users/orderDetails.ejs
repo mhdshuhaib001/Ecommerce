@@ -14,10 +14,7 @@
     <!-- Place favicon.ico in the root directory -->
 
     <!-- CSS here -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mixitup@3"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    
 
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -115,7 +112,7 @@
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-3">
                         <div class="logo">
-                            <a href="index3.html"><img src="img/logo/logo1.png" alt=""></a>
+                            <a href="index3.html"><img src="img/logo/loomLogo.png" alt="Loom"></a>
                         </div>
                     </div>
 
@@ -258,20 +255,20 @@
 
                                             <!-- Your HTML code ... -->
 
-                                                <li>
-                                                    <a href="cart">
-                                                        <i class="fal fa-shopping-bag">
-                                                            <span>
-                                                                <%= (typeof cartCount !=='undefined' && cartCount !==null &&
-                                                                    cartCount !=="" ) ? cartCount : '0' %>
-                                                            </span>
-                                                        </i>
-                                                    </a>
+                                            <li>
+                                                <a href="cart">
+                                                    <i class="fal fa-shopping-bag">
+                                                        <span>
+                                                            <%= (typeof cartCount !=='undefined' && cartCount !==null &&
+                                                                cartCount !=="" ) ? cartCount : '0' %>
+                                                        </span>
+                                                    </i>
+                                                </a>
 
-                                                </li>
-                                               
-                                                        <!-- Your HTML code ... -->
-                                                        <!-- <div class="minicart">
+                                            </li>
+
+                                            <!-- Your HTML code ... -->
+                                            <!-- <div class="minicart">
                                                             <div class="minicart-body">
                                                                 <div class="minicart-content">
                                                                     <ul class="text-left">
@@ -347,17 +344,16 @@
                                                                 </div>
                                                             </div>
                                                         </div> -->
-                                                        </li>
-                                                        <li><a href="javascript:void(0)"><i
-                                                                    class="fal fa-align-right"></i></a>
-                                                            <ul class="submenu bold-content text-right">
-                                                                <li><a href="userProfile">My Account</a></li>
-                                                                <li><a href="checkout.html">Checkout</a></li>
-                                                                <li><a href="shop.html">Shop</a></li>
-                                                                <li><a href="wishlist.html">Wishlist</a></li>
-                                                                <li><a href="question.html">Frequently</a></li>
-                                                            </ul>
-                                                        </li>
+                                            </li>
+                                            <li><a href="javascript:void(0)"><i class="fal fa-align-right"></i></a>
+                                                <ul class="submenu bold-content text-right">
+                                                    <li><a href="userProfile">My Account</a></li>
+                                                    <li><a href="checkout.html">Checkout</a></li>
+                                                    <li><a href="shop.html">Shop</a></li>
+                                                    <li><a href="wishlist.html">Wishlist</a></li>
+                                                    <li><a href="question.html">Frequently</a></li>
+                                                </ul>
+                                            </li>
                             </ul>
                         </div>
                     </div>
@@ -468,7 +464,8 @@
 
 
 
-                            <h4 class="header-title mb-3">Items from Order #VL2537</h4>
+                            <h4 class="header-title mb-3">Items from Order # <%= orderData.orderId %>
+                            </h4>
                             <div class="table-responsiv">
                                 <!-- Your table code for Items from Order goes here -->
                                 <table class="table table-bordered table-centered mb-0">
@@ -507,11 +504,10 @@
                                                         { %>
                                                         <button type="button"
                                                             onclick="cancelProduct('<%= product._id %>', '<%= orderData._id %>')"
-                                                            class="btn btn-warning"
-                                                            style="color: rgb(215, 44, 44)">Cancel</button>
+                                                            class="btn"
+                                                            style="color: rgb(249, 249, 249); background-color:  #ce3f3f;" >Cancel</button>
                                                         <% } else if (product.status=="Delivered" ) { %>
-                                                            <button type="button" class="btn "
-                                                                id="requestStatus"
+                                                            <button type="button" class="btn " id="requestStatus"
                                                                 onclick="returnRequest('<%= product._id %>','<%= orderData._id%>')"
                                                                 style=" background-color: #B6410F; color: rgb(239, 190, 167)">Return</button>
 
@@ -520,11 +516,12 @@
                                                                 <% } else if (product.status=="request" ) { %>
                                                                     <label
                                                                         style="color: rgb(221, 221, 27);">Requested</label>
-                                                                    <% } else if(product.status == "Cancelled") {%>
-                                                                        <label  style="color: rgb(221, 27, 27);">Cancelled</label>
+                                                                    <% } else if(product.status=="Cancelled" ) {%>
+                                                                        <label
+                                                                            style="color: rgb(221, 27, 27);">Cancelled</label>
                                                                         <% } else {%>
-                                                                        <label style="color: red;">Requested</label>
-                                                                        <% } %>
+                                                                            <label style="color: red;">Requested</label>
+                                                                            <% } %>
                                                 </td>
                                             </tr>
                                             <% }) %>
@@ -555,7 +552,9 @@
                                 <div class="col-lg-6">
                                     <div class="mb-4">
                                         <h5 class="mt-0">Order ID:</h5>
-                                        <p>#VL2537</p>
+                                        <p>
+                                            <%= orderData.orderId %>
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -636,12 +635,10 @@
                                 <p class="mb-2"><span class="fw-semibold me-2">Order ID:</span>
                                     <%= orderData.orderId %>
                                 </p>
+
                                 <p class="mb-2"><span class="fw-semibold me-2">Date:</span>
-                                    <%= orderData.purchaseDate.toLocaleDateString('en-US', {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric',
-                                    })%> <small>
+                                    <%= orderData.purchaseDate.toLocaleDateString('en-US', { year: 'numeric' ,
+                                        month: 'long' , day: 'numeric' , })%> <small>
                                             <%= orderData.purchaseTime %>
                                         </small>
                                 </p>
@@ -926,7 +923,8 @@
                 <form id="returnReasonForm">
                     <div class="form-group">
                         <label for="returnReason">Reason for Return:</label>
-                        <textarea class="form-control" name="returnReason" id="returnReason" rows="3" required></textarea>
+                        <textarea class="form-control" name="returnReason" id="returnReason" rows="3"
+                            required></textarea>
                     </div>
                     <button type="button" class="btn btn-primary" id="submitReturnReason">Submit</button>
                 </form>
@@ -939,44 +937,9 @@
 
 
 
-    // function returnRequest(id, order) {
 
-    // console.log('moopare ethis x');
-    // swal.fire({
-    //     title: "Are you sure?",
-    //     text: "You want to return this Product?",
-    //     icon: "warning",
-    //     showCancelButton: true,
-    //     confirmButtonColor: "#3085d6",
-    //     cancelButtonColor: "#d33",
-    //     confirmButtonText: "Yes",
-    //     cancelButtonText: "Not now",
-    // }).then((result) => {
-    //     if (result.isConfirmed) {
-    //         $.ajax({
-    //             url: "/returnRequest",
-    //             data: { id, order },
-    //             method: 'post',
-    //             success: (response) => {
-    //                 window.location.reload()
 
-    //                 const Toast = Swal.mixin({
-    //                     toast: true,
-    //                     position: 'top-end',
-    //                     showConfirmButton: false,
-    //                     timer: 3000,
-    //                 })
-    //                 Toast.fire({
-    //                     icon: 'success',
-    //                     title: 'Return request is sended.'
-    //                 })
-    //             }
-    //         });
-    //     }
-    // })
-    // }
-    
-    
+
     function returnRequest(id, order) {
         console.log('moopare ethis x');
         Swal.fire({
@@ -1008,7 +971,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             url: "/returnRequest",
-                            data: {  order, id, returnReason: returnReason },
+                            data: { order, id, returnReason: returnReason },
                             method: 'POST',
                             success: (response) => {
                                 if (response.success) {
@@ -1035,7 +998,7 @@
         });
     }
 
-        
+
     function cancelProduct(orderProductId, orderId) {
 
         Swal.fire({

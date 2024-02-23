@@ -37,16 +37,16 @@ const orderSchema = new mongoose.Schema({
       required: true,
     },
   },
+  orderId: {
+    type: String,
+
+  },
   orderProducts: [
     {
 
       productName: {
         type: String,
         required: true,
-      },
-      orderId: {
-        type: String,
-
       },
       productId: {
         type: mongoose.Types.ObjectId,
@@ -72,7 +72,6 @@ const orderSchema = new mongoose.Schema({
       },
       status: {
         type: String,
-        enum: ["Placed", "Shipped", "Delivered", "Cancelled"], 
         default: "Placed",
       },      
       returnReason: {

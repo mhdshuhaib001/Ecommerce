@@ -72,7 +72,7 @@ user_Rout.post('/editAddress',auth.isLogin,addressController.editAddress);
 user_Rout.post("/editProfile",addressController.editProfile);
 
 
-
+// =============================checkOut==================================
 user_Rout.get('/checkout', auth.isLogin,cartController.loadCheckOut);
 user_Rout.post('/placeOrder',auth.isLogin,orderControllers.placeOrder);
 user_Rout.post('/verify-payment',auth.isLogin,orderControllers.verifyPayment);
@@ -99,6 +99,7 @@ user_Rout.get("/wishlist", auth.isLogin,wishController.loadWishlist);
 user_Rout.post("/addWishlist",auth.isLogin,wishController.addWishList)
 
 user_Rout.get("/contact", userController.loadContact);
+user_Rout.get("/about",userController.aboutLoad)
 
 user_Rout.get("/404", userController.loadError404);
 user_Rout.get("/500", userController.loadError500);

@@ -23,19 +23,22 @@ var instance = new Razorpay({
 
 //-----------orderPlaced-----------------
 
+
+//-----------orderPlaced-----------------
+
 const placeOrder = async (req, res) => {
     try {
         const user_id = req.session.user_id;
         const cartData = await Cart.findOne({ userId: user_id }).populate('couponDiscount');
+
         const paymentMethod = req.body.formData.payment;
-        const total = req.body.formData.total;
-        const status = paymentMethod === 'COD' ? 'placed' : 'pending';
+        const status = paymentMethod === 'COD' ? 'Placed' : 'Pending';
         const userData = await User.findById(user_id);
         const walletBalance = userData.wallet;
         const address = req.body.formData.address;
         const subtotalAmount = cartData.product.reduce((acc, val) => acc + (val.totalPrice || 0), 0);
         const uniqId = crypto.randomBytes(4).toString('hex').toUpperCase().slice(0, 8);
-
+        console.log(cartData, '-----');
         let totalAmount = 0;
         if (cartData.couponDiscount) {
             const CouponDiscountPercentage = cartData.couponDiscount.discountAmount;
@@ -45,18 +48,23 @@ const placeOrder = async (req, res) => {
             totalAmount = subtotalAmount;
         }
 
+        const productIds = cartData.product.map(product => product.productId);
+        console.log(productIds);
+        const products = await Product.find({ '_id': { $in: productIds } });
+        console.log(products);
 
-        const productData = cartData.product.map(product => ({
-            orderId: uniqId,
-            productId: product.productId,
-            count: product.count,
-            productPrice: product.productPrice,
-            image: product.image,
-            totalPrice: product.totalPrice,
-            status: status,
-            productName: product.productName,
-        }));
-
+        const productData = cartData.product.map(cartProduct => {
+            const productDetails = products.find(p => p._id.toString() === cartProduct.productId.toString());
+            return {
+                productId: cartProduct.productId,
+                count: cartProduct.count,
+                productPrice: productDetails ? productDetails.price : 0,
+                image: productDetails ? productDetails.images.image1 : '',
+                totalPrice: cartProduct.totalPrice,
+                status: status,
+                productName: productDetails ? productDetails.name : '',
+            };
+        });
         const purchaseDate = new Date();
 
         let shipingTotalAmount = 1500;
@@ -70,6 +78,7 @@ const placeOrder = async (req, res) => {
 
         const order = new Order({
             userId: user_id,
+            orderId: uniqId,
             deliveryDetails: address,
             orderProducts: productData,
             purchaseDate: purchaseDate,
@@ -162,6 +171,7 @@ const placeOrder = async (req, res) => {
 
 
 
+
 // onnlince payment 
 const verifyPayment = async (req, res) => {
     try {
@@ -184,7 +194,6 @@ const verifyPayment = async (req, res) => {
                 { _id: paymentData.order.receipt },
                 { $set: { status: 'placed', paymentId: paymentData.payment.razorpay_payment_id } }
             );
-            // Delete the cart data
 
             const productData = cartData.product.map(product => ({
                 productId: product.productId,
@@ -215,7 +224,6 @@ const verifyPayment = async (req, res) => {
 
 
 
-
 const success = async (req, res) => {
     try {
         console.log(req.params);
@@ -226,6 +234,7 @@ const success = async (req, res) => {
         res.render("orderSuccess", { orderData });
     } catch (error) {
         console.log(error.message);
+        res.render("shop")
     }
 };
 
@@ -461,6 +470,7 @@ const loadOrderManagement = async (req, res) => {
             .skip((page - 1) * itemPage)
             .limit(itemPage);
 
+            console.log(orderData,'orderData');
         res.render("orderManagement", { orderData, totalPages, currentPage: page });
     } catch (error) {
         console.log('Error:', error.message);
@@ -478,12 +488,12 @@ const updateOrder = async (req, res) => {
         const orderData = await Order.findOne({ 'orderProducts._id': orderId });
 
         const orderProductIndex = orderData.orderProducts.findIndex(product => product._id.toString() === orderId);
-        const status= orderData.orderProducts[orderProductIndex].status = orderStatus;
+        const status = orderData.orderProducts[orderProductIndex].status = orderStatus;
         const date = orderData.orderProducts[orderProductIndex].statusChangeTime = new Date();
-        console.log(orderProductIndex,'orderProductIndex');
+        console.log(orderProductIndex, 'orderProductIndex');
 
-        console.log(status,'status');
-        console.log(date,'date ');
+        console.log(status, 'status');
+        console.log(date, 'date ');
 
         await orderData.save();
 
@@ -505,7 +515,13 @@ const updateOrder = async (req, res) => {
 const orderDetails = async (req, res) => {
     try {
         const orderId = req.query._id;
-        const orderData = await Order.findOne({ _id: orderId }).populate("orderProducts.productId");
+        const orderData = await Order.findOne({ _id: orderId })
+            .populate({
+                path: 'orderProducts.productId',
+                populate: { path: 'category' } 
+            });
+
+            console.log(orderData,'orderData');
         if (orderData) {
             res.render('orderDetails', { orderData });
         } else {
@@ -516,6 +532,7 @@ const orderDetails = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
 
 
 
