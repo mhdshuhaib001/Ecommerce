@@ -476,15 +476,11 @@
 
 
 
-
-function addToWishlist(productId) {
-    console.log(productId, 'wishId');
-    const wishId = { productId: productId };
-    console.log(wishId);
+        function addToWishlist(productId) {
     $.ajax({
         method: "POST",
         url: '/addWishlist',
-        data: JSON.stringify(wishId),
+        data:productId,
         contentType: 'application/json',
         success: function (response) {
             console.log(response);
@@ -521,6 +517,7 @@ function addToWishlist(productId) {
         }
     });
 }
+
 
 
 

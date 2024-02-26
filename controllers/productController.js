@@ -267,12 +267,10 @@ const loadProduct = async (req, res) => {
         res.status(500).render("500"); 
     }
 };
-
-
-
 const filterProducts = async (req, res) => {
     try {
-        const priceRange = req.body.price;  
+        const priceRange = req.body.price;
+        const sortOrder = req.body.sortOrder || 'lowToHigh';  
         const category = await Category.find({ blocked: 0 });
 
         const page = parseInt(req.query.page) || 1;
@@ -288,13 +286,13 @@ const filterProducts = async (req, res) => {
         const user = await User.findOne({ _id: req.session.user_id });
         let wishCount = 0;
 
-        if (priceRange !== undefined) {
+        if (priceRange !== undefined && priceRange !== '0-1000000000') {
             const [minPrice, maxPrice] = priceRange.split('-').map(Number);
 
             filtered = await Products.find({
                 blocked: 0,
                 price: { $gte: minPrice, $lte: maxPrice }
-            }).sort({ price: 1 })
+            }).sort({ price: sortOrder === 'highToLow' ? -1 : 1 })
             .skip(skip)
             .limit(limit);
             count = await Products.find({
@@ -302,7 +300,7 @@ const filterProducts = async (req, res) => {
                 price: { $gte: minPrice, $lte: maxPrice }
             }).count();
         } else {
-            filtered = await Products.find({ blocked: 0 }).skip(skip).limit(limit);
+            filtered = await Products.find({ blocked: 0 }).sort({ price: sortOrder === 'highToLow' ? -1 : 1 }).skip(skip).limit(limit);
             count = await Products.find({ blocked: 0 }).count();
         }
 

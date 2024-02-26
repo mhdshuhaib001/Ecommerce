@@ -4,10 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Mazia</title>
+    <title>Loom Fashion</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
 
     <!-- External CSS libraries -->
     <link rel="stylesheet" type="text/css" href="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.css">
@@ -131,17 +132,14 @@
 
 
                                                             <div class="search-form mt-35">
-                                                                <form action="/filter" method="get">
-                                                                    <input type="text" id="search-input" name="search"
-                                                                        placeholder="Search Products...">
+                                                                <form id="search-form" action="/seachProduct"
+                                                                    method="get">
+                                                                    <input type="search" name="searchQuary"
+                                                                        id="searchQuary" placeholder="search product"
+                                                                        required>
+
                                                                     <button type="submit"><i
                                                                             class="fal fa-search"></i></button>
-                                                                    <input type="radio" name="sort" value="0" checked
-                                                                        hidden>
-                                                                    <input type="radio" name="price"
-                                                                        value="0-10000000000" checked hidden>
-                                                                    <input type="radio" name="category" value="all"
-                                                                        checked hidden>
                                                                 </form>
                                                             </div>
 

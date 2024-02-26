@@ -270,102 +270,146 @@
                                             </div><!-- End .col-lg-6 -->
                                             <% })} %> <!-- End Address Cards Loop -->
                                     </div><!-- Row end -->
-                                    <button class="btn" style="background-color: #6895D2; color: white;">
+                                    <button class="btn" type="button" style="background-color: #6895D2; color: white;" data-toggle="modal" data-target="#addAddressModal">
                                         Add another address</button>
 
-                                    <form  id="addAddressForm" style="display: none;">
-                                        <!-- Address Details Form -->
-                                    </form>
+                                    
                                 </div><!-- End .col-lg-9 -->
+<!-- Add Address Modal -->
+<div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" style="padding-top: 80px;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Address</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/addAddress" id="form" method="post" class="row gx-2">
+                    <div class="form-group col-md-6">
+                        <label for="fullname">Full Name *</label>
+                        <input type="text" class="form-control" name="fullname" id="fullname" required>
+                        <div id="fnameError" style="display: none; color: red;"></div>
+                    </div>
+                
+                    <div class="form-group col-md-6">
+                        <label for="mobile">Mobile *</label>
+                        <input type="tel" class="form-control" name="mobile" id="mobile" autocomplete="off" required>
+                        <div id="phoneError" style="display: none; color: red;"></div>
+                    </div>
+                
+                    <div class="form-group col-md-12">
+                        <label for="email">Email *</label>
+                        <input type="email" class="form-control" name="email" id="addressEmail" required>
+                        <div id="addEmailError" style="display: none; color: red;"></div>
+                    </div>
+                
+                    <div class="form-group col-md-12">
+                        <label for="house">House Name *</label>
+                        <input type="text" class="form-control" name="houseName" id="houseName" required>
+                        <div id="houseError" style="display: none; color: red;"></div>
+                    </div>
+                
+                    <div class="form-group col-md-4">
+                        <label for="state">State *</label>
+                        <input type="text" class="form-control" name="state" id="state" required>
+                        <div id="stateError" style="display: none; color: red;"></div>
+                    </div>
+                
+                    <div class="form-group col-md-4">
+                        <label for="city">City *</label>
+                        <input type="text" class="form-control" name="city" id="city" required>
+                        <div id="cityError" style="display: none; color: red;"></div>
+                    </div>
+                
+                    <div class="form-group col-md-4">
+                        <label for="pincode">Pincode *</label>
+                        <input type="tel" class="form-control" name="pincode" id="pincode" autocomplete="off" required>
+                        <div id="pinError" style="display: none; color: red;"></div>
+                    </div>
+                
+                    <div class="form-group col-md-12">
+                        <button id="submitAddress" type="submit" class="btn btn-outline-primary">
+                            <span>Add Address</span>
+                            <i class="icon-long-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
                                 <!-- edit Modal -->
 
-                                <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog"
+                                <div class="modal fade " id="editAddressModal" tabindex="-1" role="dialog"
                                     aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-top: 80px;">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">edit
+                                                <h5 class="modal-title" id="exampleModalLabel">Edit
                                                     Address</h5>
                                                 <button type="button" class="close" data-dismiss="modal"
                                                     aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
-                                            <div class="modal-body">
-                                                <form action="/editAddress" id="editAddressform" method="post">
-                                                    <div class="form-group">
-                                                        <label for="fullname">Full
-                                                            Name
-                                                            *</label>
-                                                        <input type="text" class="form-control" name="fullname"
-                                                            id="fullnames" required>
-                                                        <div id="fnameError" style="display: none; color: red;">
-                                                        </div>
+                                            <div class="modal-body ">
+                                                <form action="/editAddress" id="editAddressform" method="post" class="row gx-2">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="fullname">Full Name *</label>
+                                                        <input type="text" class="form-control" name="fullname" id="fullnames" required>
+                                                        <div id="fnameError" style="display: none; color: red;"></div>
                                                     </div>
-
-                                                    <div class="form-group">
-                                                        <label for="email">Email
-                                                            *</label>
-                                                        <input type="email" class="form-control" name="email"
-                                                            id="emails" required>
-                                                        <div id="addEmailError" style="display: none; color: red;">
-                                                        </div>
-
+                                                
+                                                    <div class="form-group col-md-6">
+                                                        <label for="mobile">Mobile *</label>
+                                                        <input type="tel" class="form-control" name="mobile" id="mobiles" required>
+                                                        <div id="mobiles" style="display: none; color: red;"></div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="mobile">Mobile
-                                                            *</label>
-                                                        <input type="tel" class="form-control" name="mobile"
-                                                            id="mobiles" required>
-                                                        <div id="mobiles" style="display: none; color: red;">
-                                                        </div>
-
+                                                
+                                                    <div class="form-group col-md-12">
+                                                        <label for="email">Email *</label>
+                                                        <input type="email" class="form-control" name="email" id="emails" required>
+                                                        <div id="addEmailError" style="display: none; color: red;"></div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="state">State
-                                                            *</label>
-                                                        <input type="text" class="form-control" name="state" id="states"
-                                                            required>
-                                                        <div id="stateError" style="display: none; color: red;">
-                                                        </div>
+                                                
+                                                    <div class="form-group col-md-12">
+                                                        <label for="house">House Name *</label>
+                                                        <input type="text" class="form-control" name="houseName" id="houseNames" required>
+                                                        <div id="houseError" style="display: none; color: red;"></div>
+                                                        <input type="text" class="form-control" style="display: none;" id="addressId" name="addressId">
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="city">City
-                                                            *</label>
-                                                        <input type="text" class="form-control" name="city" id="citys"
-                                                            required>
-                                                        <div id="cityError" style="display: none; color: red;">
-                                                        </div>
-
+                                                
+                                                    <div class="form-group col-md-4">
+                                                        <label for="state">State *</label>
+                                                        <input type="text" class="form-control" name="state" id="states" required>
+                                                        <div id="stateError" style="display: none; color: red;"></div>
                                                     </div>
-
-                                                    <div class="form-group">
-                                                        <label for="pincode">Pincode
-                                                            *</label>
-                                                        <input type="tel" class="form-control" name="pincode"
-                                                            id="pincodes" autocomplete="off" required>
-                                                        <div id="pinError" style="display: none; color: red;">
-                                                        </div>
+                                                
+                                                    <div class="form-group col-md-4">
+                                                        <label for="city">City *</label>
+                                                        <input type="text" class="form-control" name="city" id="citys" required>
+                                                        <div id="cityError" style="display: none; color: red;"></div>
                                                     </div>
-
-                                                    <div class="form-group">
-                                                        <label for="house">House
-                                                            Name *</label>
-                                                        <input type="text" class="form-control" name="houseName"
-                                                            id="houseNames" required>
-                                                        <div id="houseError" style="display: none; color: red;">
-                                                        </div>
-                                                        <input type="text" class="form-control" style="display: none;"
-                                                            id="addressId" name="addressId">
+                                                
+                                                    <div class="form-group col-md-4">
+                                                        <label for="pincode">Pincode *</label>
+                                                        <input type="tel" class="form-control" name="pincode" id="pincodes" autocomplete="off" required>
+                                                        <div id="pinError" style="display: none; color: red;"></div>
                                                     </div>
-
-                                                    <button id="editAddress" type="submit"
-                                                        class="btn btn-outline-primary">
-                                                        <span>Add Address</span>
-                                                        <i class="icon-long-arrow-right"></i>
-                                                    </button>
+                                                
+                                                    <div class="form-group col-md-12">
+                                                        <button id="editAddress" type="submit" class="btn btn-outline-primary">
+                                                            <span>Add Address</span>
+                                                            <i class="icon-long-arrow-right"></i>
+                                                        </button>
+                                                    </div>
                                                 </form>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -701,7 +745,7 @@
 
     </script>
 
-    <script src="/js/profileEdits.js"></script>
+    <script src="/userjs/profileEdits.js"></script>
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>

@@ -13,20 +13,23 @@ $(document).ready(function () {
           },
           method: "post",
           success: function (response) {
-              errorMessage.hide().text(""); // Reset error message display
+              errorMessage.hide().text("");
 
               if (response.emailPatt || response.email_require || response.email_space || response.mailverify || response.wrong) {
                   errorMessage.show().text(getErrorMessage(response));
               } else {
-                  // Handle success or redirection
                   Swal.fire({
                     title: "Success!",
                     html: `Check your inbox for the reset instructions sent to: <strong>${email}</strong>`,
                     icon: "success",
                     customClass: {
-                        popup: 'small-swal' // Custom class for a smaller Swal
+                        popup: 'small-swal' 
                     }
                 });
+
+                setTimeout(function() {
+                    window.location.href = "/login";
+                  }, 2000);
               }
           },
       });
@@ -62,7 +65,6 @@ document.getElementById('resetPassword').addEventListener('click', function (e) 
       method: "POST",
       success: (response) => {
         if(response.required){
-          console.log("ryeyyyyyyyyyyyyyyyyyyyy")
         } else if (response.password_space) {
               password_message.style.display = "block";
               password_message.textContent = "Password cannot contain space.";

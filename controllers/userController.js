@@ -406,14 +406,26 @@ const sendPassResetMail = async (name, email, token) => {
     const mailOptions = {
       from: process.env.ADMIN_EMAIL,
       to: email,
-      subject: "For Reset Password",
-      html:
-        "<h2>Hello " +
-        name +
-        '. <br> This message for reset your password. <br> <strong>click here to <a href="http://localhost:8000/forget-password?token=' +
-        token +
-        '">Reset</strong ></a> your password.</h2>,'
+      subject: "Password Reset",
+      html: `
+        <div style="font-family: 'Arial', sans-serif; padding: 20px; background-color: #f7f7f7; text-align: center;">
+          <h1 style="color: #333;">Password Reset</h1>
+          <p>Hello ${name},</p>
+          <p>This message is for resetting your password.</p>
+          <p>
+            <strong>
+              Click the following link to reset your password:
+              <a href="http://localhost:8000/forget-password?token=${token}" style="color: #3498db; text-decoration: none;">
+                Reset Password
+              </a>
+            </strong>
+          </p>
+          <p>If you didn't request this, please ignore this email.</p>
+          <p style="color: #888;">Loom Fashion Team</p>
+        </div>
+      `,
     };
+    
 
     transporter.sendMail(mailOptions, function (err, info) {
       if (err) {
@@ -512,7 +524,13 @@ const resetPassword = async (req, res) => {
 
     if (Password.trim() === "") {
       res.json({ required: true });
-    } else {
+    } else{
+      if(confirm.trim()==""){
+        res.json({ required: true });
+
+      }
+    }
+     {
       if (Password.startsWith(" ") || Password.includes(" ")) {
         res.json({ password_space: true });
       } else {
@@ -608,7 +626,7 @@ const loadShop = async (req, res) => {
 const searchProducts = async (req, res) => {
   try {
 
-    const category = await Category.find({ blocked: 0 });
+    const categoryData = await Category.find({ blocked: 0 });
     const serchQuary = req.query.searchQuary;
     const searchRegex = new RegExp(`^${serchQuary}`, "i");
     const page = parseInt(req.query.page) || 1;
@@ -624,7 +642,9 @@ const searchProducts = async (req, res) => {
       currentPage: page,
       totalPages,
       limit,
-      totalProducts
+      totalProducts,
+      category: categoryData,
+
     })
   } catch (error) {
     console.log(error.message);

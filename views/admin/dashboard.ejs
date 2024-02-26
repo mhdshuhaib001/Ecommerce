@@ -1,6 +1,7 @@
 <%-include("../layouts/admin/header.ejs")%>
 
 
+
   <div class="main-panel">
     <div class="content-wrapper">
 
@@ -392,10 +393,10 @@
               </div>
               <canvas id="bestSellingProductChart"></canvas>
             </div>
-            </div>
           </div>
         </div>
-          <div class="row">
+      </div>
+      <div class="row">
         <div class="col-md-8  grid-margin stretch-card">
           <div class="card">
             <div class="card-body">
@@ -404,11 +405,11 @@
               </div>
               <canvas id="Category"></canvas>
             </div>
-            </div>
           </div>
         </div>
+      </div>
 
-        <!-- <div class="col-md-6 col-xl-4 grid-margin stretch-card">
+      <!-- <div class="col-md-6 col-xl-4 grid-margin stretch-card">
           <div class="card">
             <div class="card-body">
               <h4 class="card-title">Portfolio Slide</h4>
@@ -450,7 +451,7 @@
             </div>
           </div>
         </div> -->
-        <!-- <div class="col-md-12 col-xl-4 grid-margin stretch-card">
+      <!-- <div class="col-md-12 col-xl-4 grid-margin stretch-card">
           <div class="card">
             <div class="card-body">
               <h4 class="card-title">To do list</h4>
@@ -498,10 +499,10 @@
                 </ul>
               </div>
             </div> -->
-      </div>
+     </div>
     </div>
-  </div>
-  <!-- <div class="row">
+    </div>
+    <!-- <div class="row">
         <div class="col-12">
           <div class="card">
             <div class="card-body">
@@ -571,14 +572,15 @@
           </div>
         </div>
       </div> -->
-  </div>
-  </div>
+   </div>
+   </div>
 
-  
+
+
   <div id="monthlySales" data-monthly-order-counts="<%= JSON.stringify(salesDataMonthly) %>"></div>
   <div id="yearlySales" data-yearly-order-counts="<%= JSON.stringify(salesDataYearly) %>"></div>
   <div id="paymentMethod" data-payment-method="<%= JSON.stringify(paymentMethodDatas)%>"></div>
-  
+
   <div id="bestSellingProducts" data-best-seller="<%= JSON.stringify(bestSellingProducts) %>"></div>
 
 
@@ -693,50 +695,50 @@
 
 
 
-// ------------------------------------bestSellingProduct-------------------------
-var bestSellingProducts = document.getElementById('bestSellingProducts');
-var bestSellingProduct = JSON.parse(bestSellingProducts.getAttribute('data-best-seller'));
-const bestProduct = bestSellingProduct.map(product => product.productName);
-const bestSellingProductCount = bestSellingProduct.map(product => product.totalSold); 
+    // ------------------------------------bestSellingProduct-------------------------
+    var bestSellingProducts = document.getElementById('bestSellingProducts');
+    var bestSellingProduct = JSON.parse(bestSellingProducts.getAttribute('data-best-seller'));
+    const bestProduct = bestSellingProduct.map(product => product.productName);
+    const bestSellingProductCount = bestSellingProduct.map(product => product.totalSold);
 
-const dataBestsellingProduct = {
-    labels: bestProduct,
-    datasets: [{
+    const dataBestsellingProduct = {
+      labels: bestProduct,
+      datasets: [{
         axis: 'y',
         label: 'Best Selling Product',
         data: bestSellingProductCount,
         backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-            'rgba(255, 205, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(201, 203, 207, 0.2)'
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(201, 203, 207, 0.2)'
         ],
         borderColor: [
-            'rgb(255, 99, 132)',
-            'rgb(255, 159, 64)',
-            'rgb(255, 205, 86)',
-            'rgb(75, 192, 192)',
-            'rgb(54, 162, 235)',
-            'rgb(153, 102, 255)',
-            'rgb(201, 203, 207)'
+          'rgb(255, 99, 132)',
+          'rgb(255, 159, 64)',
+          'rgb(255, 205, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(54, 162, 235)',
+          'rgb(153, 102, 255)',
+          'rgb(201, 203, 207)'
         ],
         borderWidth: 1
-    }]
-};
+      }]
+    };
 
-const configBestsellingProduct = {
-    type: 'bar',
-    data: dataBestsellingProduct,
-    options: {
+    const configBestsellingProduct = {
+      type: 'bar',
+      data: dataBestsellingProduct,
+      options: {
         indexAxis: 'y',
-    }
-};
+      }
+    };
 
-const bestsellerPro = document.getElementById('bestSellingProductChart').getContext('2d');
-const myChart = new Chart(bestsellerPro, configBestsellingProduct);
+    const bestsellerPro = document.getElementById('bestSellingProductChart').getContext('2d');
+    const myChart = new Chart(bestsellerPro, configBestsellingProduct);
 
 
 

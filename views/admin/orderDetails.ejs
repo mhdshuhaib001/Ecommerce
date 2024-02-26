@@ -39,7 +39,7 @@
                         <div>
                             <h4>Products</h4>
                             <div class="table-responsive">
-                                <table class="table table-hover">
+                                <table class="table table-hover" id="reloadArea">
                                     <thead>
                                         <tr>
                                             <th>No:</th>
@@ -134,7 +134,7 @@
                     </div>
                     <% } %>
         </div>
-    </div>
+    
 
     <!-- The Modal -->
                 <div class="modal fade" id="returnOptionsModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -173,13 +173,10 @@
             console.log('checking');
             $('#returnOptionsModal').modal('hide');
 
-            // Example: Trigger the returnOrder function
             returnOrder(productId, count,orderId);
         });
 
-        // JavaScript to handle the Reject button click (optional)
         $(document).on('click', '.btn-secondary', function () {
-            // Your logic for rejecting the return
             $('#returnOptionsModal').modal('hide');
         });
 
@@ -234,7 +231,6 @@
 
 
         function updateOrder(id, status) {
-            console.log(' vdkjk x df', status, id);
             const data = { orderId: id, status };
             console.log(data);
             $.ajax({
@@ -244,7 +240,7 @@
                 contentType: 'application/json',
                 success: function (response) {
                     if (response.success === true) {
-                        window.location.reload()
+                        $('#reloadArea').load('/orderDet #reloadArea');
                     } else {
                         swal("Something error", "", "error");
                         $('#reloadArea').load('/orderDet #reloadArea');

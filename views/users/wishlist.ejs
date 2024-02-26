@@ -64,31 +64,41 @@
                                     <td class="product-subtotal"><span class="amount">$130.00</span></td>
                                     <td class="product-remove"><a href="javascript:void(0)"><i class="fa fa-times"></i></a></td>
                                 </tr> -->
+
                                 <% if (wishData != null && wishData.length > 0) { %>
-                                    <% wishData.forEach(function(wishlist) { %>
-                                        <% wishlist.products.forEach(function(product) { %>
-                                            <tr>
-                                                <td class="product-thumbnail"><a href="/products/crops/<%= product._id %>"><img src="img/product/pro2.jpg" alt=""></a></td>
-                                                <td class="product-name"><a href="/products/crops/<%= product._id %>"><%= product.name %></a></td>
-                                                <td class="product-price"><span class="amount"><%= product.price %></span></td>
-                                                <td class="product-quantity">
-                                                    <button class="btn theme-btn-2" type="submit">Add TO Cart</button>
-                                                </td>
-                                                <td class="product-remove"><a href="javascript:void(0)"><i class="fa fa-times"></i></a></td>
-                                            </tr>
-                                        <% }) %>
+                                    <% wishData.forEach(function (wishlist) { %>
+                                      <% wishlist.products.forEach(function (product) { %>
+                                        <tr>
+                                          <td class="product-thumbnail">
+                                            <a href="/products/crops/<%= product._id %>">
+                                              <img src="/products/crops/<%= product.image1 %>" alt="">
+                                            </a>
+                                          </td>
+                                          <td class="product-name">
+                                            <a href="/product._id?=<%= product._id %>"><%= product.name %></a>
+                                          </td>
+                                          <td class="product-price">
+                                            <span class="amount"><%= product.price %></span>
+                                          </td>
+                                          <td class="product-quantity">
+                                            <button class="btn theme-btn-2" type="submit">Add TO Cart</button>
+                                          </td>
+                                          <td class="product-remove">
+                                            <a href="javascript:void(0)"><i class="fa fa-times"></i></a>
+                                          </td>
+                                        </tr>
+                                      <% }) %>
                                     <% }) %>
-                                <% } else { %>
+                                  <% } else { %>
                                     <tr>
-                                        <td colspan="5">
-                                            <div>
-                                                <h3>No product </h3>
-                                            </div>
-                                        </td>
+                                      <td colspan="5">
+                                        <div>
+                                          <h3>No products</h3>
+                                        </div>
+                                      </td>
                                     </tr>
-                                <% } %>
-                                
-                                
+                                  <% } %>
+                                  
                                 
                             </tbody>
                         </table>

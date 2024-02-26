@@ -109,7 +109,7 @@ function removeAddress(addressId) {
         data: {
           id: addressId,
         },
-        method: "POST", 
+        method: "POST",
         success: (response) => {
           if (response.remove) {
             $("#addressReload").load("/userProfile #addressReload");
@@ -240,86 +240,74 @@ document.getElementById('editAddress').addEventListener('click', function (e) {
     stateError.style.display = "block";
     stateError.textContent = "State name is required"
   } else {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You want to add these details?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes",
-      cancelButtonText: "Not now",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        $.ajax({
-          url: "/editAddress",
-          data: {
-            fullname: fullname,
-            email: addressEmail,
-            mobile: phone,
-            houseName: houseName,
-            city: city,
-            state: state,
-            pincode: pin,
-            id: id
-          },
-          method: "post",
-          success: (response) => {
-            console.log(response, 'check the responce')
-            if ((response.success)) {
-              $('#editAddressModal').modal('hide');
-              $('.modal-dropback').remove();
-              // $("#reloadDiv").load("/userProfile #reloadDiv");
 
-              const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-              })
+    $.ajax({
+      url: "/editAddress",
+      data: {
+        fullname: fullname,
+        email: addressEmail,
+        mobile: phone,
+        houseName: houseName,
+        city: city,
+        state: state,
+        pincode: pin,
+        id: id
+      },
+      method: "post",
+      success: (response) => {
+        console.log(response, 'check the responce')
+        if ((response.success)) {
+          $('#editAddressModal').modal('hide');
+          $('.modal-dropback').remove();
+          // $("#reloadDiv").load("/userProfile #reloadDiv");
 
-              Toast.fire({
-                icon: 'success',
-                title: 'Billing address updated successfully.'
-              })
-              setTimeout(() => {
-                window.location.reload("/userProfile");
-              }, 2000);
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+          })
 
+          Toast.fire({
+            icon: 'success',
+            title: 'Billing address updated successfully.'
+          })
+          setTimeout(() => {
+            window.location.reload("/userProfile");
+          }, 2000);
 
-            } else {
-              const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 2000,
-              })
+        } else {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000,
+          })
 
-              Toast.fire({
-                icon: 'error',
-                title: 'Oops !! try again.'
-              })
-            }
-          },
-        });
-      }
+          Toast.fire({
+            icon: 'error',
+            title: 'Oops !! try again.'
+          })
+        }
+      },
     });
   }
 });
 
 
-function showEditAddressModal(fullname, mobile, email, houseName, city, state, pincode, addressId) {
-  document.getElementById('fullnames').value = fullname;
-  document.getElementById('emails').value = email;
-  document.getElementById('mobiles').value = mobile;
-  document.getElementById('states').value = state;
-  document.getElementById('citys').value = city;
-  document.getElementById('pincodes').value = pincode;
-  document.getElementById('houseNames').value = houseName;
-  document.getElementById('addressId').value = addressId;
 
-  $('#editAddressModal').modal('show');
-}
+  function showEditAddressModal(fullname, mobile, email, houseName, city, state, pincode, addressId) {
+    document.getElementById('fullnames').value = fullname;
+    document.getElementById('emails').value = email;
+    document.getElementById('mobiles').value = mobile;
+    document.getElementById('states').value = state;
+    document.getElementById('citys').value = city;
+    document.getElementById('pincodes').value = pincode;
+    document.getElementById('houseNames').value = houseName;
+    document.getElementById('addressId').value = addressId;
+
+    $('#editAddressModal').modal('show');
+  }
 
 
 
@@ -341,9 +329,9 @@ function showEditAddressModal(fullname, mobile, email, houseName, city, state, p
     const editEmail = document.getElementById('editEmail').value;
     const editMobile = document.getElementById('editMobile').value;
 
-    console.log(editFullname,'chek');
-    console.log(editEmail,'chek');
-    console.log(editMobile,'chek');
+    console.log(editFullname, 'chek');
+    console.log(editEmail, 'chek');
+    console.log(editMobile, 'chek');
 
 
     // Validation patterns

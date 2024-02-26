@@ -5,10 +5,12 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Admin</title>
+  <title>Loom Admin</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="/admin/vendors/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="/admin/vendors/css/vendor.bundle.base.css">
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
+
 
   <!-- endinject -->
   <!-- Plugin css for this page -->
@@ -33,6 +35,15 @@
 </head>
 
 <body>
+
+  <div id="loader-wrapper">
+    <div id="loader"></div>
+    
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+    
+  </div>
+
   <div class="container-scroller">
     <!-- partial:../../partials/_sidebar.html -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
@@ -151,14 +162,7 @@
             <span class="menu-title">Order Management</span>
           </a>
         </li>
-        <li class="nav-item menu-items">
-          <a class="nav-link" href="/admin/banner">
-            <span class="menu-icon">
-              <i class="mdi mdi-chart-bar"></i>
-            </span>
-            <span class="menu-title">Banner Management</span>
-          </a>
-        </li>
+
         <li class="nav-item menu-items">
           <a class="nav-link" href="/admin/coupon">
             <span class="menu-icon">
@@ -417,3 +421,4 @@
 
       </div>
     </nav>
+   

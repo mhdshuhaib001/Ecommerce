@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Mazia</title>
-    <meta name="description" content>
+    <title>Loom Fashion</title>
+    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
 
@@ -71,24 +71,8 @@
                                                 </div>
                                             </div> -->
                                     </li>
-                                    <li><a href><span>Blog <i class="fal fa-angle-down"></i></span>
-                                        </a>
-                                        <!-- <li><a href="javascript:void(0)"><span>Blog <i class="fal fa-angle-down"></i></span> </a> -->
-                                        <!-- <ul class="submenu">
-                                                <li><a href="blog.html">Grid layout</a></li>
-                                                <li><a href="blog2.html">Large image</a></li>
-                                                <li><a href="blog3.html">Left Sidebar</a></li>
-                                                <li><a href="blog4.html">Right Sidebar</a></li>
-                                                <li><a href="blog5.html">No sidebar</a></li>
-                                            </ul> -->
-                                    </li>
-                                  
-                                    <li><a href="javascript:void(0)"><span>Page</span>
-                                            <i class="fal fa-angle-down"></i></a>
-                                        <ul class="submenu">
-                                            <li><a href="about">About</a></li>
-                                             </ul>
-                                    </li>
+                               
+
                                     <li><a href="/contact"><span>Contact</span></a></li>
                                 </ul>
                             </nav>
@@ -169,7 +153,7 @@
                                                             </div>
                                                         </li>
                                                     </ul>
-                                                </div> -->
+                                                  </div> -->
                                                         </div>
 
                                                     </div>
@@ -340,15 +324,7 @@
                                         Botttom</a></li>
                             </ul>
                         </li>
-                        <li><a href="javascript:void(0)">Blog</a>
-                            <ul>
-                                <li><a href="blog.html">Grid layout</a></li>
-                                <li><a href="blog2.html">Large image</a></li>
-                                <li><a href="blog3.html">Left Sidebar</a></li>
-                                <li><a href="blog4.html">Right Sidebar</a></li>
-                                <li><a href="blog5.html">No sidebar</a></li>
-                            </ul>
-                        </li>
+                     
                         <li><a href="javascript:void(0)">Portfolio</a>
                             <ul>
                                 <li><a href="portfolio.html">Single
@@ -385,7 +361,6 @@
                                                 <%= category.name %>
                                             </a></li>
                                         <% }) %>
-
                                 </ul>
                             </div>
                         </div>
@@ -396,7 +371,7 @@
                             <form action="/filterProduct" method="POST">
                                 <div class="filter-form-submit mt-35">
                                     <label>
-                                        <input type="radio" name="price" value="0-50"> All price
+                                        <input type="radio" name="price" value="0-50"> ₹0 - ₹50
                                     </label>
                                     <label>
                                         <input type="radio" name="price" value="999-1999"> ₹999 - ₹1999
@@ -405,16 +380,18 @@
                                         <input type="radio" name="price" value="2000-3999"> ₹2000 - ₹3999
                                     </label>
                                     <label>
-                                        <input type="radio" name="price" id="lowToHigh" value="0-1000000000"> LowToHigh
+                                        <input type="radio" name="price" value="0-1000000000"> All Price
                                     </label>
                                     <label>
-                                        <input type="radio" name="price" id="highToLow" value="100000-0"> High to
-                                        Low
+                                        <input type="radio" name="sortOrder" id="lowToHigh" value="lowToHigh"> Low to High
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="sortOrder" id="highToLow" value="highToLow"> High to Low
                                     </label>
                                     <button type="submit">Filter</button>
                                 </div>
                             </form>
-
+                            
                         </div>
                         <!-- <div class="widget mt-50">
                              
@@ -491,12 +468,12 @@
                                                         </div>
                                                         <div class="product-desc pb-20">
                                                             <div class="product-desc-top">
-                                                                <!-- <div class="categories">
+                                                                <div class="categories">
                                                                         <a href="shop2.html" class="product-category">
                                                                             <span>
                                                                             </span>
                                                                         </a>
-                                                                    </div> -->
+                                                                    </div>
                                                                 <a onclick="addToWishlist('<%=product._id%>')"
                                                                     class="wishlist float-right">
                                                                     <span><i class="fal fa-heart"></i></span>
@@ -647,51 +624,47 @@
 
 
 
-
         function addToWishlist(productId) {
-            console.log(productId, 'wishId');
-            const wishId = { productId: productId };
-            console.log(wishId);
-            $.ajax({
-                method: "POST",
-                url: '/addWishlist',
-                data: JSON.stringify(wishId),
-                contentType: 'application/json',
-                success: function (response) {
-                    console.log(response);
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 2000,
-                    });
-
-                    if (response.added) {
-                        Toast.fire({
-                            icon: 'success',
-                            title: response.message
-                        });
-                    } else if (response.remove) {
-                        Toast.fire({
-                            icon: 'success',
-                            title: response.message
-                        });
-                    } else {
-                        Toast.fire({
-                            icon: 'error',
-                            title: 'Please log in to perform this action.',
-                            timer: 2000
-                        });
-                        setTimeout(function () {
-                            window.location.href = '/login';
-                        }, 1000);
-                    }
-                },
-                error: function (error) {
-                    console.error(error.responseText);
-                }
+    $.ajax({
+        method: "POST",
+        url: '/addWishlist',
+        data:productId,
+        contentType: 'application/json',
+        success: function (response) {
+            console.log(response);
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
             });
+
+            if (response.added) {
+                Toast.fire({
+                    icon: 'success',
+                    title: response.message
+                });
+            } else if (response.remove) {
+                Toast.fire({
+                    icon: 'success',
+                    title: response.message
+                });
+            } else {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Please log in to perform this action.',
+                    timer: 2000
+                });
+                setTimeout(function () {
+                    window.location.href = '/login';
+                }, 1000);
+            }
+        },
+        error: function (error) {
+            console.error(error.responseText);
         }
+    });
+}
 
     </script>
 

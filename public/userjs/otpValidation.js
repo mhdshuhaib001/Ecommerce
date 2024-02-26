@@ -3,7 +3,6 @@
 document.getElementById("otpForm").addEventListener('click',function(e){
     e.preventDefault()
     const otp =document.getElementById("otp").value
-    console.log(otp,'chcekotp in ajax')
     const message = document.getElementById("otp-error")
 
     

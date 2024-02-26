@@ -26,7 +26,6 @@ const adminController = require("../controllers/adminController");
 const productController = require("../controllers/productController");
 const orderController = require("../controllers/orderController");
 const couponController = require("../controllers/couponController");
-const bannerController = require("../controllers/bannerController");
 
 
 admin_Rout.get("/",auth.isLogout,adminController.adminLoginPage);
@@ -70,9 +69,6 @@ admin_Rout.put("/blockCoupon",auth.isLogin,couponController.blockCoupon);
 admin_Rout.delete("/couponDelet",auth.isLogin,couponController.deletCouopon);
 // admin_Rout.get("/editCoupon",couponController.loadEditCoupon);
 
-
-admin_Rout.get("/banner",bannerController.loadBanner)
-admin_Rout.get("/addBanner",bannerController.addBanner)
 
 
 admin_Rout.get("/salesReport",auth.isLogin,adminController.salesReport)

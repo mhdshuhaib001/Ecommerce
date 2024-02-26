@@ -4,15 +4,12 @@ const wishlistSchema = new mongoose.Schema({
   user: {
     type: String,
     required: true,
-    ref: "User  ",
+    ref: "User",
   },
   products: [
     {
-      productId: {
-        type: String,
-        required: true,
-        ref: "Products",
-      },
+      type: String,
+      ref: "Products",
     },
   ],
 });
