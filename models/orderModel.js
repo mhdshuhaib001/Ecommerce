@@ -77,10 +77,10 @@ const orderSchema = new mongoose.Schema({
       returnReason: {
         type: String,
       },
-      statusChangeTime: {
-        type: Date,
-        default: Date.now,
-      },      
+      cancelReason:{
+        type: String,
+
+      }   
     },
   ],
   totalAmount: {

@@ -1,5 +1,7 @@
 document.getElementById("submitAddress").addEventListener("click", function (e) {
   e.preventDefault();
+  console.log('hhhhhhhhhhhh');
+  alert('ijjhjkkj')
 
   const fullname = document.getElementById('fullname').value;
   const pincode = document.getElementById('pincode').value;
@@ -30,6 +32,7 @@ document.getElementById("submitAddress").addEventListener("click", function (e) 
   estateError.style.display = "none";
 
   // Validate the form
+  if(fulllname){
   if (fullname.trim() === "") {
     efnameError.style.display = "block";
     efnameError.textContent = "Name is required.";
@@ -81,14 +84,16 @@ document.getElementById("submitAddress").addEventListener("click", function (e) 
       method: "post",
       success: (response) => {
         if (response.success) {
-          window.location.reload('/addAddress');
+          window.location.reload();
         } else {
           console.error('Failed to add address.');
         }
       },
     });
   }
+}
 });
+
 
 
 //============ Remove Address============

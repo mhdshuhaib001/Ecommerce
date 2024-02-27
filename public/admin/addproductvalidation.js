@@ -30,3 +30,8 @@ document.getElementById('addproductsubmit').addEventListener('click',function(ev
         message.textContent = "Description should contain atleast 10 letters."
       } 
 })  
+
+
+
+
+

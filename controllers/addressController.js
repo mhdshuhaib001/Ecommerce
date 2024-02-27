@@ -77,6 +77,7 @@ const editAddress = async (req, res) => {
       },
       { new: true }
     );
+    console.log(updated,'00000000000000000000');
     res.json({ success: true, message: 'Address edited !' });
   } catch (error) {
     console.log(error.message);

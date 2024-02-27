@@ -57,24 +57,12 @@ document.getElementById('log-btn-1').addEventListener('click', function(e){
               `
             }
           }).then((data)=>{
-            window.location.href = "/login"
+            window.location.href = "/home"
           })
         
         }else if(response.success){
-          const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 2000,
-          })
-          
-          Toast.fire({
-            icon: 'success',
-            title: 'Welcome to Loom.'
-          })
-          setTimeout(() => {
+         
             window.location.href = "/home"
-          }, 2000);
          
         }else if(response.verify){
           window.location.href = "/userOtp"

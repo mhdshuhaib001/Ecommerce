@@ -1,6 +1,6 @@
 <%-include("../layouts/user/header.ejs")%>
 
-    <style>
+<style>
         /* Styles for Coupon Card */
 
         .coupon-container {
@@ -145,82 +145,101 @@
 
     </style>
 
-    <!-- preloader -->
-    <div id="loader-wrapper">
-        <div id="loader"></div>
-    </div>
+<!-- preloader -->
+<div id="loader-wrapper">
+    <div id="loader"></div>
+</div>
 
-    <main>
+<main>
 
-        <!-- breadcrumb-area-start -->
-        <section class="breadcrumb-area" data-background="img/bg/page-title.html">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="breadcrumb-content" style="flex-direction: column;">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb p-0 m-0">
-                                    <li class="breadcrumb-item"><a href="cart">Cart</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Checkout</li>
-                                </ol>
-                            </nav>
-                            <h2 class="cart-title mt-40">Checkout</h2>
-                        </div>
+    <!-- breadcrumb-area-start -->
+    <section class="breadcrumb-area" data-background="img/bg/page-title.html">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="breadcrumb-content"
+                        style="flex-direction: column;">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb p-0 m-0">
+                                <li class="breadcrumb-item"><a
+                                        href="cart">Cart</a></li>
+                                <li class="breadcrumb-item active"
+                                    aria-current="page">Checkout</li>
+                            </ol>
+                        </nav>
+                        <h2 class="cart-title mt-40">Checkout</h2>
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- breadcrumb-area-end -->
+        </div>
+    </section>
+    <!-- breadcrumb-area-end -->
 
-        <!-- coupon-area start -->
+    <!-- coupon-area start -->
 
-        <body class="couponBody">
-            <section class="coupon-area pt-30 pb-30">
-                <div class="container">
-                    <div class="row">
-                      <div class="col-md-12">
+    <body class="couponBody">
+        <section class="coupon-area pt-30 pb-30">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
                         <div class="coupon-accordion">
                             <!-- ACCORDION START -->
                             <h3>Have a coupon? <span id="couponShow">Click here
                                     to get your code</span></h3>
-                                    <div id="checkout_coupon" class="coupon-checkout-content" style="width: 100%;" >
-                                        <div class="coupon-info d-flex justify-content-center" id="reloadArea"  style="overflow: auto;">
-                                            <% if (couponData && couponData.length > 0) { %>
-                                                <% couponData.forEach(function (coupon) { %>
-                                                    <div class="coupon-container"  >
-                                                        <div class="coupon-card "
-                                                            data-coupon-id="<%= coupon._id %>">
-                                                            <div class="coupon-main">
-                                                                <div class="coupon-img">
-                                                                    <img src="https://i.pinimg.com/originals/c7/84/67/c78467db9ff497393cb548a48f02d451.png" alt />
-                                                                </div>
-                                                                <div class="coupon-content">
-                                                                    <h2><%= coupon.name %></h2>
-                                                                    <span>Criteria Amount: <%= coupon.criteriaAmount %></span>
-                                                                    <h1><%= coupon.discountAmount %>% <span>Coupon</span></h1>
-                                                                    <p>Valid till <%= coupon.expiryDate %></p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="coupon-copy-button">
-                                                                <% if (cartData && cartData.couponDiscount && coupon._id.toString() === cartData.couponDiscount.toString()) { %>
-                                                                    <input id="apply-value" type="text" readonly value="<%= coupon.couponCode %>" />
-                                                                    <button onclick="removeCoupon('<%= coupon._id %>')" class="coupon-copy-btn">Remove</button>
-                                                                <% } else { %>
-                                                                    <input id="apply-value" type="text" readonly value="<%= coupon.couponCode %>" />
-                                                                    <button onclick="couponApplied('<%= coupon._id %>')" class="coupon-copy-btn">Apply</button>
-                                                                <% } %>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                <% }); %>
-                                            <% } else { %>
-                                                <div style="background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
-                                                    <p style="color: #555; margin: 0;">No coupons available at the moment. Check back later!</p>
+                            <div id="checkout_coupon"
+                                class="coupon-checkout-content"
+                                style="width: 100%;">
+                                <div
+                                    class="coupon-info d-flex justify-content-center"
+                                    id="reloadArea" style="overflow: auto;">
+                                    <% if (couponData && couponData.length > 0 )
+                                    { %>
+                                    <% couponData.forEach(function (coupon) { %>
+                                    <div class="coupon-container">
+                                        <div class="coupon-card "
+                                            data-coupon-id="<%= coupon._id %>">
+                                            <div class="coupon-main">
+                                                <div class="coupon-img">
+                                                    <img
+                                                        src="https://i.pinimg.com/originals/c7/84/67/c78467db9ff497393cb548a48f02d451.png"
+                                                        alt />
                                                 </div>
-                                            <% } %>
+                                                <div class="coupon-content">
+                                                    <h2><%= coupon.name %></h2>
+                                                    <span>Criteria Amount: <%=
+                                                        coupon.criteriaAmount
+                                                        %></span>
+                                                    <h1><%=
+                                                        coupon.discountAmount
+                                                        %>%
+                                                        <span>Coupon</span></h1>
+                                                    <p>Valid till <%=
+                                                        coupon.expiryDate %></p>
+                                                </div>
+                                            </div>
+                                            <div class="coupon-copy-button">
+                                                <% if (cartData && cartData.couponDiscount && coupon._id.toString() === cartData.couponDiscount.toString()) { %>
+                                                    <input id="apply-value" type="text" readonly value="<%= coupon.couponCode %>" />
+                                                    <button onclick="removeCoupon('<%= coupon._id %>')" class="coupon-copy-btn">Remove</button>
+                                                <% } else { %>
+                                                    <input id="apply-value" type="text" readonly value="<%= coupon.couponCode %>" />
+                                                    <button onclick="couponApplied('<%= coupon._id %>')" class="coupon-copy-btn">Apply</button>
+                                                <% } %>
+                                            </div>
                                         </div>
-                                    </div>                                    
-                       </div>
+                                    </div>
+                                    <% }); %>
+                                    <% } else { %>
+                                    <div
+                                        style="background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
+                                        <p style="color: #555; margin: 0;">No
+                                            coupons available at the moment.
+                                            Check back later!</p>
+                                    </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -238,178 +257,346 @@
                                         address</p>
                                     <div class="row">
 
-                                        <% if (addressData && addressData.address && addressData.address.length> 0) {
-                                            addressData.address.forEach((address, index) => { %>
-                                            <div class="col-lg-6" style="margin-bottom: 64px;">
-                                                <div class="card card-dashboard" onclick="selectAddress(this)">
-                                                    <div class="card-body p-0 m-1">
-                                                        <input type="radio" class="pl-4 ml-3 mr-1" name="address"
-                                                            value='<%= JSON.stringify(address) %>' <%=index===0
-                                                            ? 'checked' : '' %> id="">
+                                        <% if (addressData &&
+                                        addressData.address &&
+                                        addressData.address.length> 0) {
+                                        addressData.address.forEach((address,
+                                        index) => { %>
+                                        <div class="col-lg-6"
+                                            style="margin-bottom: 64px;">
+                                            <div class="card card-dashboard"
+                                                >
+                                                <div class="card-body p-0 m-1">
+                                                    <input type="radio"
+                                                        class="pl-4 ml-3 mr-1"
+                                                        name="address"
+                                                        value='<%= JSON.stringify(address) %>'
+                                                        <%=index===0
+                                                        ? 'checked' : '' %>
+                                                    id="">
 
-                                                        <h6 class="m-0 d-inline">Address
-                                                            Name</h6>
-                                                        <!-- <span class="text-info"
+                                                    <h6
+                                                        class="m-0 d-inline">Address
+                                                        Name</h6>
+                                                    <!-- <span class="text-info"
                                                             style="font-size: small;">(default)</span> -->
-                                                        <br>
-                                                        <div class="pl-5">
-                                                            Full Name: <%= address.fullname %><br>
-                                                                Mobile: <%= address.mobile %><br>
-                                                                    Email: <%= address.email %><br>
-                                                                        House Name: <%= address.houseName %><br>
-                                                                            City: <%= address.city %><br>
-                                                                                State: <%= address.state %><br>
-                                                                                    Pincode: <%= address.pincode %><br>
-                                                                                        <a
-                                                                                            onclick="showEditAddressModal('<%= address.fullname %>',' <%= address.mobile %>','<%= address.email %>','<%= address.houseName %>','<%= address.city %>','<%= address.state %>','<%= address.pincode %>')">Edit
-                                                                                            <i class="fa-sharp fa-solid fa-pen"
-                                                                                                style="color: #cc9966;"></i></a>
-                                                        </div>
-                                                    </div><!-- End .card-body -->
-                                                </div><!-- End .card-dashboard -->
-                                            </div><!-- End .col-lg-6 -->
-                                            <% })} %> <!-- End Address Cards Loop -->
+                                                    <br>
+                                                    <div class="pl-5">
+                                                        Full Name: <%=
+                                                        address.fullname %><br>
+                                                        Mobile: <%=
+                                                        address.mobile %><br>
+                                                        Email: <%= address.email
+                                                        %><br>
+                                                        House Name: <%=
+                                                        address.houseName %><br>
+                                                        City: <%= address.city
+                                                        %><br>
+                                                        State: <%= address.state
+                                                        %><br>
+                                                        Pincode: <%=
+                                                        address.pincode %><br>
+                                                        <a
+                                                            onclick="showEditAddressModal('<%= address.fullname %>',' <%= address.mobile %>','<%= address.email %>','<%= address.houseName %>','<%= address.city %>','<%= address.state %>','<%= address.pincode %>')">Edit
+                                                            <i
+                                                                class="fa-sharp fa-solid fa-pen"
+                                                                style="color: #cc9966;"></i></a>
+                                                    </div>
+                                                </div><!-- End .card-body -->
+                                            </div><!-- End .card-dashboard -->
+                                        </div><!-- End .col-lg-6 -->
+                                        <% })} %>
+                                        <!-- End Address Cards Loop -->
                                     </div><!-- Row end -->
-                                    <button class="btn" type="button" style="background-color: #6895D2; color: white;" data-toggle="modal" data-target="#addAddressModal">
+                                    <button class="btn" type="button"
+                                        style="background-color: #6895D2; color: white;"
+                                        data-toggle="modal"
+                                        data-target="#addAddressModal">
                                         Add another address</button>
 
-                                    
                                 </div><!-- End .col-lg-9 -->
-<!-- Add Address Modal -->
-<div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true" style="padding-top: 80px;">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Address</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="/addAddress" id="form" method="post" class="row gx-2">
-                    <div class="form-group col-md-6">
-                        <label for="fullname">Full Name *</label>
-                        <input type="text" class="form-control" name="fullname" id="fullname" required>
-                        <div id="fnameError" style="display: none; color: red;"></div>
-                    </div>
-                
-                    <div class="form-group col-md-6">
-                        <label for="mobile">Mobile *</label>
-                        <input type="tel" class="form-control" name="mobile" id="mobile" autocomplete="off" required>
-                        <div id="phoneError" style="display: none; color: red;"></div>
-                    </div>
-                
-                    <div class="form-group col-md-12">
-                        <label for="email">Email *</label>
-                        <input type="email" class="form-control" name="email" id="addressEmail" required>
-                        <div id="addEmailError" style="display: none; color: red;"></div>
-                    </div>
-                
-                    <div class="form-group col-md-12">
-                        <label for="house">House Name *</label>
-                        <input type="text" class="form-control" name="houseName" id="houseName" required>
-                        <div id="houseError" style="display: none; color: red;"></div>
-                    </div>
-                
-                    <div class="form-group col-md-4">
-                        <label for="state">State *</label>
-                        <input type="text" class="form-control" name="state" id="state" required>
-                        <div id="stateError" style="display: none; color: red;"></div>
-                    </div>
-                
-                    <div class="form-group col-md-4">
-                        <label for="city">City *</label>
-                        <input type="text" class="form-control" name="city" id="city" required>
-                        <div id="cityError" style="display: none; color: red;"></div>
-                    </div>
-                
-                    <div class="form-group col-md-4">
-                        <label for="pincode">Pincode *</label>
-                        <input type="tel" class="form-control" name="pincode" id="pincode" autocomplete="off" required>
-                        <div id="pinError" style="display: none; color: red;"></div>
-                    </div>
-                
-                    <div class="form-group col-md-12">
-                        <button id="submitAddress" type="submit" class="btn btn-outline-primary">
-                            <span>Add Address</span>
-                            <i class="icon-long-arrow-right"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-                                <!-- edit Modal -->
-
-                                <div class="modal fade " id="editAddressModal" tabindex="-1" role="dialog"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-top: 80px;">
+                                <!-- Add Address Modal -->
+                                <div class="modal fade" id="addAddressModal"
+                                    tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel"
+                                    aria-hidden="true"
+                                    style="padding-top: 80px;">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Edit
+                                                <h5 class="modal-title"
+                                                    id="exampleModalLabel">Add
                                                     Address</h5>
-                                                <button type="button" class="close" data-dismiss="modal"
+                                                <button type="button"
+                                                    class="close"
+                                                    data-dismiss="modal"
                                                     aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
+                                                    <span
+                                                        aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form 
+                                                    id="form"
+                                                    class="row gx-2">
+                                                    <div class="row col-md-12">
+                                                        <div
+                                                            class="form-group col-md-6">
+                                                            <label
+                                                                for="fullname">Full
+                                                                Name *</label>
+                                                            <input type="text"
+                                                                class="form-control"
+                                                                name="fullname"
+                                                                id="fullname"
+                                                                >
+                                                            <div id="fnameError"
+                                                                style="display: none; color: red;"></div>
+                                                        </div>
+
+                                                        <div
+                                                            class="form-group col-md-6">
+                                                            <label
+                                                                for="mobile">Mobile
+                                                                *</label>
+                                                            <input type="tel"
+                                                                class="form-control"
+                                                                name="mobile"
+                                                                id="mobile"
+                                                                autocomplete="off"
+                                                                >
+                                                            <div id="phoneError"
+                                                                style="display: none; color: red;"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div
+                                                        class="form-group col-md-12">
+                                                        <label for="email">Email
+                                                            *</label>
+                                                        <input type="email"
+                                                            class="form-control"
+                                                            name="email"
+                                                            id="addressEmail"
+                                                            >
+                                                        <div id="addEmailError"
+                                                            style="display: none; color: red;"></div>
+                                                    </div>
+
+                                                    <div
+                                                        class="form-group col-md-12">
+                                                        <label for="house">House
+                                                            Name *</label>
+                                                        <input type="text"
+                                                            class="form-control"
+                                                            name="houseName"
+                                                            id="houseName"
+                                                            >
+                                                        <div id="houseError"
+                                                            style="display: none; color: red;"></div>
+                                                    </div>
+                                                    <div class="row col-md-12">
+                                                        <div
+                                                            class="form-group col-md-4">
+                                                            <label
+                                                                for="state">State
+                                                                *</label>
+                                                            <input type="text"
+                                                                class="form-control"
+                                                                name="state"
+                                                                id="state"
+                                                                >
+                                                            <div id="stateError"
+                                                                style="display: none; color: red;"></div>
+                                                        </div>
+
+                                                        <div
+                                                            class="form-group col-md-4">
+                                                            <label
+                                                                for="city">City
+                                                                *</label>
+                                                            <input type="text"
+                                                                class="form-control"
+                                                                name="city"
+                                                                id="city"
+                                                                >
+                                                            <div id="cityError"
+                                                                style="display: none; color: red;"></div>
+                                                        </div>
+
+                                                        <div
+                                                            class="form-group col-md-4">
+                                                            <label
+                                                                for="pincode">Pincode
+                                                                *</label>
+                                                            <input type="tel"
+                                                                class="form-control"
+                                                                name="pincode"
+                                                                id="pincode"
+                                                                autocomplete="off"
+                                                                >
+                                                            <div id="pinError"
+                                                                style="display: none; color: red;"></div>
+                                                        </div>
+
+                                                        <div
+                                                            class="form-group col-md-12">
+                                                            <button
+                                                                id="submitAddress"
+                                                                type="submit"
+                                                                class="btn "
+                                                                style="background-color: #506685;  ">
+                                                                <span
+                                                                    style="color: white;">Add
+                                                                    Address</span>
+                                                                <i
+                                                                    class="icon-long-arrow-right"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- edit Modal -->
+
+                                <div class="modal fade " id="editAddressModal"
+                                    tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel"
+                                    aria-hidden="true"
+                                    style="padding-top: 80px;">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title"
+                                                    id="exampleModalLabel">Edit
+                                                    Address</h5>
+                                                <button type="button"
+                                                    class="close"
+                                                    data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span
+                                                        aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body ">
-                                                <form action="/editAddress" id="editAddressform" method="post" class="row gx-2">
-                                                    <div class="form-group col-md-6">
-                                                        <label for="fullname">Full Name *</label>
-                                                        <input type="text" class="form-control" name="fullname" id="fullnames" required>
-                                                        <div id="fnameError" style="display: none; color: red;"></div>
+                                                <form 
+                                                    id="editAddressform"
+                                                    class="row gx-2">
+                                                    <div
+                                                        class="form-group col-md-6">
+                                                        <label
+                                                            for="fullname">Full
+                                                            Name *</label>
+                                                        <input type="text"
+                                                            class="form-control"
+                                                            name="fullnames"
+                                                            id="fullnames"
+                                                            >
+                                                        <div id="fnameError"
+                                                            style="display: none; color: red;"></div>
                                                     </div>
-                                                
-                                                    <div class="form-group col-md-6">
-                                                        <label for="mobile">Mobile *</label>
-                                                        <input type="tel" class="form-control" name="mobile" id="mobiles" required>
-                                                        <div id="mobiles" style="display: none; color: red;"></div>
+
+                                                    <div
+                                                        class="form-group col-md-6">
+                                                        <label
+                                                            for="mobile">Mobile
+                                                            *</label>
+                                                        <input type="tel"
+                                                            class="form-control"
+                                                            name="mobiles"
+                                                            id="mobiles"
+                                                            >
+                                                        <div id="mobiles"
+                                                            style="display: none; color: red;"></div>
                                                     </div>
-                                                
-                                                    <div class="form-group col-md-12">
-                                                        <label for="email">Email *</label>
-                                                        <input type="email" class="form-control" name="email" id="emails" required>
-                                                        <div id="addEmailError" style="display: none; color: red;"></div>
+
+                                                    <div
+                                                        class="form-group col-md-12">
+                                                        <label for="email">Email
+                                                            *</label>
+                                                        <input type="email"
+                                                            class="form-control"
+                                                            name="emails"
+                                                            id="emails"
+                                                            >
+                                                        <div id="addEmailError"
+                                                            style="display: none; color: red;"></div>
                                                     </div>
-                                                
-                                                    <div class="form-group col-md-12">
-                                                        <label for="house">House Name *</label>
-                                                        <input type="text" class="form-control" name="houseName" id="houseNames" required>
-                                                        <div id="houseError" style="display: none; color: red;"></div>
-                                                        <input type="text" class="form-control" style="display: none;" id="addressId" name="addressId">
+
+                                                    <div
+                                                        class="form-group col-md-12">
+                                                        <label for="house">House
+                                                            Name *</label>
+                                                        <input type="text"
+                                                            class="form-control"
+                                                            name="houseNames"
+                                                            id="houseNames"
+                                                            >
+                                                        <div id="houseError"
+                                                            style="display: none; color: red;"></div>
+                                                        <input type="text"
+                                                            class="form-control"
+                                                            style="display: none;"
+                                                            id="addressId"
+                                                            name="addressId">
                                                     </div>
-                                                
-                                                    <div class="form-group col-md-4">
-                                                        <label for="state">State *</label>
-                                                        <input type="text" class="form-control" name="state" id="states" required>
-                                                        <div id="stateError" style="display: none; color: red;"></div>
+
+                                                    <div
+                                                        class="form-group col-md-4">
+                                                        <label for="state">State
+                                                            *</label>
+                                                        <input type="text"
+                                                            class="form-control"
+                                                            name="states"
+                                                            id="states"
+                                                            >
+                                                        <div id="stateError"
+                                                            style="display: none; color: red;"></div>
                                                     </div>
-                                                
-                                                    <div class="form-group col-md-4">
-                                                        <label for="city">City *</label>
-                                                        <input type="text" class="form-control" name="city" id="citys" required>
-                                                        <div id="cityError" style="display: none; color: red;"></div>
+
+                                                    <div
+                                                        class="form-group col-md-4">
+                                                        <label for="city">City
+                                                            *</label>
+                                                        <input type="text"
+                                                            class="form-control"
+                                                            name="citys"
+                                                            id="citys" >
+                                                        <div id="cityError"
+                                                            style="display: none; color: red;"></div>
                                                     </div>
-                                                
-                                                    <div class="form-group col-md-4">
-                                                        <label for="pincode">Pincode *</label>
-                                                        <input type="tel" class="form-control" name="pincode" id="pincodes" autocomplete="off" required>
-                                                        <div id="pinError" style="display: none; color: red;"></div>
+
+                                                    <div
+                                                        class="form-group col-md-4">
+                                                        <label
+                                                            for="pincode">Pincode
+                                                            *</label>
+                                                        <input type="tel"
+                                                            class="form-control"
+                                                            name="pincodes"
+                                                            id="pincodes"
+                                                            autocomplete="off"
+                                                            >
+                                                        <div id="pinError"
+                                                            style="display: none; color: red;"></div>
                                                     </div>
-                                                
-                                                    <div class="form-group col-md-12">
-                                                        <button id="editAddress" type="submit" class="btn btn-outline-primary">
-                                                            <span>Add Address</span>
-                                                            <i class="icon-long-arrow-right"></i>
+
+                                                    <div
+                                                        class="form-group col-md-12">
+                                                        <button id="editAddress"
+                                                            type="submit"
+                                                            class="btn btn-outline-primary">
+                                                            <span>Add
+                                                                Address</span>
+                                                            <i
+                                                                class="icon-long-arrow-right"></i>
                                                         </button>
                                                     </div>
                                                 </form>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -421,7 +608,8 @@
                                         <h3 class="summary-title">Your
                                             Order</h3>
 
-                                        <table class="table table-summary" id="reloadArea2">
+                                        <table class="table table-summary"
+                                            id="reloadArea2">
                                             <thead>
                                                 <tr>
                                                     <th>Sub Total</th>
@@ -432,46 +620,54 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% if (cartData.couponDiscount !==null && couponDiscountAmount > 0 ) { %>
-                                                    <tr style="color: green;">
-                                                        <td>Discount:</td>
-                                                        <td>
-                                                            <span>-</span>
-                                                            <%= couponDiscountAmount %>
-                                                        </td>
-                                                    </tr>
-                                                    <% } %>
+                                                <% if (cartData.couponDiscount
+                                                !==null && couponDiscountAmount
+                                                > 0 ) { %>
+                                                <tr style="color: green;">
+                                                    <td>Discount:</td>
+                                                    <td>
+                                                        <span>-</span>
+                                                        <%= couponDiscountAmount
+                                                        %>
+                                                    </td>
+                                                </tr>
+                                                <% } %>
 
+                                                <tr>
+                                                    <td>Shipping Fee:</td>
+                                                    <td>
+                                                        <% if (totalamount
+                                                        <=1300) { %>
+                                                        ₹<span
+                                                            id="shippingAmount">
+                                                            <%=
+                                                            `${shippingAmount}`
+                                                            %>
+                                                        </span>
 
-                                                        <tr>
-                                                            <td>Shipping Fee:</td>
-                                                            <td>
-                                                                <% if (totalamount <=1300) { %>
-                                                                    ₹<span id="shippingAmount">
-                                                                        <%= `${shippingAmount}` %>
-                                                                    </span>
+                                                        <% } else { %>
+                                                        Free shipping
+                                                        <% } %>
+                                                    </td>
+                                                </tr>
 
-                                                                    <% } else { %>
-                                                                        Free shipping
-                                                                        <% } %>
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr class="summary-total">
-                                                            <td class="text-primary">Total:</td>
-                                                            <td>
-                                                                ₹
-                                                                <span >
-                                                                    <%= totalamount %>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
+                                                <tr class="summary-total">
+                                                    <td
+                                                        class="text-primary">Total:</td>
+                                                    <td>
+                                                        ₹
+                                                        <span>
+                                                            <%= totalamount %>
+                                                        </span>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table><!-- End .table table-summary -->
 
                                         <hr class="mt-0">
 
-                                        <div class="accordion-summary" id="accordion-payment">
+                                        <div class="accordion-summary"
+                                            id="accordion-payment">
                                             <div>
                                                 <!-- <h6>Shipping Method</h6>
                                                 <div class="payment-methods">
@@ -484,10 +680,11 @@
                                                     </label>
                                                 </div> -->
 
-
                                                 <!-- Display the shipping charge area based on the selected shipping method -->
-                                                <div id="shippingChargeArea" style="display: none;">
-                                                    <p>Shipping Charge: ₹<span id="shippingChargeValue">0</span></p>
+                                                <div id="shippingChargeArea"
+                                                    style="display: none;">
+                                                    <p>Shipping Charge: ₹<span
+                                                            id="shippingChargeValue">0</span></p>
                                                 </div>
                                             </div>
 
@@ -495,19 +692,29 @@
                                                 <h6>Payment methods</h6>
                                                 <div class="payment-methods">
                                                     <label>
-                                                        <input type="radio" name="payment" id="razorpay"
-                                                            value="onlinePayment" required>
-                                                        <span>Online Payments</span>
+                                                        <input type="radio"
+                                                            name="payment"
+                                                            id="razorpay"
+                                                            value="onlinePayment"
+                                                            >
+                                                        <span>Online
+                                                            Payments</span>
                                                     </label>
 
                                                     <label>
-                                                        <input type="radio" name="payment" id="wallet" value="wallet"
+                                                        <input type="radio"
+                                                            name="payment"
+                                                            id="wallet"
+                                                            value="wallet"
                                                             checked>
                                                         <span>Wallet</span>
                                                     </label>
 
                                                     <label>
-                                                        <input type="radio" name="payment" id="COD" value="COD" checked>
+                                                        <input type="radio"
+                                                            name="payment"
+                                                            id="COD" value="COD"
+                                                            checked>
                                                         <span>Cash on
                                                             Delivery</span>
                                                     </label>
@@ -516,10 +723,15 @@
                                             </div>
                                         </div><!-- End .accordion -->
 
-                                        <button type="submit" style="background-color:#052659 ;" class="btn ">
-                                            <span style="color: white;" class="btn-text">Place
+                                        <button type="submit"
+                                            style="background-color:#052659 ;"
+                                            class="btn ">
+                                            <span style="color: white;"
+                                                class="btn-text">Place
                                                 Order</span>
-                                            <span style="color: white;" class="btn-hover-text">Proceed to
+                                            <span style="color: white;"
+                                                class="btn-hover-text">Proceed
+                                                to
                                                 Checkout</span>
                                         </button>
                                     </div><!-- End .summary -->
@@ -539,8 +751,8 @@
 
         $("#checkout-form").submit(function (e) {
             e.preventDefault();
-
             const selectedAddress = $("input[name='address']:checked").val();
+
             const address = selectedAddress ? JSON.parse(selectedAddress) : {};
             const paymentMethod = $("input[name='payment']:checked").val();
 
@@ -640,78 +852,38 @@
         }
     </script>
 
+
     <script>
-        function couponApplied(couponId) {
-            $.ajax({
-                url: "/appliCopuon",
-                data: { couponId },
-                method: "POST",
-                success: function (response) {
-                    if (response.coupon === true) {
-                        $('#reloadArea').load('/checkout #reloadArea');
-                        $('#reloadArea2').load('/checkout #reloadArea2');
+  function couponApplied(couponId) {
+    $.ajax({
+        url: "/appliCopuon",
+        data: { couponId },
+        method: "POST",
+        success: function (response) {
+            if (response.coupon === true) {
+                $('#reloadArea').load('/checkout #reloadArea');
+                $('#reloadArea2').load('/checkout #reloadArea2');
+                toastr.success(response.message);
+            } else if (response.user) {
+                toastr.warning(response.message);
 
-
-                        Swal.fire({
-                            title: "Coupon Applied",
-                            text: "Your coupon has been successfully applied.",
-                            icon: "success",
-                        });
-                    } else if (response.user) {
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 2000,
-                        });
-
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Coupon removed. You can apply a new one.'
-                        });
-                    } else if (response.limit) {
-                        Swal.fire({
-                            title: "Coupon Limit Reached",
-                            text: "This coupon has reached its usage limit.",
-                            icon: "warning",
-                        });
-                    } else if (response.expired) {
-                        Swal.fire({
-                            title: "Coupon Expired",
-                            text: "This coupon has expired.",
-                            icon: "warning",
-                        });
-                    } else if (response.cartAmount) {
-                        Swal.fire({
-                            title: "Invalid Coupon",
-                            text: "Your cart total does not meet the minimum criteria for this coupon.",
-                            icon: "warning",
-                        });
-                    } else if (response.used) {
-                        Swal.fire({
-                            title: "Coupon Used",
-                            text: "Only one coupon at a time.",
-                            icon: "warning",
-                        });
-                    }
-                    else {
-                        Swal.fire({
-                            title: "Coupon Error",
-                            text: "There was an error applying the coupon. Please try again.",
-                            icon: "error",
-                        });
-                    }
-                },
-                error: function (error) {
-                    Swal.fire({
-                        title: "Coupon Error",
-                        text: "There was an error applying the coupon. Please try again.",
-                        icon: "error",
-                    });
-                }
-            });
+            } else if (response.limit) {
+                toastr.warning(response.message);
+            } else if (response.expired) {
+                toastr.warning(response.message);
+            } else if (response.cartAmount) {
+                toastr.warning(response.message);
+            } else if (response.used) {
+                toastr.warning(response.message);
+            } else {
+                toastr.error(response.message);
+            }
+        },
+        error: function (error) {
+            toastr.error('Error applying coupon. Please try again.');
         }
-
+    });
+}
 
 
         function removeCoupon(couponId) {
@@ -748,6 +920,7 @@
     <script src="/userjs/profileEdits.js"></script>
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
     <%-include("../layouts/user/footer.ejs")%>

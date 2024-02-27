@@ -19,13 +19,7 @@ var instance = new Razorpay({
 
 
 
-
-
 //-----------orderPlaced-----------------
-
-
-//-----------orderPlaced-----------------
-
 const placeOrder = async (req, res) => {
     try {
         const user_id = req.session.user_id;
@@ -38,20 +32,18 @@ const placeOrder = async (req, res) => {
         const address = req.body.formData.address;
         const subtotalAmount = cartData.product.reduce((acc, val) => acc + (val.totalPrice || 0), 0);
         const uniqId = crypto.randomBytes(4).toString('hex').toUpperCase().slice(0, 8);
-        console.log(cartData, '-----');
-        let totalAmount = 0;
+
+        let totalAmount = subtotalAmount;
+
+        // Check if there is a coupon discount
         if (cartData.couponDiscount) {
-            const CouponDiscountPercentage = cartData.couponDiscount.discountAmount;
-            const discountAmount = Math.round(CouponDiscountPercentage / 100 * subtotalAmount);
-            totalAmount = subtotalAmount - discountAmount;
-        } else {
-            totalAmount = subtotalAmount;
+            const couponDiscountPercentage = cartData.couponDiscount.discountAmount;
+            const discountAmount = Math.round((couponDiscountPercentage / 100) * subtotalAmount);
+            totalAmount -= discountAmount;
         }
 
         const productIds = cartData.product.map(product => product.productId);
-        console.log(productIds);
         const products = await Product.find({ '_id': { $in: productIds } });
-        console.log(products);
 
         const productData = cartData.product.map(cartProduct => {
             const productDetails = products.find(p => p._id.toString() === cartProduct.productId.toString());
@@ -65,16 +57,23 @@ const placeOrder = async (req, res) => {
                 productName: productDetails ? productDetails.name : '',
             };
         });
+
+        console.log(totalAmount,'totalAmount');
         const purchaseDate = new Date();
-
-        let shipingTotalAmount = 1500;
         let shippingAmount = 0;
-        if (paymentMethod === 'COD' && totalAmount > shipingTotalAmount) {
-            shippingAmount = shipingTotalAmount
-            res.json({ maxAmount: true });
-            return;
-        }
+        const shipingTotalAmount = 1300;
 
+        // checking the shipingTotalAmount
+        if (paymentMethod === 'COD' && totalAmount > shipingTotalAmount) {
+            res.json({ maxAmount: true});
+            return;
+        } else if(totalAmount < shipingTotalAmount) {
+            console.log("sssssssssssssss");
+            shippingAmount = 90
+            totalAmount+=shippingAmount
+        }
+        console.log(totalAmount,'totalAmount');
+        console.log(shippingAmount,'----------');
 
         const order = new Order({
             userId: user_id,
@@ -247,15 +246,23 @@ const OrderDetailsLoad = async (req, res) => {
 
         const order = await Order.findOne({ _id: orderId })
         const deliveryDetails = order && order.deliveryDetails ? order.deliveryDetails : null;
+          const orderPrice = orderData.totalAmount;
+          console.log(orderPrice);
+          let shippingCharge=0
+          if(orderPrice<1390){
+             shippingCharge = 90
+          }
+        console.log(shippingCharge,'-------');
 
         if (orderData) {
             res.render("orderDetails", {
                 orderData,
                 userId,
                 address: deliveryDetails,
+                shippingCharge 
+
             });
         } else {
-            console.log('chekkiung the sdata ');
             res.render("orderDetails", { userId });
         }
     } catch (error) {
@@ -263,16 +270,14 @@ const OrderDetailsLoad = async (req, res) => {
     }
 };
 
-
 const orderCancel = async (req, res) => {
     try {
         const userId = req.session.user_id;
         const productId = req.body.productId;
         const orderId = req.body.orderId;
-        console.log('halooooooooo');
-
+        const cancelReason = req.body.cancelReason;
         const orderData = await Order.findOne({ _id: orderId });
-
+console.log(cancelReason,'===================////////////////');
         const orderProduct = orderData.orderProducts.find((val) => {
             return val._id.toString() === productId
         });
@@ -280,7 +285,6 @@ const orderCancel = async (req, res) => {
         const prodcutTotalPrice = orderProduct.totalPrice;
 
         if (orderData.paymentMethod !== "COD") {
-
             const walletUpdate = await User.findOneAndUpdate(
                 { _id: userId },
                 {
@@ -289,32 +293,38 @@ const orderCancel = async (req, res) => {
                         walletHistory: {
                             date: new Date(),
                             amount: prodcutTotalPrice,
-                            direction: "Credited"
+                            direction: "Credited",
                         },
-
                     },
                 },
                 { new: true }
             );
 
-
             if (walletUpdate) {
-
                 const updateResult = await Order.findOneAndUpdate(
                     { _id: orderId, 'orderProducts._id': productId },
-                    { $set: { 'orderProducts.$.status': 'Cancelled' } }
+                    {
+                        $set: {
+                            'orderProducts.$.status': 'Cancelled',
+                            'orderProducts.$.cancelReason': cancelReason 
+                        }
+                    }
                 );
-                console.log(updateResult, '---------Cancelled');
                 console.log(`Added ${prodcutTotalPrice} to the wallet.`);
-            } else {
-                console.log("User not found.");
-            }
+                console.log(updateResult,'------------');
+            } 
         } else if (orderData.paymentMethod === "COD") {
-
             const updateResult = await Order.findOneAndUpdate(
                 { _id: orderId, 'orderProducts._id': productId },
-                { $set: { 'orderProducts.$.status': 'Cancelled' } }
+                {
+                    $set: {
+                        'orderProducts.$.status': 'Cancelled',
+                        'orderProducts.$.cancelReason': cancelReason 
+                    }
+                }
             );
+
+            console.log(updateResult,'==================');
 
             if (updateResult) {
                 return res.json({ success: true });
@@ -325,7 +335,7 @@ const orderCancel = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-        return res.json({ success: false, message: 'error occurred while cancelling the order.' });
+        return res.json({ success: false, message: 'Error occurred while cancelling the order.' });
     }
 };
 

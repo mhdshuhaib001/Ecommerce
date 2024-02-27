@@ -61,7 +61,7 @@
                                                 <td>
                                                     <%= product.productName %>
                                                 </td>
-                                                <td><%= product.productId.category.name %></td>
+                                                <td><%= product.productId.category ? product.productId.category.name : '' %></td>
 
                                                 <td>
                                                     <%= product.count %>

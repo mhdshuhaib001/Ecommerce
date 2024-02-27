@@ -22,7 +22,7 @@ const securePassword = async password => {
     return passwordHash;
   } catch (error) {
     console.log(error.message);
-    // res.render("500Error");
+    res.render("500");
   }
 };
 
@@ -35,10 +35,7 @@ const loadHome = async (req, res) => {
     const userData = await User.findOne({ _id: user_id });
     const productData = await Product.find({}).populate("category");
     const categoryData = await Category.find({});
-
-    // Slice the productData array to get only the first 10 products
     const limitedProductData = productData.slice(0, 10);
-console.log(limitedProductData,'jbhhhhhhhhhhhhhhhhh');
     const cart = await Cart.findOne({ userId: req.session.user_id });
     let cartCount = 0;
     if (cart) {

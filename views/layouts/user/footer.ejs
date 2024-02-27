@@ -334,7 +334,7 @@
                         if (response.newProduct) {
                             const Toast = Swal.mixin({
                                 toast: true,
-                                position: "bottom-end",
+                                position: "top-end",
                                 showConfirmButton: false,
                                 timer: 1500,
                             });
@@ -343,8 +343,9 @@
                                 icon: "success",
                                 title: "Product added to cart"
                             });
+                            $('#reloadArea').load('/shop #reloadArea');
+
                         }
-                        $("#cartDiv").load("/ #cartDiv");
                     } else if (response.exist) {
                         window.location.href = "/cart";
                     } else if (response.stock) {
@@ -371,10 +372,11 @@
 
 
         function addToWishlist(productId) {
+            console.log(productId,'-------------');
     $.ajax({
         method: "POST",
         url: '/addWishlist',
-        data:productId,
+        data:JSON.stringify({ productId: productId }),
         contentType: 'application/json',
         success: function (response) {
             console.log(response);
@@ -390,7 +392,7 @@
                     icon: 'success',
                     title: response.message
                 });
-            } else if (response.remove) {
+            } else if (response.removed) {
                 Toast.fire({
                     icon: 'success',
                     title: response.message

@@ -75,7 +75,7 @@ const loadDashboard = async (req, res) => {
         const userData = await User.find();
         // const userCount = userData.length;
         const orderData = await Order.find({ purchaseDate: { $gte: startDate, $lt: currentDate } });
-         const totalProduct = orderData ? orderData.length : 0;
+        const totalProduct = orderData ? orderData.length : 0;
         const verifiedUserCount = await User.countDocuments({ is_verified: true });
         let deliveredOrders = 0;
         let totalRevenue = 0;
@@ -85,11 +85,11 @@ const loadDashboard = async (req, res) => {
 
 
         orderData.forEach((order) => {
-            deliveredOrders += order.orderProducts.reduce((acc, delivered) => (delivered.status === 'delivered' ? acc + 1 : acc), 0);
-            totalRevenue += order.orderProducts.reduce((acc, product) => (product.status === 'delivered' ? acc + product.totalPrice : acc), 0);
+            deliveredOrders += order.orderProducts.reduce((acc, delivered) => (delivered.status === 'Delivered' ? acc + 1 : acc), 0);
+            totalRevenue += order.orderProducts.reduce((acc, product) => (product.status === 'Delivered' ? acc + product.totalPrice : acc), 0);
 
             order.orderProducts.forEach((product) => {
-                if (product.status === 'delivered') {
+                if (product.status === 'Delivered') {
                     if (order.paymentMethod === 'razorpay') {
                         razorpayAmount += product.totalPrice;
                     } else if (order.paymentMethod === 'COD') {
@@ -100,12 +100,43 @@ const loadDashboard = async (req, res) => {
                 }
             });
         });
+
+        //--------------------------------sales graph--------------------
+
+
+        const dailyProductSales = await Order.aggregate([
+            { $match: { 'orderProducts.status': 'Delivered', purchaseDate: { $gte: startDate, $lt: currentDate } } },
+            { $unwind: '$orderProducts' },
+            { $addFields: { formattedDate: { $dateToString: { format: '%Y-%m-%d', date: '$purchaseDate' } } } },
+            { $group: { _id: { date: '$formattedDate' }, revenue: { $sum: '$orderProducts.totalPrice' } } },
+        ]);
+
+        const weeklyProductSales = await Order.aggregate([
+            { $match: { 'orderProducts.status': 'Delivered', purchaseDate: { $gte: startDate, $lt: currentDate } } },
+            { $unwind: '$orderProducts' },
+            { $addFields: { week: { $isoWeek: '$purchaseDate' }, year: { $isoWeekYear: '$purchaseDate' } } },
+            { $group: { _id: { week: '$week', year: '$year' }, revenue: { $sum: '$orderProducts.totalPrice' } } },
+        ]);
+
+        console.log(dailyProductSales, 'jojojoooooooooooooooooooooojjjjjjjjjjjjjj');
+
+        console.log(weeklyProductSales, 'jjiiuhuiuiigygyguygyuuuy');
         const monthlyProductSales = await Order.aggregate([
-            { $match: { 'orderProducts.status': 'delivered' } },
+            { $match: { 'orderProducts.status': 'Delivered' } },
             { $unwind: '$orderProducts' },
             { $addFields: { formattedDate: { $dateToString: { format: '%Y-%m-%d', date: '$purchaseDate', }, }, }, },
             { $group: { _id: { date: '$formattedDate' }, revenue: { $sum: '$orderProducts.totalPrice' }, }, },
         ]);
+
+
+        const dailyLabels = dailyProductSales.map(entry => entry._id.date);
+        const dailyData = dailyProductSales.map(entry => entry.revenue);
+        console.log(dailyLabels, 'dailyLabels');
+        console.log(dailyData, 'dailyData');
+
+        const weeklyLabels = weeklyProductSales.map(entry => `Week ${entry._id.week}, ${entry._id.year}`);
+        const weeklyData = weeklyProductSales.map(entry => entry.revenue);
+
 
         const salesDataMonthly = Array.from({ length: 12 }, () => 0);
         const salesDataYearly = Array.from({ length: 12 }, () => 0);
@@ -128,10 +159,13 @@ const loadDashboard = async (req, res) => {
 
         const yearlyLabels = years.map(String);
 
-        const paymentMethodDatas = await Order.aggregate([{ $match: { 'orderProducts.status': 'delivered' } }, { $group: { _id: '$paymentMethod', count: { $sum: 1 } } }]);
+        const paymentMethodDatas = await Order.aggregate([{ $match: { 'orderProducts.status': 'Delivered' } }, { $group: { _id: '$paymentMethod', count: { $sum: 1 } } }]);
 
+
+
+        //========================================best selling prodcut====================
         const bestSellingProducts = await Order.aggregate([
-            { $match: { 'orderProducts.status': 'delivered' } },
+            { $match: { 'orderProducts.status': 'Delivered' } },
             { $unwind: '$orderProducts' },
             {
                 $group: {
@@ -144,9 +178,10 @@ const loadDashboard = async (req, res) => {
             { $sort: { totalSold: -1 } },
             { $limit: 5 },
         ]);
-        console.log(bestSellingProducts,'bestSellingProducts');
+
+
         const bestSellingCategories = await Order.aggregate([
-            { $match: { 'orderProducts.status': 'delivered' } },
+            { $match: { 'orderProducts.status': 'Delivered' } },
             { $unwind: '$orderProducts' },
             {
                 $lookup: {
@@ -167,10 +202,26 @@ const loadDashboard = async (req, res) => {
             { $sort: { totalSold: -1 } },
             { $limit: 10 },
         ]);
+        const bestProduct = bestSellingProducts.map(product => product.productName);
 
-        const bestProduct = bestSellingProducts.map(product=> product.productName);
-        console.log(bestProduct,'bestProduct');
-        res.render('dashboard', {bestSellingProducts, totalProduct,verifiedUserCount, yearlyLabels, salesDataMonthly, salesDataYearly, deliveredOrders, totalRevenue, paymentMethodDatas, razorpayAmount, codAmount });
+
+        res.render('dashboard', {
+            bestSellingProducts,
+            totalProduct,
+            verifiedUserCount,
+            yearlyLabels,
+            salesDataMonthly,
+            salesDataYearly,
+            deliveredOrders,
+            totalRevenue,
+            paymentMethodDatas,
+            razorpayAmount,
+            codAmount,
+            dailyLabels,
+            dailyData,
+            weeklyLabels,
+            weeklyData,
+        });
     } catch (error) {
         console.log(error.message);
     }
@@ -193,9 +244,9 @@ const usermanagementload = async (req, res) => {
             .sort({ purchaseTime: 1 })
             .skip((page - 1) * itemPage)
             .limit(itemPage)
-            .lean(); 
+            .lean();
 
-        res.render("usermanagement", { users: userData, totalPages, currentPage: page ,itemPage});
+        res.render("usermanagement", { users: userData, totalPages, currentPage: page, itemPage });
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Internal Server Error");
@@ -213,21 +264,19 @@ const userBlocked = async (req, res) => {
     try {
         const userId = req.body.userId;
         const blockedUser = await User.findOne({ _id: userId });
-        console.log(blockedUser)
 
         if (!blockedUser.is_blocked) {
             await User.updateOne({ _id: userId }, { $set: { is_blocked: true } });
-            res.json({ remove: true })
-
+            res.json({ success: true, message: "User Blocked" });
         } else {
-            await User.updateOne({ _id: userId }, { $set: { is_blocked: false } })
-            res.json({ remove: true })
+            await User.updateOne({ _id: userId }, { $set: { is_blocked: false } });
+            res.json({ success: true, message: "User Unblocked" });
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({  message: "Error processing request" });
     }
-}
-
+};
 
 
 //----------------LOAD CATEGORY MANAGEMENT-----------------

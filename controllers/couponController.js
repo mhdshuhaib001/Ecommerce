@@ -118,63 +118,47 @@ const deletCouopon = async (req, res) => {
 const applyCoupon = async (req, res) => {
     try {
         const couponId = req.body.couponId;
-        console.log(couponId,'halooo');
+        console.log(couponId, 'halooo');
         const userId = req.session.user_id;
-        const cartData = await Cart.findOne({ userId: userId })
-        const cartTotal = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0)
+        const cartData = await Cart.findOne({ userId: userId });
+        const cartTotal = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
         const currentDate = new Date();
         const couponData = await Coupon.findOne({ _id: couponId });
         const existUser = couponData.usedUser.includes(userId);
 
-
         if (existUser) {
-            res.json({ user: true });
+            res.json({ user: true, message: 'You have already used this coupon.' });
         } else {
             if (cartData.couponDiscount == null) {
-
                 const couponData = await Coupon.findOne({ _id: couponId });
                 if (couponData) {
                     if (couponData.userLimit <= 0) {
-                        res.json({ limit: true });
-
+                        res.json({ limit: true, message: 'Coupon usage limit reached.' });
                     } else {
                         if (couponData.expiryDate <= currentDate) {
-                            res.json({ expired: true });
+                            res.json({ expired: true, message: 'This coupon has expired.' });
                         } else {
                             if (couponData.criteriaAmount >= cartTotal) {
-                                res.json({ cartAmount: true });
+                                res.json({ cartAmount: true, message: 'Your cart total does not meet the coupon criteria.' });
                             } else {
                                 const discountPercentage = couponData.discountAmount;
                                 const discountAmount = Math.round((discountPercentage / 100) * cartTotal);
-                                // await Coupon.findOneAndUpdate({ _id: couponId }, { $push: { usedUser: userId } });
+                                await Coupon.findOneAndUpdate({ _id: couponId }, { $push: { usedUser: userId } });
                                 await Cart.findOneAndUpdate({ userId: userId }, { $set: { couponDiscount: couponId } });
-                                res.json({ coupon: true });
+                                res.json({ coupon: true, message: 'Coupon applied successfully.' });
                             }
                         }
                     }
                 }
             } else {
-               return res.json({used: true})
+                res.json({ used: true, message: 'You have already applied a coupon.' });
             }
-
         }
-        // const cartExist = await Cart.findOne({ userId: userId });
-        // if (cartExist && cartExist.discountAmount == null) {
-
-        //     if (cartExist.couponDiscount) {
-        //         console.log('chekk this ');
-        //         await Coupon.updateOne({ _id: cartExist.couponId }, { $pull: { usedUser: userId } });
-        //     } else {
-
-        //     }
-        // }
-
-
     } catch (error) {
         console.log(error.message);
+        res.json({ error: true, message: 'An error occurred while applying the coupon.' });
     }
-}
-
+};
 
 
 const removeCoupon = async (req, res) => {

@@ -63,7 +63,7 @@ user_Rout.post("/removeCartItem", cartController.removeCartItem);
 user_Rout.post("/quantityUpdate", cartController.quantityUpdate);
 
 
-
+//===================== UserProfile =================================
 user_Rout.get('/userProfile', auth.isLogin,userController.loadprofile);
 user_Rout.post('/addAddress', addressController.addAddress);
 user_Rout.post('/removeAddress',addressController.removeAddress);
@@ -85,6 +85,7 @@ user_Rout.get('/invoice',orderControllers.invoice);
 user_Rout.post('/filterProduct',productController.filterProducts);
 user_Rout.get('/seachProduct',userController.searchProducts)
 
+//=========================coupon========================
 user_Rout.post('/appliCopuon',couponController.applyCoupon);
 user_Rout.post('/removeCoupon',couponController.removeCoupon)
 
@@ -95,12 +96,14 @@ user_Rout.get('/product', productController.loadProduct);
 
 user_Rout.get("/shop",userController.loadShop);
 
+
+//======================Wishlkist==================================
 user_Rout.get("/wishlist", auth.isLogin,wishController.loadWishlist);
 user_Rout.post("/addWishlist",auth.isLogin,wishController.addWishList)
+user_Rout.delete("/removeWish",auth.isLogin,wishController.removeWish)
 
 user_Rout.get("/contact", userController.loadContact);
 user_Rout.get("/about",userController.aboutLoad)
-
 user_Rout.get("/404", userController.loadError404);
 user_Rout.get("/500", userController.loadError500);
 

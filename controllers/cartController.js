@@ -207,7 +207,6 @@ const quantityUpdate = async (req, res) => {
 };
 
 
-
 const loadCheckOut = async (req, res) => {
   try {
       const user_id = req.session.user_id;
@@ -215,13 +214,17 @@ const loadCheckOut = async (req, res) => {
       const cartData = await Cart.findOne({ userId: user_id }).populate("product.productId");
       const cartTotal = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
       const addressData = await Address.findOne({ user: user_id });
-      const couponData = await Coupon.find({ usedUser: { $nin: [user_id] }});
+
+      // Fetch coupons that the user has not used
+      const couponData = await Coupon.find();
+      const couponUsed = await Coupon.find({usedUser: user_id})
+      console.log(couponData,'====================================');
 
       let couponDiscountAmount = 0;
       if (cartData.couponDiscount) {
           const coupon = await Coupon.findOne({ _id: cartData.couponDiscount });
           if (coupon) {
-            couponDiscountAmount = Math.round((coupon.discountAmount / 100) * cartTotal);
+              couponDiscountAmount = Math.round((coupon.discountAmount / 100) * cartTotal);
           }
       }
 
@@ -246,30 +249,36 @@ const loadCheckOut = async (req, res) => {
 
       let totalamount = 0;
 
-      if(couponDiscountAmount> 0){
-        totalamount = cartTotal - couponDiscountAmount;
-      }else {
-        totalamount +=cartTotal;
+      if (couponDiscountAmount > 0) {
+          totalamount = cartTotal - couponDiscountAmount;
+      } else {
+          totalamount += cartTotal;
       }
 
-      if(cartData){
-      res.render("checkout", {
-          user: userData,
-          addressData,
-          userId:user_id,
-          cartData,
-          products: cartData.product,
-          totalamount,
-          cartCount,
-          couponData,
-          cartTotal,
-          couponDiscountAmount,
-          discountAmount,
-          shippingAmount
-      });
-    } else {
-      res.render("shop")
-    }
+      // Add shippingAmount to totalamount if it's greater than 0
+      if (shippingAmount > 0) {
+          totalamount += shippingAmount;
+      }
+
+      console.log(totalamount, 'totalamount');
+      if (cartData) {
+          res.render("checkout", {
+              user: userData,
+              addressData,
+              userId: user_id,
+              cartData,
+              products: cartData.product,
+              totalamount,
+              cartCount,
+              couponData,
+              cartTotal,
+              couponDiscountAmount,
+              discountAmount,
+              shippingAmount
+          });
+      } else {
+          res.render("shop");
+      }
   } catch (error) {
       console.error(error.message);
       res.status(500).send('Internal Server Error ');
