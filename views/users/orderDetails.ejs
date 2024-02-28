@@ -449,7 +449,7 @@
                                             <th>Product Name</th>
                                             <th>Image</th>
                                             <th>Quantity</th>
-                                            <th>Unit Price</th>
+                                            <th>Product Price</th>
                                             <th>Total</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -466,8 +466,8 @@
                                                 <td>
                                                     <%= product.count %>
                                                 </td>
-                                                <td>₹<%= product.productPrice %>
-                                                </td>
+                                                <td>₹<%= product.productId.price %></td>
+
                                                 <td>₹<%= product.totalPrice %>
                                                 </td>
                                                 <td>
@@ -1004,6 +1004,7 @@
     }
 
     function cancelProduct(orderProductId, orderId) {
+        console.log('orderProductId',orderProductId,orderId);
     Swal.fire({
         title: "Are you sure?",
         text: "You want to cancel this Order?",
@@ -1024,9 +1025,10 @@
                     data: { productId: orderProductId, orderId: orderId, cancelReason: cancelReason },
                     method: "post",
                     success: (response) => {
+                        console.log("jksdnckjs");
                         if (response.success) {
                             $('#cancelReasonModal').modal('hide');
-
+console.log('lkcklsd');
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Order Cancelled.',

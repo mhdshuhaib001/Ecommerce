@@ -10,7 +10,7 @@ mongoose.connect(process.env.DBCOLLECTION, console.log("DB connected"));
 const express = require('express');
 const app = express();
 const noCache = require('nocache');
-const morgan = require('morgan');
+// const morgan = require('morgan');
 
 
 const path = require("path");
@@ -26,7 +26,7 @@ app.use(session({
   store: new MemoryStore()
 }))
 
-app.use(morgan('dev')); 
+// app.use(morgan('dev')); 
 
 
 app.use(noCache())

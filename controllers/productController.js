@@ -2,10 +2,11 @@ const Category = require("../models/categoryModel");
 const Products = require("../models/productsModel");
 const Cart = require("../models/cartModel")
 const sharp = require("sharp");
+const mongoose = require("mongoose");
 const fs = require("fs")
 const path = require("path");
 const User = require("../models/userModel")
-const { userBlocked } = require("./adminController");
+
 
 
 
@@ -73,6 +74,7 @@ const addProduct = async (req, res) => {
         console.log('Details:', details);
 
         const products = await Products.find({});
+        
 
         let product = new Products({
             name: details.name,
@@ -148,44 +150,46 @@ const loadEditProduct = async (req, res) => {
 
 //----------------------UPDATING PRODUCTS ----------------------------------------
 
-
 const editedProduct = async (req, res) => {
     try {
-
         let details = req.body;
         let imagesFiles = req.files;
         let currentData = await Products.findOne({ _id: req.query.id });
 
-        const oldImg = [
-            imagesFiles.image1 ? currentData.images.image1 : false,
-            imagesFiles.image2 ? currentData.images.image2 : false,
-            imagesFiles.image3 ? currentData.images.image3 : false,
-            imagesFiles.image4 ? currentData.images.image4 : false,
-        ];
-
-        const img = [
-            imagesFiles.image1 ? imagesFiles.image1[0].filename : currentData.images.image1,
-            imagesFiles.image2 ? imagesFiles.image2[0].filename : currentData.images.image2,
-            imagesFiles.image3 ? imagesFiles.image3[0].filename : currentData.images.image3,
-            imagesFiles.image4 ? imagesFiles.image4[0].filename : currentData.images.image4,
-        ];
-
+        const oldImg = Object.values(currentData.images);
+        const img = Object.values(imagesFiles).map(file => file[0]?.filename || currentData.images[file.fieldname]);
 
         for (let k = 0; k < oldImg.length; k++) {
             if (oldImg[k] && !img.includes(oldImg[k])) {
                 let imagePath = path.resolve('public/products/images', oldImg[k]);
                 let cropPath = path.resolve('public/products/crops', oldImg[k]);
 
+                // Delay before deleting the file (1-second delay)
+                await new Promise(resolve => setTimeout(resolve, 1000));
 
-                // Delete original image
-                fs.unlinkSync(imagePath);
+                // Check if the file exists before attempting to delete
+                if (fs.existsSync(imagePath)) {
+                    try {
+                        fs.unlinkSync(imagePath);
+                    } catch (unlinkError) {
+                        console.error(`Error deleting file: ${imagePath}`, unlinkError);
+                    }
+                } else {
+                    console.warn(`File not found: ${imagePath}`);
+                }
 
-                // Delete cropped image
-                fs.unlinkSync(cropPath);
+                // Check if the file exists before attempting to delete
+                if (fs.existsSync(cropPath)) {
+                    try {
+                        fs.unlinkSync(cropPath);
+                    } catch (unlinkError) {
+                        console.error(`Error deleting file: ${cropPath}`, unlinkError);
+                    }
+                } else {
+                    console.warn(`File not found: ${cropPath}`);
+                }
             }
         }
-
-
 
         for (let i = 0; i < img.length; i++) {
             await sharp("public/products/images/" + img[i])
@@ -193,39 +197,29 @@ const editedProduct = async (req, res) => {
                 .toFile("public/products/crops/" + img[i]);
         }
 
-        let img1, img2, img3, img4;
-
-        img1 = imagesFiles.image1 ? imagesFiles.image1[0].filename : currentData.images.image1;
-        img2 = imagesFiles.image2 ? imagesFiles.image2[0].filename : currentData.images.image2;
-        img3 = imagesFiles.image3 ? imagesFiles.image3[0].filename : currentData.images.image3;
-        img4 = imagesFiles.image4 ? imagesFiles.image4[0].filename : currentData.images.image4;
+        let updateData = {
+            name: details.name,
+            price: details.price,
+            quantity: details.quantity,
+            category: details.category,
+            description: details.description,
+            "images.image1": img[0],
+            "images.image2": img[1],
+            "images.image3": img[2],
+            "images.image4": img[3],
+        };
 
         let update = await Products.updateOne(
             { _id: req.query.id },
-            {
-                $set: {
-                    name: details.name,
-                    price: details.price,
-                    quantity: details.quantity,
-                    category: details.category,
-                    description: details.description,
-                    "images.image1": img1,
-                    "images.image2": img2,
-                    "images.image3": img3,
-                    "images.image4": img4,
-                },
-            }
+            { $set: updateData }
         );
+
         res.redirect("/admin/productmanagement");
-
     } catch (error) {
-        console.log(error.message)
-        res.status(500).render("500"); 
+        console.error(error.message);
+        res.status(500).render("500");
     }
-}
-
-
-
+};
 
 
 

@@ -361,10 +361,7 @@
                             <h4 class="mb-30">Filter By Price</h4>
                             <form action="/filterProduct" method="POST">
                                 <div class="filter-form-submit mt-35">
-                                    <label>
-                                        <input type="radio" name="price"
-                                            value="0-50"> ₹0 - ₹50
-                                    </label>
+                                    
                                     <label>
                                         <input type="radio" name="price"
                                             value="999-1999"> ₹999 - ₹1999
@@ -501,7 +498,9 @@
                                                             class="price switcher-item">₹<%=
                                                             product.price %>
                                                         </span>
+                                                        <h4><%=product._id%></h4>
                                                         <a
+                                                        
                                                             onclick="addToCart('<%= product._id %>')"
                                                             class="add-cart text-capitalize switcher-item"
                                                             style="cursor: pointer;">

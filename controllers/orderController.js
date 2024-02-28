@@ -57,20 +57,20 @@ const placeOrder = async (req, res) => {
             };
         });
 
-        console.log(totalAmount,'totalAmount');
+        console.log(totalAmount, 'totalAmount');
         const purchaseDate = new Date();
         let shippingAmount = 0;
         const shipingTotalAmount = 1300;
 
         // checking the shipingTotalAmount
         if (paymentMethod === 'COD' && totalAmount > shipingTotalAmount) {
-            res.json({ maxAmount: true});
+            res.json({ maxAmount: true });
             return;
-        } else if(totalAmount < shipingTotalAmount) {
+        } else if (totalAmount < shipingTotalAmount) {
             shippingAmount = 90
-            totalAmount+=shippingAmount
+            totalAmount += shippingAmount
         }
-        
+
         const order = new Order({
             userId: user_id,
             orderId: uniqId,
@@ -155,7 +155,7 @@ const placeOrder = async (req, res) => {
         }
     } catch (error) {
         console.error(error.message);
-        res.status(500).render("500"); 
+        res.status(500).render("500");
     }
 };
 
@@ -204,7 +204,7 @@ const verifyPayment = async (req, res) => {
         res.status(400).json({ error: 'Invalid payment verification' });
     } catch (error) {
         console.error(error.message);
-        res.status(500).render("500"); 
+        res.status(500).render("500");
     }
 };
 
@@ -218,7 +218,7 @@ const success = async (req, res) => {
     } catch (error) {
         console.log(error.message);
         res.render("shop")
-        res.status(500).render("500"); 
+        res.status(500).render("500");
     }
 };
 
@@ -227,32 +227,33 @@ const OrderDetailsLoad = async (req, res) => {
     try {
         const userId = req.session.user_id;
         const orderId = req.query._id;
-        const orderData = await Order.findOne({ _id: orderId }).populate("orderProducts.productId").exec();
 
+        const orderData = await Order.findOne({ _id: orderId }).populate("orderProducts.productId").exec();
+        console.log(orderData.orderProducts[0].productId.price);
+        
         const order = await Order.findOne({ _id: orderId })
         const deliveryDetails = order && order.deliveryDetails ? order.deliveryDetails : null;
-          const orderPrice = orderData.totalAmount;
-          console.log(orderPrice);
-          let shippingCharge=0
-          if(orderPrice<1390){
-             shippingCharge = 90
-          }
+        const orderPrice = orderData.totalAmount;
+        console.log(orderPrice);
+        let shippingCharge = 0
+        if (orderPrice < 1390) {
+            shippingCharge = 90
+        }
         if (orderData) {
             res.render("orderDetails", {
                 orderData,
                 userId,
                 address: deliveryDetails,
-                shippingCharge 
+                shippingCharge
             });
         } else {
             res.render("orderDetails", { userId });
         }
     } catch (error) {
         console.log(error.message);
-        res.status(500).render("500"); 
+        res.status(500).render("500");
     }
 };
-
 const orderCancel = async (req, res) => {
     try {
         const userId = req.session.user_id;
@@ -287,24 +288,27 @@ const orderCancel = async (req, res) => {
                     {
                         $set: {
                             'orderProducts.$.status': 'Cancelled',
-                            'orderProducts.$.cancelReason': cancelReason 
+                            'orderProducts.$.cancelReason': cancelReason
                         }
                     }
                 );
                 console.log(`Added ${prodcutTotalPrice} to the wallet.`);
-            } 
+                return res.json({ success: true, message: 'Order cancelled successfully.' });
+            }
         } else if (orderData.paymentMethod === "COD") {
             const updateResult = await Order.findOneAndUpdate(
                 { _id: orderId, 'orderProducts._id': productId },
                 {
                     $set: {
                         'orderProducts.$.status': 'Cancelled',
-                        'orderProducts.$.cancelReason': cancelReason 
+                        'orderProducts.$.cancelReason': cancelReason
                     }
                 }
             );
+
+            console.log(updateResult, 'updateResult');
             if (updateResult) {
-                return res.json({ success: true });
+                return res.json({ success: true, message: 'Order cancelled successfully.' });
             } else {
                 return res.json({ success: false, message: 'Order cancellation failed.' });
             }
@@ -312,7 +316,7 @@ const orderCancel = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-        res.status(500).render("500"); 
+        res.status(500).json({ success: false, message: 'Internal server error.' });
     }
 };
 
@@ -334,7 +338,7 @@ const returnRequest = async (req, res) => {
             res.json({ success: false });
         }
     } catch (error) {
-        res.status(500).render("500"); 
+        res.status(500).render("500");
     }
 }
 
@@ -392,7 +396,7 @@ const returnOrder = async (req, res) => {
         res.json({ success: true });
     } catch (error) {
         console.log(error.message);
-        res.status(500).render("500"); 
+        res.status(500).render("500");
     }
 };
 
@@ -440,7 +444,7 @@ const loadOrderManagement = async (req, res) => {
         const orderData = await Order.find({
             "orderProducts.status": { $nin: ["pending"] }
         })
-            .sort({ purchaseTime: -1 }) 
+            .sort({ purchaseTime: -1 })
             .skip((page - 1) * itemPage)
             .limit(itemPage);
 
@@ -468,7 +472,7 @@ const updateOrder = async (req, res) => {
         res.json({ success: true, orderData });
     } catch (error) {
         console.error(error.message);
-        res.status(500).render("500"); 
+        res.status(500).render("500");
     }
 };
 
@@ -480,7 +484,7 @@ const orderDetails = async (req, res) => {
         const orderData = await Order.findOne({ _id: orderId })
             .populate({
                 path: 'orderProducts.productId',
-                populate: { path: 'category' } 
+                populate: { path: 'category' }
             });
         if (orderData) {
             res.render('orderDetails', { orderData });
@@ -489,7 +493,7 @@ const orderDetails = async (req, res) => {
         }
     } catch (error) {
         console.error(error.message);
-        res.status(500).render("500"); 
+        res.status(500).render("500");
     }
 };
 

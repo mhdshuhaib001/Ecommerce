@@ -102,38 +102,14 @@ const loadDashboard = async (req, res) => {
 
         //--------------------------------sales graph--------------------
 
-        const dailyProductSales = await Order.aggregate([
-            { $match: { 'orderProducts.status': 'Delivered', purchaseDate: { $gte: startDate, $lt: currentDate } } },
-            { $unwind: '$orderProducts' },
-            { $addFields: { formattedDate: { $dateToString: { format: '%Y-%m-%d', date: '$purchaseDate' } } } },
-            { $group: { _id: { date: '$formattedDate' }, revenue: { $sum: '$orderProducts.totalPrice' } } },
-        ]);
 
-        const weeklyProductSales = await Order.aggregate([
-            { $match: { 'orderProducts.status': 'Delivered', purchaseDate: { $gte: startDate, $lt: currentDate } } },
-            { $unwind: '$orderProducts' },
-            { $addFields: { week: { $isoWeek: '$purchaseDate' }, year: { $isoWeekYear: '$purchaseDate' } } },
-            { $group: { _id: { week: '$week', year: '$year' }, revenue: { $sum: '$orderProducts.totalPrice' } } },
-        ]);
 
-        console.log(dailyProductSales, 'jojojoooooooooooooooooooooojjjjjjjjjjjjjj');
-
-        console.log(weeklyProductSales, 'jjiiuhuiuiigygyguygyuuuy');
         const monthlyProductSales = await Order.aggregate([
             { $match: { 'orderProducts.status': 'Delivered' } },
             { $unwind: '$orderProducts' },
             { $addFields: { formattedDate: { $dateToString: { format: '%Y-%m-%d', date: '$purchaseDate', }, }, }, },
             { $group: { _id: { date: '$formattedDate' }, revenue: { $sum: '$orderProducts.totalPrice' }, }, },
         ]);
-
-
-        const dailyLabels = dailyProductSales.map(entry => entry._id.date);
-        const dailyData = dailyProductSales.map(entry => entry.revenue);
-        console.log(dailyLabels, 'dailyLabels');
-        console.log(dailyData, 'dailyData');
-
-        const weeklyLabels = weeklyProductSales.map(entry => `Week ${entry._id.week}, ${entry._id.year}`);
-        const weeklyData = weeklyProductSales.map(entry => entry.revenue);
 
 
         const salesDataMonthly = Array.from({ length: 12 }, () => 0);
@@ -222,6 +198,9 @@ const loadDashboard = async (req, res) => {
         });
     } catch (error) {
         console.log(error.message);
+        res.status(500).render("500"); 
+
+
     }
 };
 

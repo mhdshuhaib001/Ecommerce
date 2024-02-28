@@ -12,6 +12,7 @@ const loadCart = async (req, res) => {
   try {
     const userId = req.session.user_id;
     const cartData = await Cart.findOne({ userId: userId }).populate("product.productId");
+    console.log("cartData",cartData)
 
     if (cartData && cartData.product.length > 0) {
       const products = cartData.product;
@@ -20,9 +21,9 @@ const loadCart = async (req, res) => {
       for (let i = 0; i < products.length; i++) {
         const productId = products[i].productId;
         const product = await Products.findById(productId).select("price");
-
+console.log(product,'product');
         const count = products[i].count;
-        const productPrice = product.price;
+        const productPrice = product.price || 0;
         const totalPrice = productPrice * count;
         total += totalPrice;
         cartData.product[i].totalPrice = totalPrice;
@@ -55,7 +56,7 @@ const loadCart = async (req, res) => {
     }
   } catch (error) {
     console.error(error.message);
-    res.status(500).render("500").send("Internal Server Error cart");
+    res.status(500).render("500");
   }
 };
 
@@ -64,8 +65,11 @@ const addToCart = async (req, res) => {
   try {
     const userId = req.session.user_id;
     const productId = req.body.id;
+    console.log(req.body);
+    console.log(productId,'productId');
     const userData = await User.findOne({ _id: userId });
     const productData = await Products.findById({ _id: productId }).populate("category");
+    console.log(productData,'productData');
     const productQuantity = productData.quantity;
     const count = req.body.count ? parseInt(req.body.count) : 1;
 
@@ -86,6 +90,7 @@ const addToCart = async (req, res) => {
       count: count,
       image: productData.images.image1
     };
+    console.log(products,'jkvncfsdv');
 
     const existCartData = await Cart.findOne({ userId: userId });
 
