@@ -1,257 +1,275 @@
 <%- include('../layouts/admin/header.ejs') -%>
 
+<div class="main-panel">
+    <div class="content-wrapper">
+        <% if (orderData) { %>
+        <!-- Display Order Details -->
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Order Details</h3>
 
-    <div class="main-panel">
-        <div class="content-wrapper">
-            <% if (orderData) { %>
-                <!-- Display Order Details -->
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title">Order Details</h3>
+                <!-- Display Delivery Address Section -->
+                <div>
+                    <h4>Delivery Address</h4>
+                    <p>Name: <%= orderData.deliveryDetails.fullname%><br>
+                        Email: <%= orderData.deliveryDetails.email %><br>
+                        Mobile: <%= orderData.deliveryDetails.mobile %><br>
+                        State: <%= orderData.deliveryDetails.state %><br>
+                        City: <%= orderData.deliveryDetails.city %><br>
+                        House Name: <%= orderData.deliveryDetails.houseName
+                        %><br>
+                        Pincode: <%= orderData.deliveryDetails.pincode %><br>
+                    </p>
+                </div>
 
-                        <!-- Display Delivery Address Section -->
-                        <div>
-                            <h4>Delivery Address</h4>
-                            <p>Name: <%= orderData.deliveryDetails.fullname%><br>
-                                    Email: <%= orderData.deliveryDetails.email %><br>
-                                        Mobile: <%= orderData.deliveryDetails.mobile %><br>
-                                            State: <%= orderData.deliveryDetails.state %><br>
-                                                City: <%= orderData.deliveryDetails.city %><br>
-                                                    House Name: <%= orderData.deliveryDetails.houseName %><br>
-                                                        Pincode: <%= orderData.deliveryDetails.pincode %><br>
-                            </p>
-                        </div>
+                <!-- Display Order Summary Section -->
+                <div>
+                    <h4>Order Summary</h4>
+                    <p>OrderId: <%= orderData.orderId %><br>
+                        Date: <%=
+                        orderData.purchaseDate.toLocaleDateString('en-US', {
+                        year: 'numeric' ,
+                        month: 'short' , day: 'numeric' }) %><br>
+                        Items: <%= orderData.orderProducts.length %><br>
+                        <!-- Shipping: <%= orderData.shippingMethod %><br> -->
+                        Total Amount: <span>₹</span>
+                        <%= orderData.totalAmount %><br>
+                        Payment Method: <%= orderData.paymentMethod %><br>
+                    </p>
+                </div>
 
-                        <!-- Display Order Summary Section -->
-                        <div>
-                            <h4>Order Summary</h4>
-                            <p>OrderId: <%= orderData.orderId %><br>
-                                    Date: <%= orderData.purchaseDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %><br>
-                                        Items: <%= orderData.orderProducts.length %><br>
-                                            <!-- Shipping: <%= orderData.shippingMethod %><br> -->
-                                                Total Amount: <span>₹</span>
-                                                <%= orderData.totalAmount %><br>
-                                                    Payment Method: <%= orderData.paymentMethod %><br>
-                            </p>
-                        </div>
+                <!-- Display Products Table Section -->
+                <div>
+                    <h4>Products</h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="reloadArea">
+                            <thead>
+                                <tr>
+                                    <th>No:</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Count</th>
+                                    <th>Price</th>
+                                    <th>Total Price</th>
+                                    <th>Status</th> <!-- Moved Status Column -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% orderData.orderProducts.forEach((product,
+                                index)=> { %>
 
-                        <!-- Display Products Table Section -->
-                        <div>
-                            <h4>Products</h4>
-                            <div class="table-responsive">
-                                <table class="table table-hover" id="reloadArea">
-                                    <thead>
-                                        <tr>
-                                            <th>No:</th>
-                                            <th>Name</th>
-                                            <th>Category</th>
-                                            <th>Count</th>
-                                            <th>Price</th>
-                                            <th>Total Price</th>
-                                            <th>Status</th> <!-- Moved Status Column -->
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% orderData.orderProducts.forEach((product, index)=> { %>
-                                            
-                                            <tr>
-                                                <td>
-                                                    <%= index + 1 %>
-                                                </td>
-                                                <td>
-                                                    <%= product.productName %>
-                                                </td>
-                                                <td><%= product.productId.category ? product.productId.category.name : '' %></td>
+                                <tr>
+                                    <td>
+                                        <%= index + 1 %>
+                                    </td>
+                                    <td>
+                                        <%= product.productName %>
+                                    </td>
+                                    <td>
+                                        <%= product.productId.category ?
+                                        product.productId.category.name
+                                        : '' %>
+                                    </td>
 
-                                                <td>
-                                                    <%= product.count %>
-                                                </td>
-                                                <td><span>₹</span>
-                                                    <%= product.productPrice %>
-                                                </td>
-                                                <td><span>₹</span>
-                                                    <%= product.totalPrice %>
-                                                </td>
-                                                <% if (product.status=="pending" ) { %>
-                                                    <td style="color: yellow;">Pending</td>
-                                                    <% } else if (product.status=='Delivered' ) { %>
-                                                        <td style="color: limegreen;">Delivered</td>
-                                                        <% } else if (product.status=="request" ) {%>
-                                                            <td>
-                                                                <button
-                                                                onclick="showReturnModal(`<%= product._id %>`,`<%= product.count %>`,`<%= product.returnReason %>`,`<%= orderData._id%>`)"`
-                                                                class="badge badge-warning">Return Request
-                                                                </button>
-                                                            </td>
-                                                            <% } else if(product.status=="Accepted" ){%>
-                                                                <td style="color: rgb(9, 16, 219);">Returned</td>
+                                    <td>
+                                        <%= product.count %>
+                                    </td>
+                                    <td><span>₹</span>
+                                        <%= product.productPrice %>
+                                    </td>
+                                    <td><span>₹</span>
+                                        <%= product.totalPrice %>
+                                    </td>
+                                    <% if (product.status=="pending" ) { %>
+                                    <td style="color: yellow;">Pending</td>
+                                    <% } else if (product.status=='Delivered' )
+                                    { %>
+                                    <td style="color: limegreen;">Delivered</td>
+                                    <% } else if (product.status=="request" )
+                                    {%>
+                                    <td>
+                                        <button
+                                            onclick="showReturnModal(`<%= product._id %>`,`<%= product.count %>`,`<%= product.returnReason %>`,`<%= orderData._id%>`)"
+                                            ` class="badge badge-warning">Return
+                                            Request
+                                        </button>
+                                    </td>
+                                    <% } else if(product.status=="Accepted" ){%>
+                                    <td
+                                        style="color: rgb(9, 16, 219);">Returned</td>
 
-
-                                                                <% } else if (product.status=='cancel' ) { %>
-                                                                    <td style="color: red;">Cancelled</td>
-                                                                    <% } else { %>
-                                                                        <td>
-                                                                            <div class="dropdown">
-                                                                                <button
-                                                                                    class="btn btn-primary dropdown-toggle"
-                                                                                    type="button"
-                                                                                    data-toggle="dropdown">
-                                                                                    <%= product.status %>
-                                                                                </button>
-                                                                                <div class="dropdown-menu">
-                                                                                    <button class="dropdown-item"
-                                                                                        type="button"
-                                                                                        onclick="updateOrder('<%= product._id %>','Placed')">Placed</button>
-                                                                                    <button class="dropdown-item"
-                                                                                        type="button"
-                                                                                        onclick="updateOrder('<%= product._id %>','Shipped')">Shipped</button>
-                                                                                    <!-- <button class="dropdown-item"
+                                    <% } else if (product.status=='cancel' ) {
+                                    %>
+                                    <td style="color: red;">Cancelled</td>
+                                    <% } else { %>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button
+                                                class="btn btn-primary dropdown-toggle"
+                                                type="button"
+                                                data-toggle="dropdown">
+                                                <%= product.status %>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <button class="dropdown-item"
+                                                    type="button"
+                                                    onclick="updateOrder('<%= product._id %>','Placed')">Placed</button>
+                                                <button class="dropdown-item"
+                                                    type="button"
+                                                    onclick="updateOrder('<%= product._id %>','Shipped')">Shipped</button>
+                                                <!-- <button class="dropdown-item"
                                                                                         type="button"
                                                                                         onclick="updateOrder('<%= product._id %>','Out for Delivery')">Out
                                                                                         for Delivery</button> -->
-                                                                                    <button class="dropdown-item"
-                                                                                        type="button"
-                                                                                        onclick="updateOrder('<%= product._id %>','Delivered')">Delivered</button>
-                                                                                    <button class="dropdown-item"
-                                                                                        type="button"
-                                                                                        onclick="updateOrder('<%= product._id %>','cancel')">Cancel</button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </td>
-                                                                        <% } %>
-                                            </tr>
-                                            <% }); %>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                                                <button class="dropdown-item"
+                                                    type="button"
+                                                    onclick="updateOrder('<%= product._id %>','Delivered')">Delivered</button>
+                                                <button class="dropdown-item"
+                                                    type="button"
+                                                    onclick="updateOrder('<%= product._id %>','cancel')">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <% } %>
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <% } else { %>
-                    <!-- Handle Case where Order Details are not found -->
-                    <div class="alert alert-danger" role="alert">
-                        Order details not found.
-                    </div>
-                    <% } %>
+            </div>
         </div>
-    
+        <% } else { %>
+        <!-- Handle Case where Order Details are not found -->
+        <div class="alert alert-danger" role="alert">
+            Order details not found.
+        </div>
+        <% } %>
+    </div>
 
     <!-- The Modal -->
-                <div class="modal fade" id="returnOptionsModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered ">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Return Options</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p id="returnReason" class="return-options-modal-reason"></p>
-                                <p id="returnReasonDescription" class="return-options-modal-description"></p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Reject</button>
-                                <button type="button" class="btn btn-success" id="acceptBtn">Accept</button>
-                            </div>
-                        </div>
-                    </div>
+    <div class="modal fade" id="returnOptionsModal" tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Return
+                        Options</h5>
+                    <button type="button" class="btn-close"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-
+                <div class="modal-body">
+                    <p id="returnReason"
+                        class="return-options-modal-reason"></p>
+                    <p id="returnReasonDescription"
+                        class="return-options-modal-description"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Reject</button>
+                    <button type="button" class="btn btn-success"
+                        id="acceptBtn">Accept</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
 
 
-        function showReturnModal(productId, count,returnReason,orderId) {
-            console.log(productId, count, returnReason,orderId,'valiyyannappan');
-            document.getElementById('returnReason').innerText = returnReason;
-            $('#returnOptionsModal').modal('show');
+            function showReturnModal(productId, count, returnReason, orderId) {
+                console.log(productId, count, returnReason, orderId, 'valiyyannappan');
+                document.getElementById('returnReason').innerText = returnReason;
+                $('#returnOptionsModal').modal('show');
 
-            $(document).on('click', '#acceptBtn', function () {
-            // Close the modal
-            console.log('checking');
-            $('#returnOptionsModal').modal('hide');
+                $(document).on('click', '#acceptBtn', function () {
+                    // Close the modal
+                    console.log('checking');
+                    $('#returnOptionsModal').modal('hide');
 
-            returnOrder(productId, count,orderId);
-        });
+                    returnOrder(productId, count, orderId);
+                });
 
-        $(document).on('click', '.btn-secondary', function () {
-            $('#returnOptionsModal').modal('hide');
-        });
+                $(document).on('click', '.btn-secondary', function () {
+                    $('#returnOptionsModal').modal('hide');
+                });
 
-        }
+            }
 
-       
-        function returnOrder(productId, count, orderId) {
-            console.log('id', productId);
-            console.log('count', count);
-            console.log('productId', orderId);
-            
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You want to accept this return request?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes",
-                cancelButtonText: "Not now",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "/admin/returnOrder",
-                        data: JSON.stringify({
-                            productId: productId,
-                            count: count,
-                            orderId: orderId
-                        }),
-                        contentType: "application/json",
-                        method: "POST",
-                        success: (response) => {
-                            if (response.success) {
-                                window.location.reload();
 
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: 'top-end',
-                                    showConfirmButton: false,
-                                    timer: 3000,
-                                });
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: 'The order is successfully returned.'
-                                });
+            function returnOrder(productId, count, orderId) {
+                console.log('id', productId);
+                console.log('count', count);
+                console.log('productId', orderId);
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You want to accept this return request?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "Not now",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/admin/returnOrder",
+                            data: JSON.stringify({
+                                productId: productId,
+                                count: count,
+                                orderId: orderId
+                            }),
+                            contentType: "application/json",
+                            method: "POST",
+                            success: (response) => {
+                                if (response.success) {
+                                    window.location.reload();
+
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: 'top-end',
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                    });
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'The order is successfully returned.'
+                                    });
+                                }
                             }
-                        }
-                    });
-                }
-            });
-        }
-
-
-        function updateOrder(id, status) {
-            const data = { orderId: id, status };
-            console.log(data);
-            $.ajax({
-                method: 'PUT',
-                url: '/admin/updateOrder',
-                data: JSON.stringify(data),
-                contentType: 'application/json',
-                success: function (response) {
-                    if (response.success === true) {
-                        $('#reloadArea').load('/orderDet #reloadArea');
-                    } else {
-                        swal("Something error", "", "error");
-                        $('#reloadArea').load('/orderDet #reloadArea');
+                        });
                     }
-                }
-            });
-        }
+                });
+            }
+
+
+            function updateOrder(id, status) {
+                const data = { orderId: id, status };
+                console.log(data);
+                $.ajax({
+                    method: 'PUT',
+                    url: '/admin/updateOrder',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    success: function (response) {
+                        if (response.success === true) {
+                            $('#reloadArea').load('/orderDet #reloadArea');
+                        } else {
+                            swal("Something error", "", "error");
+                            $('#reloadArea').load('/orderDet #reloadArea');
+                        }
+                    }
+                });
+            }
 
 
 
 
-    </script>
+        </script>
 
     <%- include('../layouts/admin/footer.ejs') -%>

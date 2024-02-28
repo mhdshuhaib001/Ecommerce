@@ -11,7 +11,6 @@ const express = require('express');
 const app = express();
 const noCache = require('nocache');
 const morgan = require('morgan');
-;
 
 
 const path = require("path");
@@ -39,13 +38,19 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 
+const adminRout = require('./routes/adminRoute');
+app.use('/admin',adminRout); 
 
 const userRoute = require('./routes/userRoute');
 app.use('/', userRoute);
 
-const adminRout = require('./routes/adminRoute');
-app.use('/admin',adminRout); 
+app.use((req, res) => {
+  res.status(404).render(path.join(__dirname, 'views', 'users', '404.ejs'));
+});
 
+app.use((req, res) => {
+  res.status(404).render(__dirname+'/views/user/404.ejs');
+});
 
 
 

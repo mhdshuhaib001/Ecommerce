@@ -45,6 +45,7 @@ const loadHome = async (req, res) => {
     res.render("home", { user: userData, cart: cartData, cartCount, productData: limitedProductData });
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 
@@ -137,10 +138,7 @@ const insertUser = async (req, res) => {
                                           Math.floor(Math.random() * 9000) +
                                           1000;
                                         otp = randomNumber;
-                                        console.log(otp, "check otp");
-
                                         req.session.email = req.body.email;
-
                                         req.session.password = spassword;
                                         req.session.userName = req.body.name;
                                         req.session.mobile = req.body.mobile;
@@ -179,6 +177,7 @@ const insertUser = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message)
+    res.status(500).render("500"); 
   }
 };
 
@@ -192,6 +191,7 @@ const loadUserOtp = async (req, res) => {
     res.render("userOtp", { verifyErr, otpsend });
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 
@@ -201,11 +201,8 @@ const verifyOTP = async (req, res) => {
 
     req.session.verifyErr = false;
     req.session.otpsent = false;
-
     const otpInput = req.body.otp;
     const email = req.session.email;
-    console.log(email, 'veryfy');
-
     if (req.body.otp.trim() === "") {
       res.json({ fill: true });
     } else {
@@ -227,6 +224,7 @@ const verifyOTP = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 
@@ -269,6 +267,7 @@ const sendVerifyMail = async ({ name, email, otp }) => {
     })
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 
@@ -283,11 +282,6 @@ const resendOtp = async (req, res) => {
     let name = req.session.name || "User";
     let randomNumber = Math.floor(Math.random() * 9000) + 1000;
 
-
-    console.log(email, '1');
-    console.log(verifyErr, '2');
-    console.log(name, '3');
-    console.log(randomNumber, '3');
     setTimeout(() => {
       otp = Math.floor(Math.random() * 9000) + 1000;
     }, 60000);
@@ -301,6 +295,7 @@ const resendOtp = async (req, res) => {
     });
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 
@@ -310,10 +305,10 @@ const loadLogin = async (req, res) => {
   try {
     const userId = req.session.user_id;
     let regSuccess = req.session.regSuccess;
-console.log(regSuccess,'------------');
     res.render("login", regSuccess);
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 
@@ -383,6 +378,7 @@ const verifylogin = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message)
+    res.status(500).render("500"); 
   }
 };
 
@@ -433,6 +429,7 @@ const sendPassResetMail = async (name, email, token) => {
     });
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 
@@ -444,6 +441,7 @@ const forgetLoad = async (req, res) => {
     res.render("forgetpassword");
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 
@@ -509,6 +507,7 @@ const loadForgetpage = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 
@@ -541,7 +540,6 @@ const resetPassword = async (req, res) => {
               res.json({ wrong: true });
             } else {
               const email = req.session.email;
-              console.log(email, 'emailcheck')
               const secure_password = await securePassword(Password);
               const updateData = await User.updateOne(
                 { email: email },
@@ -560,6 +558,7 @@ const resetPassword = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message)
+    res.status(500).render("500"); 
   }
 };
 
@@ -614,6 +613,7 @@ const loadShop = async (req, res) => {
     });
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 
@@ -645,6 +645,7 @@ const searchProducts = async (req, res) => {
     })
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 }
 
@@ -656,6 +657,7 @@ const logout = async (req, res) => {
     res.redirect("/");
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 
@@ -666,6 +668,7 @@ const loadSignup = async (req, res) => {
     res.render("signup");
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 
@@ -676,6 +679,7 @@ const loadContact = async (req, res) => {
     res.render("contact");
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 
@@ -684,7 +688,7 @@ const aboutLoad = async (req,res)=>{
     res.render("about");
   }catch {
     console.log(error.message);
-    res.render("404");
+    res.status(500).render("500"); 
   }
 }
 
@@ -713,6 +717,7 @@ const loadprofile = async (req, res) => {
     res.render("userProfile", { user: userData, addressData, orderData, cartCount, walletData });
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 
@@ -738,6 +743,7 @@ const changePassword = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
 
   }
 }
@@ -751,6 +757,7 @@ const loadError404 = async (req, res) => {
     res.render("404");
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 
@@ -761,6 +768,7 @@ const loadError500 = async (req, res) => {
     res.render("500");
   } catch (error) {
     console.log(error.message);
+    res.status(500).render("500"); 
   }
 };
 

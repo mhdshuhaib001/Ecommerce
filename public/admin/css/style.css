@@ -21452,3 +21452,8 @@ h1 {
   transform: translateY(-100%);
   transition: all 0.3s 1s ease-out;
 }
+
+.square-image {
+  width: 100px; height: 100px; object-fit: cover;
+  
+}

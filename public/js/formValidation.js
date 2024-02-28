@@ -26,7 +26,6 @@ console.log(email)
     },
     method: "post",
     success: (response) => {
-      console.log('check data')
 
       if ((response.name_require)) {
         name_message.style.display = "block";

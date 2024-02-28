@@ -26,6 +26,7 @@ const loadproduct = async (req, res) => {
         res.render("productmanagement", { productData, totalPages, currentPage: page });
     } catch (error) {
         console.log(error.message);
+        res.status(500).render("500"); 
     }
 }
 
@@ -36,10 +37,10 @@ const loadAddProduct = async (req, res) => {
     try {
         const nameAlready = req.session.proNameAlready
         const categoryData = await Category.find({ blocked: false })
-        console.log(categoryData);
         res.render("addproduct", { categoryData, nameAlready })
     } catch (error) {
         console.log(error.message);
+        res.status(500).render("500"); 
     }
 }
 
@@ -92,9 +93,8 @@ const addProduct = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-
+        res.status(500).render("500"); 
     }
-
 }
 
 //---------------------BLOCK AND UNBLOCK PRODUCTS IN ADMIN SIDE---------------
@@ -105,17 +105,14 @@ const blockProduct = async (req, res) => {
         const blockedproduct = await Products.findOne({ _id: req.body.proId })
         if (!blockedproduct.blocked) {
             await Products.updateOne({ _id: req.body.proId }, { $set: { blocked: true } })
-            // res.redirect("/admin/productmanagement")
             res.json({ success: true })
         } else {
             await Products.updateOne({ _id: req.body.proId }, { $set: { blocked: false } })
-            // res.redirect("/admin/productmanagement")
             res.json({ success: true })
         }
-
-
     } catch (error) {
         console.log(error.message);
+        res.status(500).render("500"); 
     }
 }
 
@@ -123,12 +120,12 @@ const blockProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     try {
-
         await Products.deleteOne({ _id: req.query.id })
         res.redirect("/admin/productmanagement")
 
     } catch (error) {
         console.log(error.message)
+        res.status(500).render("500"); 
     }
 }
 
@@ -143,7 +140,7 @@ const loadEditProduct = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
-
+        res.status(500).render("500"); 
     }
 }
 
@@ -223,7 +220,7 @@ const editedProduct = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
-
+        res.status(500).render("500"); 
     }
 }
 
@@ -243,19 +240,11 @@ const loadProduct = async (req, res) => {
         }
 
         const categoryId = productView.category;
-        console.log(categoryId, 'categoryId');
-
         const userData = req.session.user_id;
-        
         const products = await Products.find({ blocked: 0 });
-        const category = await Category.find({ blocked: 0 }); 
-
-        console.log(productView, ']]]]]]]]]]]]]]]]]]');
-        
+        const category = await Category.find({ blocked: 0 });         
         const cart = await Cart.findOne({ userId: req.session.user_id });
         const relatedProduct = await Products.find({ category: categoryId, blocked: 0 }).populate('category')
-
-
         let cartCount = 0;
         if (cart) {
             cartCount = cart.product.length;
@@ -267,6 +256,7 @@ const loadProduct = async (req, res) => {
         res.status(500).render("500"); 
     }
 };
+
 const filterProducts = async (req, res) => {
     try {
         const priceRange = req.body.price;
@@ -317,7 +307,7 @@ const filterProducts = async (req, res) => {
         });
     } catch (error) {
         console.log(error.message);
-        res.status(500).render(500).send("Internal Server Error");
+        res.status(500).render("500"); 
     }
 };
 
@@ -327,7 +317,7 @@ module.exports = {
     loadAddProduct,
     addProduct,
     blockProduct,
-    // deleteProduct,
+    deleteProduct,
     loadEditProduct,
     editedProduct,
     loadProduct,

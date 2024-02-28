@@ -11,25 +11,23 @@ const ExcelJS = require('exceljs');
 
 
 
-
-
-
 const adminLoginPage = async (req, res) => {
     try {
         res.render("login");
     } catch (error) {
         console.log(error.message)
+        res.status(500).render("500");
     }
 }
 
 //-------------------------Log out---------------------
-
 const logout = async (req, res) => {
     try {
         req.session.destroy()
         res.redirect("/admin")
     } catch (error) {
         console.log(error.message);
+        res.status(500).render("500");
     }
 }
 
@@ -61,6 +59,7 @@ const adminVerify = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).render("500");
 
     }
 }
@@ -102,7 +101,6 @@ const loadDashboard = async (req, res) => {
         });
 
         //--------------------------------sales graph--------------------
-
 
         const dailyProductSales = await Order.aggregate([
             { $match: { 'orderProducts.status': 'Delivered', purchaseDate: { $gte: startDate, $lt: currentDate } } },
@@ -248,15 +246,10 @@ const usermanagementload = async (req, res) => {
 
         res.render("usermanagement", { users: userData, totalPages, currentPage: page, itemPage });
     } catch (error) {
-        console.log(error.message);
-        res.status(500).send("Internal Server Error");
+        console.error(error.message);
+        res.status(500).render("500"); 
     }
 };
-
-module.exports = {
-    usermanagementload,
-};
-
 
 //-------------------- Block Or Unblock User -------------
 
@@ -274,7 +267,7 @@ const userBlocked = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({  message: "Error processing request" });
+        res.status(500).render("500"); 
     }
 };
 
@@ -287,9 +280,9 @@ const loadcategory = async (req, res) => {
         const categoryData = await Category.find()
         res.render("categorymanagement", { categoryData: categoryData })
 
-
     } catch (error) {
         console.log(error.message);
+        res.status(500).render("500"); 
     }
 }
 
@@ -301,20 +294,17 @@ const loadAddCategory = async (req, res) => {
         res.render("addcategory")
     } catch (error) {
         console.log(error.message)
+        res.status(500).render("500"); 
     }
 }
 
 
 const addCategory = async (req, res) => {
     try {
-
-
         const name = req.body.categoryname
-
         const data = new categoryModel({
             name: req.body.categoryname
         });
-        console.log(data)
 
         const already = await categoryModel.findOne({ name: { $regex: name, $options: "i" } });
         console.log(already)
@@ -325,14 +315,13 @@ const addCategory = async (req, res) => {
             res.redirect("/admin/categorymanagement");
         }
 
-
     } catch (error) {
         console.log(error.message);
-
+        res.status(500).render("500"); 
     }
 }
 
-//--------------------BLOCK AND UNBLOCK CATEGORY-----------
+//--------------------BLOCK AND UNBLOCK CATEGORY--------------------------
 
 const blockCategory = async (req, res) => {
     try {
@@ -340,17 +329,15 @@ const blockCategory = async (req, res) => {
         const blockedcategory = await Category.findOne({ _id: req.body.catId })
         if (!blockedcategory.blocked) {
             await Category.updateOne({ _id: req.body.catId }, { $set: { blocked: true } })
-            // res.redirect("/admin/categorymanagement")
             res.json({ success: true })
         } else {
             await Category.updateOne({ _id: req.body.catId }, { $set: { blocked: false } })
-            // res.redirect("/admin/categorymanagement")
             res.json({ success: true })
         }
 
     } catch (error) {
         console.log(error.message)
-
+        res.status(500).render("500"); 
     }
 }
 
@@ -365,7 +352,7 @@ const loadeditCategory = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
-
+        res.status(500).render("500"); 
     }
 }
 
@@ -384,7 +371,7 @@ const updateCategory = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message)
-
+        res.status(500).render("500"); 
     }
 }
 
@@ -399,6 +386,7 @@ const deleteCategory = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
+        res.status(500).render("500"); 
     }
 }
 
@@ -443,7 +431,7 @@ const salesReport = async (req, res) => {
         res.render('salesReport', { orders });
     } catch (error) {
         console.error(error.message);
-        // res.render('500Error');
+        res.status(500).render("500"); 
     }
 };
 
@@ -511,6 +499,7 @@ const pdfDownload = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).render("500"); 
     }
 }
 
@@ -577,8 +566,7 @@ const excelDownload = async (req, res) => {
                 order._id,
                 order.deliveryDetails.fullname,
                 order.orders,
-                // order.subtotal,
-                // order.payment
+             
             ]);
         });
 
@@ -594,7 +582,7 @@ const excelDownload = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-        res.status(500);
+        res.status(500).render("500"); 
     }
 }
 
@@ -603,7 +591,6 @@ const excelDownload = async (req, res) => {
 
 
 module.exports = {
-
     adminLoginPage,
     adminVerify,
     loadDashboard,

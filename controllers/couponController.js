@@ -9,7 +9,7 @@ const loadCouponManagement = async (req, res) => {
         res.render("couponManagement", { couponData });
     } catch (error) {
         console.log(error.message);
-
+        res.status(500).render("500"); 
     }
 }
 
@@ -18,6 +18,7 @@ const addCouponLoad = async (req, res) => {
         res.render("addCoupon");
     } catch (error) {
         console.log(error.message);
+        res.status(500).render("500"); 
     }
 }
 
@@ -56,7 +57,7 @@ const addCoupon = async (req, res) => {
         res.json({ success: true });
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).render("500"); 
     }
 };
 
@@ -75,37 +76,20 @@ const blockCoupon = async (req, res) => {
             res.json({ success: true })
         }
 
-
     } catch (error) {
         console.log(error.message)
+        res.status(500).render("500"); 
     }
 }
 
-
-// const loadEditCoupon = async (req, res) => {
-//     try {
-//         console.log(req.query);
-//         const couponId = req.query._id; // Use req.query._id to get the parameter value
-//         console.log(couponId, '000000000000000000');
-//         const couponData = await Coupon.findOne({ _id: couponId });
-//         console.log(couponData, "-----------", couponId);
-//         res.render('editCoupon', { couponData });
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
-
-
 const deletCouopon = async (req, res) => {
     try {
-        console.log('chek this sanam')
         const couponId = req.body.couponId;
-        console.log(couponId);
-
         await Coupon.deleteOne({ _id: couponId });
         res.json({ success: true })
     } catch (error) {
         console.log(error.message);
+        res.status(500).render("500"); 
     }
 }
 
@@ -118,7 +102,6 @@ const deletCouopon = async (req, res) => {
 const applyCoupon = async (req, res) => {
     try {
         const couponId = req.body.couponId;
-        console.log(couponId, 'halooo');
         const userId = req.session.user_id;
         const cartData = await Cart.findOne({ userId: userId });
         const cartTotal = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
@@ -156,7 +139,7 @@ const applyCoupon = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.json({ error: true, message: 'An error occurred while applying the coupon.' });
+        res.status(500).render("500"); 
     }
 };
 
@@ -165,15 +148,13 @@ const removeCoupon = async (req, res) => {
     try {
         const couponId = req.body.couponId;
         const userId = req.session.user_id;
-        console.log(couponId, 'chkkk id  ', userId, 'hakoo');
-
         const updateCoupo = await Coupon.findOneAndUpdate({ _id: couponId }, { $pull: { usedUser: userId } });
         const cartStatus = await Cart.findOneAndUpdate({ userId: userId }, { $set: { couponDiscount: null } });
 
         res.json({ couponRemove: true });
     } catch (error) {
         console.log(error.message);
-
+        res.status(500).render("500"); 
     }
 }
 

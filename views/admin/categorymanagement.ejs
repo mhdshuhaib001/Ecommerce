@@ -11,7 +11,7 @@
               <h4 class="card-title">Category Management</h4>
               <p class="card-description"> Mazia Categories</p>
               <p><a href="/admin/loadaddcategory" class="badge badge-success"> + Add Category </a></p>
-              <div class="table-responsive">
+              <div class="table-responsive" id="categoryTableContainer">
                 <table class="table">
                   <thead>
                     <tr>
@@ -50,11 +50,11 @@
                                   <a href="/admin/edit-category?id=<%= categoryData[i]._id %>"
                                     class="badge badge-success">Edit</a>
                                 </td>
-                                 <td>
+                                <!-- <td>
                                   <button class="btn-inverse-danger"> <a
                                       href="/admin/delete-category?id=<%= categoryData[i]._id %>"
                                       style="text-decoration: none; color: #fff; ">Delete</a></button>
-                                </td> 
+                                </td> -->
 
                         </tr>
                         <% } %>
@@ -72,46 +72,51 @@
         </div>
         <!-- partial -->
       </div>
-      </div>
-      
-      <!-- main-panel ends -->
-      <script>
-        function categoryBlock(catId) {
-          swal
-            .fire({
-              title: "Are You Sure?",
-              text:"Are you sure",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#3085d6",
-              cancelButtonColor: "#d33",
-              confirmButtonText: "Yes",
-              cancelButtonText: "cancel",
-            })
-            .then((result) => {
-              if (result.isConfirmed) {
-                $.ajax({
-                  url: "/admin/block-category",
-                  data: {
-                    catId: catId,
-                  },
-                  method: "post",
-                  success: (response) => {
-                    if ((response.remove = true)) {
-                      location.reload();
-                      swal.fire({
-                        title: "Done",
-                        text: "suSuscces",
-                        icon: "Suscces",
-                        timer: 1500,
-                        showConfirmButton: false,
-                      });
-                    }
-                  },
-                });
-              }
-            });
-        }
-      </script>
+    </div>
 
-  <%-include("../layouts/admin/footer.ejs")%>
+    <!-- main-panel ends -->
+    <script>
+      function categoryBlock(catId) {
+        swal
+          .fire({
+            title: "Are You Sure?",
+            text: "Are you sure",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes",
+            cancelButtonText: "cancel",
+          })
+          .then((result) => {
+            if (result.isConfirmed) {
+              $.ajax({
+                url: "/admin/block-category",
+                data: {
+                  catId: catId,
+                },
+                method: "post",
+                success: (response) => {
+                  if ((response.remove = true)) {
+                    $('#categoryTableContainer').load('/admin/categorymanagement #categoryTableContainer');
+
+                    const Toast = Swal.mixin({
+                      toast: true,
+                      position: "top-end",
+                      showConfirmButton: false,
+                      timer: 1500,
+                    });
+
+                    Toast.fire({
+                      icon: "error",
+                      title: response.message,
+                    });
+                  }
+                },
+              });
+            }
+          });
+      }
+    </script>
+
+    <%-include("../layouts/admin/footer.ejs")%>

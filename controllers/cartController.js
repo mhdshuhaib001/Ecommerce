@@ -24,7 +24,6 @@ const loadCart = async (req, res) => {
         const count = products[i].count;
         const productPrice = product.price;
         const totalPrice = productPrice * count;
-
         total += totalPrice;
         cartData.product[i].totalPrice = totalPrice;
       }
@@ -36,13 +35,9 @@ const loadCart = async (req, res) => {
 
       const cart = await Cart.findOne({ userId: req.session.user_id });
       let cartCount = 0;
-
       if (cart) {
         cartCount = cart.product.length;
       }
-
-      console.log(subTotal, 'subTotal');
-      console.log(grandTotal, 'grandTotal');
 
       res.render("cart", {
         user: userId,
@@ -80,7 +75,6 @@ const addToCart = async (req, res) => {
 
     if (productQuantity <= 0) {
       return res.json({ stock: true, message: "Product is out of stock." });
-      console.log('haeloooooooooooooooo');
     }
 
     const totalPrice = productData.price * count;
@@ -96,7 +90,6 @@ const addToCart = async (req, res) => {
     const existCartData = await Cart.findOne({ userId: userId });
 
     if (!existCartData) {
-      // If cart doesn't exist for the user, create a new one
       const newCartData = await Cart.create({
         userId: userId,
         userName: userData.name,
@@ -108,12 +101,10 @@ const addToCart = async (req, res) => {
     const existProductIndex = existCartData.product.findIndex((p) => p.productId == productId);
 
     if (existProductIndex !== -1) {
-      // If the same product is already in the cart, redirect to the cart page
       return res.json({ exist: true, newProduct: false, message: "Product is already in your cart." });
     }
 
     if (productQuantity < count) {
-      // If quantity exceeds the available stock, show a message
       return res.json({ success: false, limit: true, message: "Quantity limit reached!" });
     }
 
@@ -147,7 +138,7 @@ const removeCartItem = async (req, res) => {
     }
   } catch (error) {
     console.error("Error removing cart item:", error);
-    res.status(500).json({ success: false, error: "Internal Server Error" });
+    res.status(500).render("500"); 
   }
 };
 
@@ -191,7 +182,6 @@ const quantityUpdate = async (req, res) => {
       (product) => product.productId == proId
     );
     const updatedQuantity = updatedProduct.count;
-
     const productTotal = productData.price * updatedQuantity;
 
     await Cart.updateOne(
@@ -202,7 +192,7 @@ const quantityUpdate = async (req, res) => {
 
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    res.status(500).render("500"); 
   }
 };
 
@@ -215,10 +205,7 @@ const loadCheckOut = async (req, res) => {
       const cartTotal = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
       const addressData = await Address.findOne({ user: user_id });
 
-      // Fetch coupons that the user has not used
       const couponData = await Coupon.find();
-      const couponUsed = await Coupon.find({usedUser: user_id})
-      console.log(couponData,'====================================');
 
       let couponDiscountAmount = 0;
       if (cartData.couponDiscount) {
@@ -227,9 +214,7 @@ const loadCheckOut = async (req, res) => {
               couponDiscountAmount = Math.round((coupon.discountAmount / 100) * cartTotal);
           }
       }
-
       const discountAmount = cartTotal - couponDiscountAmount;
-
       const cartCount = cartData.product.length;
       let instock = true;
       for (const product of cartData.product) {
@@ -246,21 +231,15 @@ const loadCheckOut = async (req, res) => {
       } else {
           shippingAmount = 0;
       }
-
       let totalamount = 0;
-
       if (couponDiscountAmount > 0) {
           totalamount = cartTotal - couponDiscountAmount;
       } else {
           totalamount += cartTotal;
       }
-
-      // Add shippingAmount to totalamount if it's greater than 0
       if (shippingAmount > 0) {
           totalamount += shippingAmount;
       }
-
-      console.log(totalamount, 'totalamount');
       if (cartData) {
           res.render("checkout", {
               user: userData,
@@ -281,8 +260,8 @@ const loadCheckOut = async (req, res) => {
       }
   } catch (error) {
       console.error(error.message);
-      res.status(500).send('Internal Server Error ');
-  }
+      res.status(500).render("500"); 
+    }
 };
 
 

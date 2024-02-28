@@ -24,7 +24,6 @@ const placeOrder = async (req, res) => {
     try {
         const user_id = req.session.user_id;
         const cartData = await Cart.findOne({ userId: user_id }).populate('couponDiscount');
-
         const paymentMethod = req.body.formData.payment;
         const status = paymentMethod === 'COD' ? 'Placed' : 'Pending';
         const userData = await User.findById(user_id);
@@ -68,13 +67,10 @@ const placeOrder = async (req, res) => {
             res.json({ maxAmount: true});
             return;
         } else if(totalAmount < shipingTotalAmount) {
-            console.log("sssssssssssssss");
             shippingAmount = 90
             totalAmount+=shippingAmount
         }
-        console.log(totalAmount,'totalAmount');
-        console.log(shippingAmount,'----------');
-
+        
         const order = new Order({
             userId: user_id,
             orderId: uniqId,
@@ -111,7 +107,6 @@ const placeOrder = async (req, res) => {
                     { _id: orderId },
                     { $set: { status: 'placed' } }
                 );
-                console.log(update, '---------------');
 
                 return res.json({ razorpay: true, order });
             });
@@ -136,7 +131,6 @@ const placeOrder = async (req, res) => {
                 );
 
                 if (wallet) {
-                    console.log("Amount debited from wallet");
 
                     for (let i = 0; i < cartData.product.length; i++) {
                         let product = cartData.product[i].productId;
@@ -146,16 +140,13 @@ const placeOrder = async (req, res) => {
                         );
                     }
 
-                    // Update the overall order status to 'placed'
                     const orderUpdate = await Order.findByIdAndUpdate(
                         { _id: orderId },
                         { $set: { status: 'placed' } }
                     );
                     await Cart.deleteOne({ userId: user_id });
-                    console.log(orderUpdate, 'Order status updated to placed');
                     return res.json({ placed: true, orderId });
                 } else {
-                    console.log("Not debited from wallet");
                     return res.json({ walletFailed: true });
                 }
             } else {
@@ -164,7 +155,7 @@ const placeOrder = async (req, res) => {
         }
     } catch (error) {
         console.error(error.message);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).render("500"); 
     }
 };
 
@@ -205,19 +196,15 @@ const verifyPayment = async (req, res) => {
                 category: product.category,
             }));
 
-            console.log(productData, 'orderData');
             const razoOrder = await Order.findOneAndUpdate({ _id: orderData._id }, { $set: { orderProducts: productData } }, { new: true })
-            console.log(razoOrder, 'jjj');
             await Cart.deleteOne({ userId: user_id });
-
-
             return res.json({ placed: true });
         }
 
         res.status(400).json({ error: 'Invalid payment verification' });
     } catch (error) {
         console.error(error.message);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).render("500"); 
     }
 };
 
@@ -225,15 +212,13 @@ const verifyPayment = async (req, res) => {
 
 const success = async (req, res) => {
     try {
-        console.log(req.params);
         const userId = req.session.user_id;
-
         const orderData = await Order.find({ _id: userId });
-        console.log(orderData, 'ordderData');
         res.render("orderSuccess", { orderData });
     } catch (error) {
         console.log(error.message);
         res.render("shop")
+        res.status(500).render("500"); 
     }
 };
 
@@ -252,21 +237,19 @@ const OrderDetailsLoad = async (req, res) => {
           if(orderPrice<1390){
              shippingCharge = 90
           }
-        console.log(shippingCharge,'-------');
-
         if (orderData) {
             res.render("orderDetails", {
                 orderData,
                 userId,
                 address: deliveryDetails,
                 shippingCharge 
-
             });
         } else {
             res.render("orderDetails", { userId });
         }
     } catch (error) {
         console.log(error.message);
+        res.status(500).render("500"); 
     }
 };
 
@@ -277,13 +260,11 @@ const orderCancel = async (req, res) => {
         const orderId = req.body.orderId;
         const cancelReason = req.body.cancelReason;
         const orderData = await Order.findOne({ _id: orderId });
-console.log(cancelReason,'===================////////////////');
         const orderProduct = orderData.orderProducts.find((val) => {
             return val._id.toString() === productId
         });
 
         const prodcutTotalPrice = orderProduct.totalPrice;
-
         if (orderData.paymentMethod !== "COD") {
             const walletUpdate = await User.findOneAndUpdate(
                 { _id: userId },
@@ -311,7 +292,6 @@ console.log(cancelReason,'===================////////////////');
                     }
                 );
                 console.log(`Added ${prodcutTotalPrice} to the wallet.`);
-                console.log(updateResult,'------------');
             } 
         } else if (orderData.paymentMethod === "COD") {
             const updateResult = await Order.findOneAndUpdate(
@@ -323,9 +303,6 @@ console.log(cancelReason,'===================////////////////');
                     }
                 }
             );
-
-            console.log(updateResult,'==================');
-
             if (updateResult) {
                 return res.json({ success: true });
             } else {
@@ -335,7 +312,7 @@ console.log(cancelReason,'===================////////////////');
 
     } catch (error) {
         console.log(error.message);
-        return res.json({ success: false, message: 'Error occurred while cancelling the order.' });
+        res.status(500).render("500"); 
     }
 };
 
@@ -357,8 +334,7 @@ const returnRequest = async (req, res) => {
             res.json({ success: false });
         }
     } catch (error) {
-        console.error('Error in returnRequest controller:', error);
-        res.status(500).json({ success: false, error: 'Internal Server Error' });
+        res.status(500).render("500"); 
     }
 }
 
@@ -388,13 +364,9 @@ const returnOrder = async (req, res) => {
         );
 
         const userId = order.userId;
-
         const user = await User.findById(userId);
-
         const transactionDate = new Date();
-
         const newTotalAmount = order.totalAmount - totalRefundedAmount;
-
         const updatedUser = await User.findByIdAndUpdate(
             userId,
             {
@@ -420,7 +392,7 @@ const returnOrder = async (req, res) => {
         res.json({ success: true });
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).render("500"); 
     }
 };
 
@@ -433,13 +405,10 @@ const invoice = async (req, res) => {
         const orderData = await Order.findById({ _id: orderId }).populate('orderProducts._id');
 
         const deliveredOrder = orderData.orderProducts.filter((product) => product.status === "delivered");
-        console.log(deliveredOrder, 'checking this ');
-
         if (deliveredOrder.length === 0) {
             return res.status(404).send('No delivered products found for the specified order.');
         }
 
-        // Rendering the invoice template with deliveredOrder
         const templatePath = path.join(__dirname, '../views/users/invoice.ejs');
         const templateContent = await ejs.renderFile(templatePath, { order: orderData, orderProducts: deliveredOrder });
 
@@ -461,32 +430,27 @@ const invoice = async (req, res) => {
     }
 };
 
-
-
-
-
-
-
 const loadOrderManagement = async (req, res) => {
     try {
-
-        const itemPage = 10
+        const itemPage = 10;
         const page = +req.query.page || 1;
         const totalOrders = await Order.countDocuments();
         const totalPages = Math.ceil(totalOrders / itemPage);
+
         const orderData = await Order.find({
             "orderProducts.status": { $nin: ["pending"] }
-        }).sort({ purchaseTime: 1 })
+        })
+            .sort({ purchaseTime: -1 }) 
             .skip((page - 1) * itemPage)
             .limit(itemPage);
 
-            console.log(orderData,'orderData');
         res.render("orderManagement", { orderData, totalPages, currentPage: page });
     } catch (error) {
         console.log('Error:', error.message);
-        res.status(500).send('Internal Server Error');
+        res.status(500).render("500");
     }
 };
+
 
 
 
@@ -500,25 +464,13 @@ const updateOrder = async (req, res) => {
         const orderProductIndex = orderData.orderProducts.findIndex(product => product._id.toString() === orderId);
         const status = orderData.orderProducts[orderProductIndex].status = orderStatus;
         const date = orderData.orderProducts[orderProductIndex].statusChangeTime = new Date();
-        console.log(orderProductIndex, 'orderProductIndex');
-
-        console.log(status, 'status');
-        console.log(date, 'date ');
-
         await orderData.save();
-
-
-
         res.json({ success: true, orderData });
     } catch (error) {
         console.error(error.message);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        res.status(500).render("500"); 
     }
 };
-
-
-
-
 
 
 
@@ -530,8 +482,6 @@ const orderDetails = async (req, res) => {
                 path: 'orderProducts.productId',
                 populate: { path: 'category' } 
             });
-
-            console.log(orderData,'orderData');
         if (orderData) {
             res.render('orderDetails', { orderData });
         } else {
@@ -539,7 +489,7 @@ const orderDetails = async (req, res) => {
         }
     } catch (error) {
         console.error(error.message);
-        res.status(500).send('Internal Server Error');
+        res.status(500).render("500"); 
     }
 };
 

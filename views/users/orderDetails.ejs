@@ -429,7 +429,7 @@
                         <div class="card-body">
                             <div class="invoice" style="display: flex; justify-content: flex-end;">
                                 <% if (orderData && orderData.orderProducts && orderData.orderProducts.some(product=>
-                                    product.status === 'delivered')) { %>
+                                    product.status === 'Delivered')) { %>
                                     <a href="/invoice?_id=<%= orderData._id %>">
                                         <button id="Invoice" class="add-review-button btn btn-info">
                                             <i class="fa-solid fa-download"></i> Invoice
@@ -443,7 +443,6 @@
                             <h4 class="header-title mb-3">Items from Order # <%= orderData.orderId %>
                             </h4>
                             <div class="table-responsiv">
-                                <!-- Your table code for Items from Order goes here -->
                                 <table class="table table-bordered table-centered mb-0">
                                     <thead class="table-light">
                                         <tr>
@@ -462,7 +461,7 @@
                                                 <td>
                                                     <%= product.productName %>
                                                 </td>
-                                                <td><img src="/products/crops/<%= product.image %>" alt="product-img"
+                                                <td><img src="/products/crops/<%= product.image %>" alt="product-img" loading="lazy"
                                                         height="80" width="80"></td>
                                                 <td>
                                                     <%= product.count %>

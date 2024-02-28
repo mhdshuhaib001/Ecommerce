@@ -11,9 +11,6 @@ user_Rout.use(session({
 }))
 
 
-
-
-
 //============= Controllers ==============//
 const userController = require("../controllers/userController");
 const addressController = require("../controllers/addressController")
@@ -26,34 +23,33 @@ const wishController = require("../controllers/wishListController");
 user_Rout.set("views", "./views/users");
 
 
-
-
-
-
 user_Rout.get("/", auth.isLogout, userController.loadHome);
 user_Rout.get("/home",auth.isLogin, userController.loadHome);
+
 
 //======================= Sign Up ===========================
 user_Rout.get("/signup", userController.loadSignup);
 user_Rout.post("/signup", userController.insertUser);
 
+
 user_Rout.get('/userOtp',auth.isLogout,userController.loadUserOtp)
 user_Rout.post('/verifyOtp', auth.isLogout,userController.verifyOTP);
 user_Rout.get('/resendOtp', userController.resendOtp);
+
 
 user_Rout.get('/login', auth.isLogout, userController.loadLogin);
 user_Rout.post('/verifylogin',userController.verifylogin);
 user_Rout.get('/logout', auth.isLogin,userController.logout);
 user_Rout.get('/resendOtp',userController.resendOtp);
 
+
 //===========================Forget  Password=================================
 user_Rout.get('/forgetpassword', auth.isLogout, userController.forgetLoad);
 user_Rout.post('/forgetPassword', userController.forgetVerify);
 
+
 user_Rout.get('/forget-password',auth.isLogout, userController.loadForgetpage)
 user_Rout.post('/resetPassword',userController.resetPassword)
-
-
 
 
 //===================Cart====================//
@@ -82,18 +78,17 @@ user_Rout.post('/returnRequest', orderControllers.returnRequest)
 user_Rout.post('/orderCancel',auth.isLogin,orderControllers.orderCancel);
 user_Rout.get('/invoice',orderControllers.invoice);
 
+
 user_Rout.post('/filterProduct',productController.filterProducts);
 user_Rout.get('/seachProduct',userController.searchProducts)
+
 
 //=========================coupon========================
 user_Rout.post('/appliCopuon',couponController.applyCoupon);
 user_Rout.post('/removeCoupon',couponController.removeCoupon)
 
 
-
 user_Rout.get('/product', productController.loadProduct);
-
-
 user_Rout.get("/shop",userController.loadShop);
 
 
