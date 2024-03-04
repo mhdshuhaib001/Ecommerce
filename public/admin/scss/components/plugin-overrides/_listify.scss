@@ -1,25 +1,24 @@
 /* Listify */
 
-.listify-list{
-  input{
+.listify-list {
+  input {
     border: 1px solid $white-smoke;
     color: color(gray-light);
     background: #fff;
   }
-  button{
-
+  button {
   }
-  ul.list{
+  ul.list {
     list-style: none;
     padding-left: 0;
-    li{
+    li {
       display: block;
       border-bottom: $border-property;
       padding: 15px 10px;
-      h5{
-        color: theme-color("primary");
+      h5 {
+        color: theme-color('primary');
       }
-      p{
+      p {
         color: color(gray-light);
         margin: 0;
       }

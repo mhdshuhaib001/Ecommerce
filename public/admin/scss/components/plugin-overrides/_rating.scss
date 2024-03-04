@@ -5,13 +5,13 @@
   .br-widget {
     a {
       font-size: 20px;
-      &:after{
+      &:after {
         color: lighten(black, 30%);
       }
       &.br-selected,
       &.br-active {
         &:after {
-          color:  theme-color(warning);
+          color: theme-color(warning);
         }
       }
     }
@@ -26,7 +26,7 @@
   .br-widget {
     a {
       background-color: lighten(black, 30%);
-      color:  theme-color(warning);
+      color: theme-color(warning);
       &.br-selected,
       &.br-active {
         background-color: theme-color(warning);
@@ -76,8 +76,8 @@
 .br-theme-bars-pill {
   .br-widget {
     a {
-     line-height: 2.5;
-     color: $text-muted;
+      line-height: 2.5;
+      color: $text-muted;
     }
   }
 }

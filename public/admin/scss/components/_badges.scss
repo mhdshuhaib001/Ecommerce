@@ -12,7 +12,6 @@
   }
 }
 
-
 /*Badge variations*/
 @each $color, $value in $theme-colors {
   .badge-#{$color} {

@@ -1,0 +1,75 @@
+<%- include('../layout/admin/header.ejs') -%>
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Banner Management</h4>
+            <a href="/admin/addBanner" class="btn btn-primary">Add Banner</a>
+            <div class="table-responsive" id="reloadArea">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>No:</th>
+                    <th>Image</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Update</th>
+                    <th>Action</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Sample Static Row -->
+                  <tr>
+                    <td>1</td>
+                    <td>
+                      <img src="/images/banner/orginal/sample_image.jpg" alt="Sample Title">
+                    </td>
+                    <td>Sample Title</td>
+                    <td>Sample Description</td>
+                    <td>
+                      <span class="text-success">Active</span>
+                    </td>
+                    <td>
+                      <a href="/admin/editBanner?_id=sampleId" class="btn btn-outline-warning edit-button">
+                        Edit
+                      </a>
+                    </td>
+                    <td>
+                      <a class="btn btn-outline-danger block-button" onclick="blockBanner('sampleId')">
+                        Block
+                      </a>
+                    </td>
+                    <td>
+                      <a class="btn btn-outline-primary delete-button" onclick="deleteBanner('sampleId')">
+                        Delete
+                      </a>
+                    </td>
+                  </tr>
+                  <!-- Add more static rows as needed -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function deleteBanner(bannerId) {
+      console.log(bannerId);
+      // Implement your logic for deleting a banner
+    }
+
+    function blockBanner(bannerId) {
+      console.log(bannerId);
+      // Implement your logic for blocking/unblocking a banner
+    }
+  </script>
+
+  <!-- Include footer template -->
+  <%- include('../layout/admin/footer.ejs') -%>

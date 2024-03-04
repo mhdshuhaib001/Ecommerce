@@ -17,7 +17,7 @@
     }
 
     &:after {
-      content: "";
+      content: '';
       width: 10px;
       height: 10px;
       border-radius: 100%;
@@ -59,7 +59,6 @@
   }
 
   .noUi-pips {
-
     .noUi-marker-horizontal,
     .noUi-marker-vertical {
       background: $border-color;
@@ -84,8 +83,7 @@
 }
 
 /* Slider Color variations */
-@each $color,
-$value in $theme-colors {
+@each $color, $value in $theme-colors {
   .slider-#{$color} {
     @include slider-color-variant($value);
   }

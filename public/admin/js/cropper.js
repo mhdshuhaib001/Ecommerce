@@ -1,6 +1,6 @@
-(function($) {
-  'use strict';
+;(function ($) {
+  'use strict'
   $('#cropperExample').cropper({
-    aspectRatio: 16 / 9
-  });
-})(jQuery);
+    aspectRatio: 16 / 9,
+  })
+})(jQuery)

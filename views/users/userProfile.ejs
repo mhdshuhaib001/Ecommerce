@@ -499,24 +499,7 @@
                 $(this).addClass("active").siblings().removeClass("active")
             })
 
-            // -------------------------------show notification-----------------------------------
-            // function showNotification(message, success = true) {
-            //     const notificationContainer = document.getElementById('notification-container');
-            //     notificationContainer.innerHTML = message;
-
-            //     if (success) {
-            //         notificationContainer.style.color = 'green';
-            //     } else {
-            //         notificationContainer.style.color = 'red';
-            //     }
-
-            //     notificationContainer.style.display = 'block';
-
-            //     setTimeout(() => {
-            //         notificationContainer.style.display = 'none';
-            //     }, 3000);
-            // }
-
+          
             function togglePasswordVisibility(fieldId, groupId) {
                 const passField = document.getElementById(fieldId);
                 const togglePasswordIcon = document.getElementById('toggle' + fieldId.charAt(0).toUpperCase() + fieldId.slice(1) + 'Icon');

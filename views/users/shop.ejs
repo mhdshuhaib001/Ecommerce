@@ -149,7 +149,7 @@
                                                     <div
                                                         class="search-form mt-35">
                                                         <form id="search-form"
-                                                            action="/seachProduct"
+                                                            action="/searchAndFilter"
                                                             method="get">
                                                             <input type="search"
                                                                 name="searchQuary"
@@ -359,7 +359,7 @@
 
                         <div class="widget mt-50">
                             <h4 class="mb-30">Filter By Price</h4>
-                            <form action="/filterProduct" method="POST">
+                            <form action="/searchAndFilter" method="get">
                                 <div class="filter-form-submit mt-35">
                                     
                                     <label>
@@ -498,7 +498,6 @@
                                                             class="price switcher-item">₹<%=
                                                             product.price %>
                                                         </span>
-                                                        <h4><%=product._id%></h4>
                                                         <a
                                                         
                                                             onclick="addToCart('<%= product._id %>')"

@@ -3,7 +3,7 @@
 .editable-form {
   .editable {
     color: $body-color;
-    font-size: .8125rem;
+    font-size: 0.8125rem;
   }
   .editable-click {
     border-color: $body-color;
@@ -17,7 +17,7 @@
       .control-group {
         max-width: 100%;
         white-space: initial;
-        >div {
+        > div {
           max-width: 100%;
         }
         .editable-input {

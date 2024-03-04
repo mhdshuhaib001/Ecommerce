@@ -3,7 +3,7 @@
 .context-menu-icon {
   &:before {
     color: $black;
-    font: normal normal normal 15px/1 "Material Design Icons";
+    font: normal normal normal 15px/1 'Material Design Icons';
   }
   &.context-menu-icon-cut {
     &:before {
@@ -42,7 +42,7 @@
   .context-menu-item {
     span {
       color: $black;
-      font-size: .75rem;
+      font-size: 0.75rem;
       font-weight: $font-weight-bold;
     }
     &.context-menu-hover {

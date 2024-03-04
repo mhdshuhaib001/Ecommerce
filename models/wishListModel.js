@@ -1,17 +1,17 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
 const wishlistSchema = new mongoose.Schema({
   user: {
     type: String,
     required: true,
-    ref: "User",
+    ref: 'User',
   },
   products: [
     {
       type: String,
-      ref: "Products",
+      ref: 'Products',
     },
   ],
-});
+})
 
-module.exports = mongoose.model("Wishlist", wishlistSchema);
+module.exports = mongoose.model('Wishlist', wishlistSchema)

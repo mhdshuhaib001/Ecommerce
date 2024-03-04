@@ -1,19 +1,18 @@
 /* Normal desktop :1200px. */
 @media (min-width: 1200px) and (max-width: 1500px) {
-  .single-slider{
+  .single-slider {
     min-height: 700px;
   }
-  .single-slider.h-790{
+  .single-slider.h-790 {
     min-height: 600px;
   }
 }
-
 
 @media (max-width: 1600px) {
   header.header ul li a {
     font-size: 12px;
   }
-  .single-slider-content{
+  .single-slider-content {
     padding-left: 60px;
   }
   header.header.left-search ul.white-content > li > a {
@@ -44,14 +43,15 @@
   .widget {
     padding-right: 0;
   }
-  section.new-arrival,.stylish-collection ,.our-products{
+  section.new-arrival,
+  .stylish-collection,
+  .our-products {
     margin-top: 80px;
   }
   section.shipping-price-section {
     margin-top: 20px;
     padding-top: 80px;
   }
- 
 }
 
 /* Normal desktop :992px. */
@@ -120,17 +120,17 @@
   .banner-img.body-banner.style-2 .banner-content {
     left: 48px;
   }
-  header.header ul li:first-child a{
+  header.header ul li:first-child a {
     padding-left: 30px;
   }
   .single-slider-content.white-content .slider-heading h2 {
     font-size: 96px;
-    line-height: 1 !important;  
+    line-height: 1 !important;
   }
-  .slider-link.slider-link-2  {
+  .slider-link.slider-link-2 {
     margin-top: 30px;
   }
-  
+
   .hidden-xl {
     display: none !important;
   }
@@ -188,11 +188,11 @@
   }
   .header-2 .mean-container a.meanmenu-reveal span {
     background: #222;
-}
-.has-breadcrumb-bg{
-  margin-bottom: 50px;
-  min-height: 350px;
-}
+  }
+  .has-breadcrumb-bg {
+    margin-bottom: 50px;
+    min-height: 350px;
+  }
 }
 @media (min-width: 992px) and (max-width: 1200px) {
   .logo img {
@@ -201,7 +201,7 @@
   .single-slider {
     min-height: 700px;
   }
-  .banner-img{
+  .banner-img {
     margin-bottom: 30px;
   }
   header.header-2 ul li a {
@@ -219,19 +219,19 @@
   .container {
     max-width: 936px;
   }
-  .main-product{
+  .main-product {
     margin-top: 30px;
   }
   .load-btn {
     margin-top: 0;
   }
-  .footer a.title{
+  .footer a.title {
     margin-bottom: 15px;
   }
   .service {
     padding-top: 40px;
     margin-top: 20px;
-}
+  }
   .shipping-price-section {
     margin-top: 50px;
     padding-top: 50px;
@@ -254,10 +254,10 @@
     left: 51px;
     top: 55px;
   }
-  .mobile-menu.visible-sm.mean-container{
+  .mobile-menu.visible-sm.mean-container {
     z-index: 999;
   }
-  a.meanmenu-reveal.meanclose{
+  a.meanmenu-reveal.meanclose {
     color: #222 !important;
   }
   .mean-nav {
@@ -281,7 +281,7 @@
     font-size: 16px;
     font-weight: 400 !important;
     border-bottom: 0.5px solid #ddd;
-    font-family: "Rubik", sans-serif;
+    font-family: 'Rubik', sans-serif;
     color: #777 !important;
   }
   .mean-nav ul li a:hover {
@@ -301,7 +301,7 @@
   .footer-menu {
     margin-top: 60px;
   }
-  .product-popup-container form input[type="number"] {
+  .product-popup-container form input[type='number'] {
     width: 174px;
     margin-bottom: 10px;
   }
@@ -330,46 +330,46 @@
     margin-top: 30px;
   }
   .testimonial-desc p {
-        font-size: 22.96px;
-        line-height: 42.928px;
-    }
-    .testimonial {
-        padding: 50px 0;
-    }
-    .slider-desc-2 {
-      margin-top: 32px;
-    }
-    section.shipping-price-section {
-      margin-top: 0;
-      margin-top: 30px;
-      padding-top: 50px;
-    }
-    section.new-arrival, .stylish-collection, .our-products {
-      margin-top: 50px;
-    }
-    .home-widget {
-      margin-top: 50px;
-    }
-    .widget-content h3 {
-      font-size: 27px;
-      line-height: 1.1;
-    }
-    .generic-title h2 {
-      line-height: 1.1;
-      font-size: 27px;
-    }
-    
-    .blog {
-      margin-top: 50px;
-    }
-    .service-box-3 p {
-      max-width: initial;
+    font-size: 22.96px;
+    line-height: 42.928px;
+  }
+  .testimonial {
+    padding: 50px 0;
+  }
+  .slider-desc-2 {
+    margin-top: 32px;
+  }
+  section.shipping-price-section {
+    margin-top: 0;
+    margin-top: 30px;
+    padding-top: 50px;
+  }
+  section.new-arrival,
+  .stylish-collection,
+  .our-products {
+    margin-top: 50px;
+  }
+  .home-widget {
+    margin-top: 50px;
+  }
+  .widget-content h3 {
+    font-size: 27px;
+    line-height: 1.1;
+  }
+  .generic-title h2 {
+    line-height: 1.1;
+    font-size: 27px;
+  }
+
+  .blog {
+    margin-top: 50px;
+  }
+  .service-box-3 p {
+    max-width: initial;
   }
   .cupon input {
     width: 100% !important;
   }
-  
- 
 }
 @media (min-width: 768px) and (max-width: 991px) {
   .single-slider {
@@ -382,16 +382,16 @@
   .mt-sm-20 {
     margin-top: 20px;
   }
-  .table-2 tr{
+  .table-2 tr {
     border: 0 !important;
   }
-  .table-2.no-border tr{
+  .table-2.no-border tr {
     border: 0;
   }
   .table-2 td {
     border-top: 0;
-}
-  .newsletter-form{
+  }
+  .newsletter-form {
     margin-top: 10px;
   }
   .text-sm-device-left {
@@ -447,18 +447,19 @@
   .portfolio-right {
     margin-top: 30px;
   }
-  .service-box p{
+  .service-box p {
     padding-left: 0;
     max-width: 350px;
   }
-    .testimonial-desc p {
-        font-size: 15.96px;
-        line-height: 36.928px;
-    }
-    .cart-body-content table th, .cart-body-content table td{
-      display: block;
-    }
-    
+  .testimonial-desc p {
+    font-size: 15.96px;
+    line-height: 36.928px;
+  }
+  .cart-body-content table th,
+  .cart-body-content table td {
+    display: block;
+  }
+
   /* th.remove-porduct, th.product-image {
       display: none !important;
   } */
@@ -467,7 +468,8 @@
     width: 100%;
     height: auto;
   }
-  .cupon input, .cupon button{
+  .cupon input,
+  .cupon button {
     margin-bottom: 10px;
     float: none !important;
   }
@@ -513,7 +515,7 @@
     margin-top: 12px;
     margin-bottom: 0;
   }
-  .single-slider-content.white-content .slider-heading h2{
+  .single-slider-content.white-content .slider-heading h2 {
     line-height: 1 !important;
   }
   .slider-link-2 {
@@ -529,7 +531,6 @@
   ul.nav.left-tab-link li:not(:last-child) {
     margin-right: 20px;
   }
-
 }
 
 /* Large Mobile :480px. */
@@ -584,6 +585,5 @@
   }
   .slider-link a {
     margin-top: 0px;
-}
-
+  }
 }

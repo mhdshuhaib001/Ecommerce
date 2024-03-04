@@ -1,78 +1,92 @@
-<%-include("../layouts/admin/header.ejs")%>
+<%- include("../layouts/admin/header.ejs") %>
 
-    <div class="main-panel">
-        <div class="content-wrapper">
-            <div class="page-header">
-                <h3 class="page-title"> Loom sales Report </h3>
-                <div class="dropdown">
-                    <button class="btn btn-outline-primary dropdown-toggle" type="button"
-                        id="dropdownMenuOutlineButton1" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false"> Filter </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1">
-                        <h6 class="dropdown-header">Report Sorting</h6>
-                        <a class="dropdown-item" href="/admin/salesReport?sort=<%= 1 %>">Daily</a>
-                        <a class="dropdown-item" href="/admin/salesReport?sort=<%= 7 %>">Weekly</a>
-                        <a class="dropdown-item" href="/admin/salesReport?sort=<%= 30 %>">Monthly</a>
-                        <a class="dropdown-item" href="/admin/salesReport?sort=<%= 365 %>">Yearly</a>
-                    </div>
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title"> Loom Sales Report </h3>
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button"
+                    id="dropdownMenuOutlineButton1" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false"> Filter </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1">
+                    <h6 class="dropdown-header">Report Sorting</h6>
+                    <a class="dropdown-item" href="/admin/salesReport?sort=<%= 1 %>">Daily</a>
+                    <a class="dropdown-item" href="/admin/salesReport?sort=<%= 7 %>">Weekly</a>
+                    <a class="dropdown-item" href="/admin/salesReport?sort=<%= 30 %>">Monthly</a>
+                    <a class="dropdown-item" href="/admin/salesReport?sort=<%= 365 %>">Yearly</a>
                 </div>
             </div>
-            <div class="page-header">
-                <div class="dropdown">
-                    <button class="btn btn-outline-light  dropdown-toggle" type="button"
-                        id="dropdownMenuOutlineButton1" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false"> Report Download </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1">
-                        <a class="dropdown-item" id="excel-format" href="exelDown">Excel Format</a>
-                        <a class="dropdown-item" id="pdf-format" href="pdfDown">Pdf Format</a>
-                    </div>
-                </div>
+            <div id="calendarContainer" class="mt-3 text-end">
+                <label for="calendarInput" class="mb-2">Select Date:</label>
+                <input type="date" id="calendarInput" class="form-control form-control-sm">
+                <button class="btn btn-primary btn-sm mt-2" onclick="sendDateToBackend()">Get Report</button>
             </div>
-            <div class="col-lg-13 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Loom Sales Report</h4>
-                        </p>
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Order Id</th>
-                                        <th>Products - Qty</th>
-                                        <th>Date</th>
-                                        <th>Customer</th>
-                                        <th>Total Amount</th>
-                                        <!-- <th>Status</th> -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% if(orders.length > 0) { %>
-                                        <% orders.forEach((order, index) => { %>
-                                           
-                                                <tr>
-                                                    <td><%= index + 1 %>.</td>
-                                                    <td><%= order.orderProducts._id %></td>
-                                                    <td><%= order.orderProducts.productName %> - <%= order.orderProducts.count %></td>
-                                                    <td><%= order.purchaseDate.toISOString().split('T')[0] %></td>
-                                                    <td><%= order.deliveryDetails.fullname %></td>
-                                                    <td>₹&nbsp;<%= order.orderProducts.totalPrice %></td>
-                                                </tr>
-                                            <% }); %>
-                                    <% } else { %>
-                                        <!-- Handle case when there are no orders -->
-                                        <tr>
-                                            <td colspan="6">No orders found</td>
-                                        </tr>
-                                    <% } %>                                </tbody>
-                                
-                            </table>
-                        </div>
-                    </div>
+        </div>
+        <div class="page-header">
+            <div class="dropdown">
+                <button class="btn btn-outline-light  dropdown-toggle" type="button"
+                    id="dropdownMenuOutlineButton1" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false"> Report Download </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1">
+                    <a class="dropdown-item" id="excel-format" href="exelDown">Excel Format</a>
+                    <a class="dropdown-item" id="pdf-format" href="pdfDown">Pdf Format</a>
                 </div>
             </div>
         </div>
 
-     
+        <div class="col-lg-13 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Loom Sales Report</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Order Id</th>
+                                    <th>Products - Qty</th>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Total Amount</th>
+                                    <!-- <th>Status</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if(orders.length > 0) { %>
+                                    <% orders.forEach((order, index) => { %>
+                                        <tr>
+                                            <td><%= index + 1 %>.</td>
+                                            <td><%= order.orderId %></td>
+                                            <td><%= order.orderProducts.productName %> - <%= order.orderProducts.count %></td>
+                                            <td><%= order.purchaseDate.toISOString().split('T')[0] %></td>
+                                            <td><%= order.deliveryDetails.fullname %></td>
+                                            <td>₹&nbsp;<%= order.orderProducts.totalPrice %></td>
+                                        </tr>
+                                    <% }); %>
+                                <% } else { %>
+                                    <!-- Handle case when there are no orders -->
+                                    <tr>
+                                        <td colspan="6">No orders found</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <%-include("../layouts/admin/footer.ejs")%>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function sendDateToBackend() {
+            var selectedDate = $('#calendarInput').val();
+            console.log('selectedDate', selectedDate);
+            var jsDate = new Date(selectedDate);
+            var formattedDate = jsDate.toISOString().split('T')[0];
+            var url = '/admin/salesReport?sort=&date=' + formattedDate;
+            window.location.href = url;
+        }
+    </script>
+
+    <%- include("../layouts/admin/footer.ejs") %>

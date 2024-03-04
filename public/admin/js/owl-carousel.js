@@ -1,7 +1,7 @@
-(function($) {
-  'use strict';
-  $.fn.andSelf = function() {
-    return this.addBack.apply(this, arguments);
+;(function ($) {
+  'use strict'
+  $.fn.andSelf = function () {
+    return this.addBack.apply(this, arguments)
   }
 
   if ($('.example-1').length) {
@@ -13,16 +13,16 @@
       autoplayTimeout: 4500,
       responsive: {
         0: {
-          items: 1
+          items: 1,
         },
         600: {
-          items: 3
+          items: 3,
         },
         1000: {
-          items: 5
-        }
-      }
-    });
+          items: 5,
+        },
+      },
+    })
   }
 
   if ($('.full-width').length) {
@@ -33,8 +33,11 @@
       nav: true,
       autoplay: true,
       autoplayTimeout: 5500,
-      navText: ["<i class='mdi mdi-chevron-left'></i>", "<i class='mdi mdi-chevron-right'></i>"]
-    });
+      navText: [
+        "<i class='mdi mdi-chevron-left'></i>",
+        "<i class='mdi mdi-chevron-right'></i>",
+      ],
+    })
   }
 
   if ($('.loop').length) {
@@ -47,10 +50,10 @@
       autoplayTimeout: 8500,
       responsive: {
         600: {
-          items: 4
-        }
-      }
-    });
+          items: 4,
+        },
+      },
+    })
   }
 
   if ($('.nonloop').length) {
@@ -62,10 +65,10 @@
       autoplayTimeout: 6000,
       responsive: {
         600: {
-          items: 4
-        }
-      }
-    });
+          items: 4,
+        },
+      },
+    })
   }
 
   if ($('.auto-width').length) {
@@ -76,7 +79,7 @@
       autoplay: true,
       autoplayTimeout: 3500,
       autoWidth: true,
-    });
+    })
   }
 
   if ($('.lazy-load').length) {
@@ -88,7 +91,7 @@
       auto: true,
       autoplay: true,
       autoplayTimeout: 2500,
-    });
+    })
   }
 
   if ($('.rtl-carousel').length) {
@@ -100,16 +103,16 @@
       autoplayTimeout: 3000,
       responsive: {
         0: {
-          items: 1
+          items: 1,
         },
         600: {
-          items: 3
+          items: 3,
         },
         1000: {
-          items: 5
-        }
-      }
-    });
+          items: 5,
+        },
+      },
+    })
   }
 
   if ($('.video-carousel').length) {
@@ -122,13 +125,12 @@
       autoplayTimeout: 7000,
       responsive: {
         480: {
-          items: 4
+          items: 4,
         },
         600: {
-          items: 4
-        }
-      }
-    });
+          items: 4,
+        },
+      },
+    })
   }
-
-})(jQuery);
+})(jQuery)

@@ -43,7 +43,7 @@
   @include display-flex;
   @include align-items(stretch);
   @include justify-content(stretch);
-  >.card{
+  > .card {
     width: 100%;
     min-width: 100%;
   }
@@ -117,8 +117,7 @@
   background: color(gray-dark);
 }
 
-@each $color,
-$value in $social-colors {
+@each $color, $value in $social-colors {
   .text-#{$color} {
     color: social-color($color);
   }

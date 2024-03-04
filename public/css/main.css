@@ -7,7 +7,7 @@ INCLUDE STYLES AND COMPONENTS
 @import url(vendors/material-icon-round.css);
 @import url(vendors/perfect-scrollbar.css);
 @import url(vendors/select2.min.css);
-@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@400;500;600;700&display=swap');
 /*RESET*/
 html,
 body,
@@ -136,7 +136,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: "";
+  content: '';
   content: none;
 }
 
@@ -156,14 +156,14 @@ button:focus,
 textarea:focus,
 textarea.form-control:focus,
 input.form-control:focus,
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="email"]:focus,
-input[type="number"]:focus,
-[type="text"].form-control:focus,
-[type="password"].form-control:focus,
-[type="email"].form-control:focus,
-[type="tel"].form-control:focus,
+input[type='text']:focus,
+input[type='password']:focus,
+input[type='email']:focus,
+input[type='number']:focus,
+[type='text'].form-control:focus,
+[type='password'].form-control:focus,
+[type='email'].form-control:focus,
+[type='tel'].form-control:focus,
 [contenteditable].form-control:focus {
   outline: none !important;
   -webkit-box-shadow: none;
@@ -239,14 +239,14 @@ button:focus,
 textarea:focus,
 textarea.form-control:focus,
 input.form-control:focus,
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="email"]:focus,
-input[type="number"]:focus,
-[type="text"].form-control:focus,
-[type="password"].form-control:focus,
-[type="email"].form-control:focus,
-[type="tel"].form-control:focus,
+input[type='text']:focus,
+input[type='password']:focus,
+input[type='email']:focus,
+input[type='number']:focus,
+[type='text'].form-control:focus,
+[type='password'].form-control:focus,
+[type='email'].form-control:focus,
+[type='tel'].form-control:focus,
 [contenteditable].form-control:focus {
   outline: none !important;
   -webkit-box-shadow: none;
@@ -358,13 +358,23 @@ table .form-check {
   opacity: 0;
   visibility: hidden;
   background-color: rgba(34, 34, 34, 0.6);
-  -webkit-transition: opacity 0.2s linear, visibility 0.1s, width 1s ease-in;
-  transition: opacity 0.2s linear, visibility 0.1s, width 1s ease-in;
+  -webkit-transition:
+    opacity 0.2s linear,
+    visibility 0.1s,
+    width 1s ease-in;
+  transition:
+    opacity 0.2s linear,
+    visibility 0.1s,
+    width 1s ease-in;
 }
 
 .screen-overlay.show {
-  -webkit-transition: opacity 0.5s ease, width 0s;
-  transition: opacity 0.5s ease, width 0s;
+  -webkit-transition:
+    opacity 0.5s ease,
+    width 0s;
+  transition:
+    opacity 0.5s ease,
+    width 0s;
   opacity: 1;
   width: 100%;
   visibility: visible;
@@ -505,7 +515,7 @@ a {
 }
 
 body {
-  font-family: "Lato", sans-serif;
+  font-family: 'Lato', sans-serif;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -552,7 +562,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Quicksand", sans-serif;
+  font-family: 'Quicksand', sans-serif;
   color: #495057;
   font-weight: 800;
   line-height: 1.5;
@@ -620,7 +630,7 @@ b {
 .menu-aside a {
   display: block;
   text-decoration: none;
-  font-family: "Quicksand", sans-serif;
+  font-family: 'Quicksand', sans-serif;
   font-weight: 600;
 }
 
@@ -690,7 +700,7 @@ b {
 }
 
 .menu-aside .submenu a:before {
-  content: "";
+  content: '';
   width: 5px;
   height: 5px;
   position: absolute;
@@ -713,7 +723,7 @@ b {
   top: 15px;
   margin-top: 0.6em;
   vertical-align: middle;
-  content: "";
+  content: '';
   border-top: 5px solid #adb5bd;
   border-right: 5px solid transparent;
   border-bottom: 0;
@@ -1007,7 +1017,7 @@ b {
   padding: 10px;
 }
 
-.form-inline input[type="number"] {
+.form-inline input[type='number'] {
   max-width: 100px;
 }
 
@@ -1210,7 +1220,7 @@ textarea.form-control {
   scrollbar-width: thin;
 }
 
-.select2-container--default .select2-results__option[aria-selected="true"] {
+.select2-container--default .select2-results__option[aria-selected='true'] {
   background-color: #ececec;
   color: unset;
 }
@@ -1331,7 +1341,7 @@ textarea.form-control {
 }
 
 .map-pin:after {
-  content: "";
+  content: '';
   position: absolute;
   width: 50px;
   height: 50px;
@@ -1900,11 +1910,11 @@ textarea.form-control {
   }
 }
 
-a[class*="card"] {
+a[class*='card'] {
   color: initial;
 }
 
-a[class*="card"]:hover .title {
+a[class*='card']:hover .title {
   color: #3bb77e;
 }
 
@@ -1969,15 +1979,15 @@ a.itemside:hover .title {
 }
 
 /* BASE STYLE FOR PRODUCT ITEM */
-[class*="card-product"] {
+[class*='card-product'] {
   border: 1px solid #eee;
 }
 
-[class*="card-product"] p {
+[class*='card-product'] p {
   margin-bottom: 0;
 }
 
-[class*="card-product"] .img-wrap {
+[class*='card-product'] .img-wrap {
   text-align: center;
   display: block;
   overflow: hidden;
@@ -1985,7 +1995,7 @@ a.itemside:hover .title {
   background: white;
 }
 
-[class*="card-product"] .img-wrap img {
+[class*='card-product'] .img-wrap img {
   height: 100%;
   max-width: 100%;
   width: auto;
@@ -2062,7 +2072,7 @@ a.itemside:hover .title {
 }
 
 /* --------- description list --------*/
-[class*="dlist"] {
+[class*='dlist'] {
   margin-bottom: 5px;
 }
 
@@ -2100,10 +2110,10 @@ ul.row-sm {
 }
 
 /* ================= lists ================= */
-[class*="list-"] li:after {
+[class*='list-'] li:after {
   visibility: hidden;
   display: block;
-  content: "";
+  content: '';
   overflow: hidden;
   height: 0;
   clear: both;
@@ -2148,7 +2158,7 @@ ul.row-sm {
 }
 
 .list-bullet li::before {
-  content: " ";
+  content: ' ';
   position: absolute;
   top: 8px;
   left: 0;
@@ -2170,14 +2180,14 @@ ul.row-sm {
 }
 
 .list-check > li::before {
-  font-family: "Font Awesome 5 Free";
+  font-family: 'Font Awesome 5 Free';
   font-weight: 900;
   font-size: 12px;
   color: #3ed092;
   position: absolute;
   top: 2px;
   left: 0;
-  content: "\f00c";
+  content: '\f00c';
 }
 
 .list-normal {
@@ -2191,7 +2201,7 @@ ul.row-sm {
 }
 
 .list-normal li:before {
-  content: "\2022";
+  content: '\2022';
   color: #3bb77e;
   display: inline-block;
   width: 1em;
@@ -4314,11 +4324,18 @@ body.dark .dropdown-menu .dropdown-item.text-danger {
     -webkit-transform: translateX(-100%);
     transform: translateX(-100%);
     overflow-x: hidden;
-    -webkit-transition: visibility 0.2s ease-in-out,
+    -webkit-transition:
+      visibility 0.2s ease-in-out,
       -webkit-transform 0.2s ease-in-out;
-    transition: visibility 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
-    transition: visibility 0.2s ease-in-out, transform 0.2s ease-in-out;
-    transition: visibility 0.2s ease-in-out, transform 0.2s ease-in-out,
+    transition:
+      visibility 0.2s ease-in-out,
+      -webkit-transform 0.2s ease-in-out;
+    transition:
+      visibility 0.2s ease-in-out,
+      transform 0.2s ease-in-out;
+    transition:
+      visibility 0.2s ease-in-out,
+      transform 0.2s ease-in-out,
       -webkit-transform 0.2s ease-in-out;
   }
   .navbar-aside .aside-top .logo {
@@ -4343,11 +4360,18 @@ body.dark .dropdown-menu .dropdown-item.text-danger {
     width: 80%;
     overflow-y: scroll;
     overflow-x: hidden;
-    -webkit-transition: visibility 0.2s ease-in-out,
+    -webkit-transition:
+      visibility 0.2s ease-in-out,
       -webkit-transform 0.2s ease-in-out;
-    transition: visibility 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
-    transition: visibility 0.2s ease-in-out, transform 0.2s ease-in-out;
-    transition: visibility 0.2s ease-in-out, transform 0.2s ease-in-out,
+    transition:
+      visibility 0.2s ease-in-out,
+      -webkit-transform 0.2s ease-in-out;
+    transition:
+      visibility 0.2s ease-in-out,
+      transform 0.2s ease-in-out;
+    transition:
+      visibility 0.2s ease-in-out,
+      transform 0.2s ease-in-out,
       -webkit-transform 0.2s ease-in-out;
   }
   .mobile-offcanvas.show {
@@ -4425,7 +4449,7 @@ body.dark .dropdown-menu .dropdown-item.text-danger {
     text-align: center;
   }
   .table-responsive table td::before {
-    content: attr(data-title) " ";
+    content: attr(data-title) ' ';
     float: left;
     text-transform: capitalize;
     margin-right: 15px;

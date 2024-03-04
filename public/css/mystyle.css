@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 body {
@@ -66,8 +66,7 @@ p {
   margin-top: 10px;
 }
 
-
 .small-swal {
-  width: 400px; 
-  font-size: 14px; 
+  width: 400px;
+  font-size: 14px;
 }

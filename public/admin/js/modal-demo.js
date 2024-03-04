@@ -1,6 +1,6 @@
-(function($) {
-  'use strict';
-  $('#exampleModal-4').on('show.bs.modal', function(event) {
+;(function ($) {
+  'use strict'
+  $('#exampleModal-4').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     var recipient = button.data('whatever') // Extract info from data-* attributes
     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
@@ -9,4 +9,4 @@
     modal.find('.modal-title').text('New message to ' + recipient)
     modal.find('.modal-body input').val(recipient)
   })
-})(jQuery);
+})(jQuery)

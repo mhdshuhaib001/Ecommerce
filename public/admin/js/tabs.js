@@ -1,22 +1,22 @@
-(function($) {
-  'use strict';
-  $(function() {
+;(function ($) {
+  'use strict'
+  $(function () {
     if ($('.demo-tabs').length) {
       $('.demo-tabs').pwstabs({
-        effect: 'none'
-      });
+        effect: 'none',
+      })
     }
 
     if ($('.hello_world').length) {
-      $('.hello_world').pwstabs();
+      $('.hello_world').pwstabs()
     }
 
     if ($('#rtl-tabs-1').length) {
       $('#rtl-tabs-1').pwstabs({
         effect: 'slidedown',
         defaultTab: 2,
-        rtl: true
-      });
+        rtl: true,
+      })
     }
 
     if ($('#vertical-left').length) {
@@ -25,8 +25,8 @@
         defaultTab: 1,
         containerWidth: '600px',
         tabsPosition: 'vertical',
-        verticalPosition: 'left'
-      });
+        verticalPosition: 'left',
+      })
     }
 
     if ($('#horizontal-left').length) {
@@ -34,15 +34,14 @@
         effect: 'slidedown',
         defaultTab: 2,
         containerWidth: '600px',
-        horizontalPosition: 'bottom'
-      });
+        horizontalPosition: 'bottom',
+      })
     }
 
     if ($('.tickets-tab').length) {
       $('.tickets-tab').pwstabs({
-        effect: 'none'
-      });
+        effect: 'none',
+      })
     }
-
-  });
-})(jQuery);
+  })
+})(jQuery)

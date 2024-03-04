@@ -1,9 +1,9 @@
-(function($) {
-  'use strict';
-  $(function() {
+;(function ($) {
+  'use strict'
+  $(function () {
     $('#profile-rating').barrating({
       theme: 'css-stars',
-      showSelectedRating: false
-    });
-  });
-})(jQuery);
+      showSelectedRating: false,
+    })
+  })
+})(jQuery)

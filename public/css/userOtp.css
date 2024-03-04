@@ -1,12 +1,12 @@
 /* User Otp Form */
 
 /* Import Google font - Poppins */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 body {
@@ -45,8 +45,6 @@ body {
 form .input-field {
   flex-direction: row;
   column-gap: 10px;
- 
-
 }
 .input-field input {
   height: 45px;

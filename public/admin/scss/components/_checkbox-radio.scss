@@ -33,7 +33,7 @@
       opacity: 0;
       filter: alpha(opacity=0);
     }
-    input[type="checkbox"] {
+    input[type='checkbox'] {
       + .input-helper {
         &:before,
         &:after {
@@ -46,7 +46,7 @@
           }
         }
         &:before {
-          content: "";
+          content: '';
           width: 16px;
           height: 16px;
           border-radius: 2px;
@@ -59,9 +59,8 @@
           position: absolute;
           top: 2px;
           left: 0;
-
         }
-  
+
         &:after {
           @include transition(all);
           transition-duration: 0s;
@@ -82,7 +81,7 @@
         }
       }
       &:checked {
-        +.input-helper {
+        + .input-helper {
           &:before {
             background: theme-color(primary);
             border-width: 0;
@@ -118,11 +117,11 @@
         }
       }
     }
-    input[type="radio"] {
-      +.input-helper {
+    input[type='radio'] {
+      + .input-helper {
         &:before {
           position: absolute;
-          content: "";
+          content: '';
           top: 0;
           left: 0;
           .rtl & {
@@ -141,7 +140,7 @@
         }
 
         &:after {
-          content: "";
+          content: '';
           width: 8px;
           height: 8px;
           background: $white;
@@ -169,7 +168,7 @@
       }
 
       &:checked {
-        +.input-helper {
+        + .input-helper {
           &:before {
             background: theme-color(primary);
             border-width: 0;
@@ -214,15 +213,15 @@
   .form-check-#{$color} {
     &.form-check {
       label {
-        input[type="checkbox"],
-        input[type="radio"] {
-          +.input-helper {
+        input[type='checkbox'],
+        input[type='radio'] {
+          + .input-helper {
             &:before {
               border-color: theme-color($color);
             }
           }
           &:checked {
-            +.input-helper {
+            + .input-helper {
               &:before {
                 background: $value;
               }
@@ -237,15 +236,15 @@
 .form-check-muted {
   &.form-check {
     label {
-      input[type="checkbox"],
-      input[type="radio"] {
-        +.input-helper {
+      input[type='checkbox'],
+      input[type='radio'] {
+        + .input-helper {
           &:before {
             border-color: $text-muted;
           }
         }
         &:checked {
-          +.input-helper {
+          + .input-helper {
             &:before {
               background: $text-muted;
             }
@@ -255,4 +254,3 @@
     }
   }
 }
-

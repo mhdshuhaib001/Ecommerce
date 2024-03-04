@@ -1,9 +1,9 @@
 /* Light Gallery */
 
-.lightGallery{
+.lightGallery {
   width: 100%;
   margin: 0;
-  .image-tile{
+  .image-tile {
     position: relative;
     @extend .col-xl-3;
     @extend .col-lg-3;
@@ -11,14 +11,14 @@
     @extend .col-md-4;
     @extend .col-6;
     margin-bottom: 30px;
-    .demo-gallery-poster{
+    .demo-gallery-poster {
       @extend .d-flex;
       position: absolute;
       top: 0;
       bottom: 0;
       left: 0;
       right: 0;
-      img{
+      img {
         display: block;
         margin: auto;
         width: 40%;
@@ -26,7 +26,7 @@
         min-width: 20px;
       }
     }
-    img{
+    img {
       max-width: 100%;
       width: 100%;
     }
