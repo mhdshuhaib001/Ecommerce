@@ -112,7 +112,6 @@
                 </div>
 
                 <div class="row" id="imagePreviews">
-                  <!-- Image previews will be added here dynamically -->
                 </div>
 
               </div>
@@ -147,32 +146,7 @@
       })
       
     </script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const imageInput = document.getElementById('imageInput');
-        const imagePreviews = document.getElementById('imagePreviews');
-
-        imageInput.addEventListener('change', function () {
-          imagePreviews.innerHTML = ''; 
-
-          const files = this.files;
-          for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-              const img = document.createElement('img');
-              img.src = e.target.result;
-              img.classList.add('preview-image');
-              imagePreviews.appendChild(img);
-            };
-
-            reader.readAsDataURL(file);
-          }
-        });
-      });
-
-    </script>
+   
     <script src="/public/admin/addproductvalidation.js"></script>
 
     <%-include("../layouts/admin/footer.ejs")%>

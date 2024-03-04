@@ -6,6 +6,7 @@ const Address = require('../models/addressModel')
 const Category = require('../models/categoryModel')
 const Order = require('../models/orderModel')
 const wishList = require('../models/wishListModel')
+const Banner = require("../models/bannerModel");
 const nodemailer = require('nodemailer')
 const randomString = require('randomstring')
 const config = require('../config/config')
@@ -34,6 +35,8 @@ const loadHome = async (req, res) => {
     const cartData = await Cart.findOne({ user: user_id }).populate(
       'product.productId',
     )
+    const bannerData = await Banner.find({is_blocked:false})
+    console.log('banner',bannerData);
     const userData = await User.findOne({ _id: user_id })
     const productData = await Product.find({}).populate('category')
     const categoryData = await Category.find({})
@@ -49,6 +52,7 @@ const loadHome = async (req, res) => {
       cart: cartData,
       cartCount,
       productData: limitedProductData,
+      bannerData
     })
   } catch (error) {
     console.log(error.message)

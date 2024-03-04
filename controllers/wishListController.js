@@ -2,15 +2,15 @@ const Wishlist = require('../models/wishListModel')
 const Products = require('../models/productsModel')
 const Cart = require('../models/cartModel')
 
+
+
+
 // Wishlist
 const loadWishlist = async (req, res) => {
   try {
     const userId = req.session.user_id
     const wishData = await Wishlist.find({ user: userId }).populate('products')
-    const productIds = wishData.map((wishlist) =>
-      wishlist.products.map((product) => product.productId),
-    )
-    const cart = await Cart.findOne({ userId: req.session.user_id })
+      const cart = await Cart.findOne({ userId: req.session.user_id })
     let cartCount = 0
     if (cart) {
       cartCount = cart.product.length
@@ -21,6 +21,9 @@ const loadWishlist = async (req, res) => {
     res.status(500).render('500')
   }
 }
+
+
+
 
 const addWishList = async (req, res) => {
   try {
@@ -47,6 +50,10 @@ const addWishList = async (req, res) => {
     res.status(500).render('500', { error: error.message })
   }
 }
+
+
+
+
 
 const removeWish = async (req, res) => {
   try {

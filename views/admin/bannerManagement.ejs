@@ -1,4 +1,4 @@
-<%- include('../layout/admin/header.ejs') -%>
+<%- include('../layouts/admin/header.ejs') -%>
 <div class="main-panel">
   <div class="content-wrapper">
     <div class="row">
@@ -7,52 +7,59 @@
           <div class="card-body">
             <h4 class="card-title">Banner Management</h4>
             <a href="/admin/addBanner" class="btn btn-primary">Add Banner</a>
-            <div class="table-responsive" id="reloadArea">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>No:</th>
-                    <th>Image</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Update</th>
-                    <th>Action</th>
-                    <th>Delete</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Sample Static Row -->
-                  <tr>
-                    <td>1</td>
-                    <td>
-                      <img src="/images/banner/orginal/sample_image.jpg" alt="Sample Title">
-                    </td>
-                    <td>Sample Title</td>
-                    <td>Sample Description</td>
-                    <td>
-                      <span class="text-success">Active</span>
-                    </td>
-                    <td>
-                      <a href="/admin/editBanner?_id=sampleId" class="btn btn-outline-warning edit-button">
-                        Edit
-                      </a>
-                    </td>
-                    <td>
-                      <a class="btn btn-outline-danger block-button" onclick="blockBanner('sampleId')">
-                        Block
-                      </a>
-                    </td>
-                    <td>
-                      <a class="btn btn-outline-primary delete-button" onclick="deleteBanner('sampleId')">
-                        Delete
-                      </a>
-                    </td>
-                  </tr>
-                  <!-- Add more static rows as needed -->
-                </tbody>
-              </table>
-            </div>
+
+            <% if (bannerData.length === 0) { %>
+              <p>No banners available.</p>
+            <% } else { %>
+              <div class="table-responsive" id="reloadArea">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>No:</th>
+                      <th>Image</th>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Status</th>
+                      <th>Update</th>
+                      <th>Action</th>
+                      <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% bannerData.forEach(function(banner, index) { %>
+                      <tr>
+                        <td><%= index + 1 %></td>
+                        <td>
+                          <img src="/admin/bannerImg/images/<%= banner.image %>" alt="<%= banner.title %>" style="width: 50px; height: 50px; object-fit: cover;">
+                        </td>
+                        <td><%= banner.title %></td>
+                        <td><%= banner.description %></td>
+                        <td>
+                          <span class="<%= banner.is_blocked ? 'text-danger' : 'text-success' %>">
+                            <%= banner.is_blocked ? "Blocked" : "Active" %>
+                          </span>
+                        </td>
+                        <td>  
+                          <a href="/admin/editBanner?_id=<%= banner._id %>" class="btn btn-outline-warning edit-button">
+                            Edit
+                          </a>
+                        </td>
+                        <td>
+                          <button type="button" class="btn block-button <%= banner.is_blocked ? 'btn-success' : 'btn-danger' %>" onclick="blockBanner('<%= banner._id %>')">
+                            <%= banner.is_blocked ? "Unblock" : "Block" %>
+                          </button>
+                        </td>
+                        <td>
+                          <a class="btn btn-outline-primary delete-button" onclick="deleteBanner('<%= banner._id %>')">
+                            Delete
+                          </a>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+            <% } %>
           </div>
         </div>
       </div>
@@ -60,16 +67,68 @@
   </div>
 
   <script>
-    function deleteBanner(bannerId) {
-      console.log(bannerId);
-      // Implement your logic for deleting a banner
+      function blockBanner(bannerId){
+        const data = {_id:bannerId}
+console.log('hakko',);
+        $.ajax({
+            method:'PATCH',
+            url:'/admin/blockBanner',
+            data:JSON.stringify(data),
+            contentType:'application/json',
+            success:function(response){
+                if(response.block==true){
+                  console.log('heyyyy',);
+                    $('#reloadArea').load('/admin/bannerManagement #reloadArea'); 
+
+                    const Toast = Swal.mixin({
+                      toast: true,
+                      position: "top-end",
+                      showConfirmButton: false,
+                      timer: 1500,
+                    });
+
+                    Toast.fire({
+                      icon: "success",
+                      title: response.message,
+                    });
+                }
+            },
+            error:function(error){
+                console.log(error);
+            }
+        });
     }
 
-    function blockBanner(bannerId) {
+
+    function deleteBanner(bannerId){
       console.log(bannerId);
-      // Implement your logic for blocking/unblocking a banner
+        const data = {_id:bannerId}
+
+        $.ajax({
+            method:'POST',
+            url:'/admin/deleteBanner',
+            data:JSON.stringify(data),
+            contentType:'application/json',
+            success:function(response){
+                if(response.delete==true){
+                    $('#reloadArea').load('/admin/bannerManagement #reloadArea'); 
+                    const Toast = Swal.mixin({
+                      toast: true,
+                      position: "top-end",
+                      showConfirmButton: false,
+                      timer: 1500,
+                    });
+
+                    Toast.fire({
+                      icon: "success",
+                      title: response.message,
+                    });
+                }
+            },
+            error:function(error){
+                console.log(error);
+            }
+        });
     }
   </script>
-
-  <!-- Include footer template -->
-  <%- include('../layout/admin/footer.ejs') -%>
+  <%- include('../layouts/admin/footer.ejs') -%>

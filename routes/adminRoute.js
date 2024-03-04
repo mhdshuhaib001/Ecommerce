@@ -6,6 +6,8 @@ const multer2 = require('../middleware/multer2')
 
 const session = require('express-session')
 const config = require('../config/config')
+const { productImagesUpload, bannerUpload } = require('../middleware/multer');
+
 
 // =========================================< MiddleWare >=================================================
 admin_Rout.use(
@@ -102,11 +104,18 @@ admin_Rout.delete('/couponDelet', auth.isLogin, couponController.deletCouopon)
 
 //========================BannerManagement===============================
 
-admin_Rout.get("bannermanagement",auth.isLogin,bannerController.bannerLoad)
+admin_Rout.get("/bannermanagement", auth.isLogin, bannerController.bannerLoad);
+admin_Rout.get("/addBanner",auth.isLogin,bannerController.loadaddBanner);
+admin_Rout.post('/addBanner', bannerUpload, bannerController.addBanner);
+admin_Rout.patch("/blockBanner",auth.isLogin,bannerController.blockAndunblock);
+admin_Rout.post("/deleteBanner",auth.isLogin,bannerController.deleteBanner);
+admin_Rout.get("/editBanner",auth.isLogin,bannerController.editBannerload)
+admin_Rout.post('/editBanner', bannerUpload, bannerController.editBanner);
 
-admin_Rout.get('/salesReport', auth.isLogin, adminController.salesReport)
-admin_Rout.get('/pdfDown', auth.isLogin, adminController.pdfDownload)
-admin_Rout.get('/exelDown', auth.isLogin, adminController.excelDownload)
+
+admin_Rout.get('/salesReport', auth.isLogin,adminController.salesReport)
+admin_Rout.get('/pdfDown', auth.isLogin,adminController.pdfDownload)
+admin_Rout.get('/exelDown', auth.isLogin,adminController.excelDownload)
 
 admin_Rout.get('*', function (req, res) {
   res.redirect('/admin')

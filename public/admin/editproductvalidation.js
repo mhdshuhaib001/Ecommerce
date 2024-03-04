@@ -35,3 +35,31 @@ document
       message.textContent = 'Description atleast 10 letters.'
     }
   })
+
+
+  function validateForm() {
+    document.getElementById('titleError').textContent = '';
+    document.getElementById('descriptionError').textContent = '';
+    document.getElementById('imageError').textContent = '';
+  
+    const titleInput = document.getElementById('exampleInputName1');
+    const descriptionInput = document.getElementById('exampleInputEmail3');
+    const imageInput = document.getElementById('imageInputBanner');
+  
+    if (titleInput.value.trim() === '') {
+      document.getElementById('titleError').textContent = 'Title cannot be empty.';
+    } else if (titleInput.value.trim().length < 4) {
+      document.getElementById('titleError').textContent = 'Title must have at least 5 words.';
+    } else if (descriptionInput.value.trim() === '') {
+      document.getElementById('descriptionError').textContent = 'Description cannot be empty.';
+    } else if (descriptionInput.value.trim().length > 20){
+      document.getElementById('descriptionError').textContent = 'Description cannot be graterthan 20.';
+    } else if (imageInput.files.length === 0) {
+      document.getElementById('imageError').textContent = 'Please choose an image.';
+    } else {
+      return true;
+    }
+  
+    return false;
+  }
+  

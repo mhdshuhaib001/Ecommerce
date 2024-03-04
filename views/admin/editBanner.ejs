@@ -1,0 +1,50 @@
+<%- include('../layouts/admin/header.ejs') -%>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <br>
+        <br>
+        <br>
+        <h1 class="card-title">Edit Banner</h1>
+        <p class="card-description"> Edit Banner form</p>
+        <form action="/admin/editBanner?_id=<%= banner._id %>" class="forms-sample" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
+          <div class="form-group">
+                <label for="exampleInputName1">Banner Title</label>
+                <input type="text" class="form-control" id="exampleInputName1" name="title" placeholder="title" value="<%= banner.title %>"  style="color: white;">
+                <span id="titleError" style="color: rgb(206, 41, 41);"class="error"></span>
+
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail3">Description</label>
+                <input type="text" class="form-control" id="exampleInputEmail3" name="description" placeholder="description" value="<%= banner.description %>"   style="color: white;">
+                <span id="descriptionError" style="color: red;"class="error"></span>
+
+            </div>
+            <!-- <div class="row d-flex justify-content-center "> -->
+              <div class="row d-flex justify-content-between">
+                <div class="col-lg-3 col-md-6 rounded-image-preview">
+                  <label for="imageInput1" class="image-label">
+                    <div class="rounded-image-preview" >
+                      <img id="imagePreview1" style="max-width: 100%; max-height: 100%;"
+                        src="/admin/bannerImg/images/<%= banner.image %>"
+                        alt="Preview" />
+                    </div>
+                    <input name="image" type="file" accept="image/*" id="imageInput1" class="imageInput"  value="<%= banner.title %>" >
+                    <span id="imageError" style="color: red;" class="error"></span>
+                  </label>
+                </div>
+              <!-- </div> -->
+              
+            </div>
+            <br>
+          <button type="submit" class="btn btn-primary mr-2">Submit</button>
+          <button class="btn btn-dark">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+<%- include('../layouts/admin/footer.ejs') -%>

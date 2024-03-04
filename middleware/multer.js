@@ -1,40 +1,30 @@
-const multer = require('multer')
-const path = require('path')
-const fs = require('fs')
+const multer = require('multer');
+const path = require('path');
 
-// const storage = multer.diskStorage({
-//     destination: function(req,file,cb){
-//         cb(null,path.join(__dirname,"../public/products/images"))
-//     },
-//     filename: function(req,file,cb){
-//         cb(null,file.fieldname+"-"+ Date.now()+path.extname(file.originalname))
-//     }
-// })
-
-// const upload = multer({storage:storage})
-// const productImagesUpload = upload.fields([
-//     {name:"image1",maxCount:1},
-//     {name:"image2",maxCount:1},
-//     {name:"image3",maxCount:1},
-//     {name:"image4",maxCount:1},
-// ])
-
-// to upload multiple image
-
-const storage = multer.diskStorage({
+// To upload multiple product images
+const productImagesStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../public/products/images'))
+    cb(null, path.join(__dirname, '../public/products/images'));
   },
   filename: function (req, file, cb) {
-    cb(
-      null,
-      file.fieldname + '-' + Date.now() + path.extname(file.originalname),
-    )
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   },
-})
+});
 
-const upload = multer({ storage: storage })
+const productImagesUpload = multer({ storage: productImagesStorage }).array('images', 4);
 
-const productImagesUpload = upload.array('images', 4) // Limiting to 4 images, adjust as needed
+// To upload a single banner image
+const bannerStorage = multer.diskStorage({
+  destination: "public/admin/bannerImg/images",
+  filename: (req, file, cb)=> {
 
-module.exports = { productImagesUpload }
+    const filename = file.originalname;
+    cb(null, filename)
+
+  }
+
+});
+
+const bannerUpload = multer({ storage: bannerStorage }).single('image');
+
+module.exports = { productImagesUpload, bannerUpload };

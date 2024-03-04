@@ -10,69 +10,30 @@
         <!-- slider section start -->
         <section class="slider">
             <div class="slider-active">
-                <div class="single-slider d-flex align-items-center h-950" data-background="img/slider/1.jpg">
-                    <div class="container">
-                        <div class="single-slider-inner d-flex align-items-center justify-content-start">
-                            <div class="single-slider-content text-left light-content">
-                                <div class="slider-heading">
-                                    <h2 class="mb-0" data-animation="fadeInUp" data-delay=".2s">Perfect</h2>
-                                    <h2 class="mb-0" data-animation="fadeInUp" data-delay=".4s">Kids Collection</h2>
-                                </div>
-                                <div class="slider-desc" data-animation="fadeInUp" data-delay=".6s">
-                                    <p class="mt-35 mb-0">New Spring drops from
-                                        Over. Shop the Collection</p>
-                                </div>
-                                <div class="slider-link" data-animation="fadeInUp" data-delay=".8s">
-                                    <a href="shop" class="generic-btn mt-70 red-hover-btn text-uppercase">Discover
-                                        now</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="single-slider d-flex align-items-center h-950" data-background="img/slider/2.jpg">
-                    <div class="container">
-                        <div class="single-slider-inner d-flex align-items-center justify-content-start">
-                            <div class="single-slider-content text-left light-content">
-                                <div class="slider-heading">
-                                    <h2 class="mb-0" data-animation="fadeInUp" data-delay=".2s">Enjoy This</h2>
-                                    <h2 class="mb-0" data-animation="fadeInUp" data-delay=".4s">Summer Trends</h2>
-                                </div>
-                                <div class="slider-desc" data-animation="fadeInUp" data-delay=".6s">
-                                    <p class="mt-35 mb-0">New Spring drops from
-                                        Over. Shop the Collection</p>
-                                </div>
-                                <div class="slider-link" data-animation="fadeInUp" data-delay=".8s">
-                                    <a href="shop" class="generic-btn mt-70 red-hover-btn text-uppercase">Discover
-                                        now</a>
+                <% bannerData.forEach(function(banner, index) { %>
+                    <div class="single-slider d-flex align-items-center h-950" data-background="/admin/bannerImg/images/<%= banner.image %>">
+                        <div class="container">
+                            <div class="single-slider-inner d-flex align-items-center justify-content-start">
+                                <div class="single-slider-content text-left light-content">
+                                    <div class="slider-heading">
+                                        <h2 class="mb-0" data-animation="fadeInUp" data-delay=".2s"><%= banner.title %></h2>
+                                        <!-- Additional heading or content from banner data can be added here -->
+                                    </div>
+                                    <div class="slider-desc" data-animation="fadeInUp" data-delay=".6s">
+                                        <p class="mt-35 mb-0"><%= banner.description %></p>
+                                    </div>
+                                    <div class="slider-link" data-animation="fadeInUp" data-delay=".8s">
+                                        <!-- Adjust the link based on your banner data -->
+                                        <a href="<%= banner.link %>" class="generic-btn mt-70 red-hover-btn text-uppercase">Discover now</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="single-slider d-flex align-items-center h-950" data-background="img/slider/3.jpg">
-                    <div class="container">
-                        <div class="single-slider-inner d-flex align-items-center justify-content-start">
-                            <div class="single-slider-content text-left light-content">
-                                <div class="slider-heading">
-                                    <h2 class="mb-0">Sale Off</h2>
-                                    <h2 class="mb-0">Clothing For Man</h2>
-                                </div>
-                                <div class="slider-desc" data-animation="fadeInUp" data-delay=".6s">
-                                    <p class="mt-35 mb-0">New Spring drops from
-                                        Over. Shop the Collection</p>
-                                </div>
-                                <div class="slider-link" data-animation="fadeInUp" data-delay=".8s">
-                                    <a href="shop" class="generic-btn mt-70 red-hover-btn text-uppercase">Discover
-                                        now</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <% }); %>
             </div>
         </section>
+        
         <!-- slider section end -->
 
         <!-- category section start -->

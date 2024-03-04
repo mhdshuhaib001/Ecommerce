@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loom Fashion</title>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Open+Sans:700");
+     
+        /* Variables */
+        :root {
+           --font: "Open Sans", sans-serif;
+           --bg: #fff;
+           --white: #fff;
+           --text-color: #4b4f4b;
+           --button: #ff5659;
+           --hover: #ff2629;
+           --selection: transparent;
+        }
+     
+        * {
+           margin: 0;
+           padding: 0;
+           font-family: var(--font);
+           text-align: center;
+           text-decoration: none;
+           outline: none;
+           border: none;
+           -webkit-box-sizing: border-box;
+           -moz-box-sizing: border-box;
+           -ms-box-sizing: border-box;
+           box-sizing: border-box;
+        }
+     
+        ::selection {
+           background: var(--selection);
+        }
+     
+        img {
+           max-width: 100%;
+           -webkit-user-select: none;
+           -moz-user-select: none;
+           -ms-user-select: none;
+           user-select: none;
+        }
+     
+        html, body {
+           height: 100%;
+        }
+     
+        body {
+           background: var(--bg);
+        }
+     
+        .wrapper {
+           position: relative;
+           padding: 20px;
+        }
+     
+        .oops {
+           color: var(--text-color);
+           font-size: 8em;
+           letter-spacing: 0.05em;
+           margin-top: 30px;
+        }
+     
+        .info {
+           color: var(--text-color);
+           padding: 5px;
+        }
+     
+        .button {
+           background: var(--button);
+           color: var(--white);
+           text-transform: uppercase;
+           padding: 10px 40px;
+           border-radius: 50px;
+           transition: 150ms;
+        }
+     
+        .button:hover {
+           background: var(--hover);
+           transition: 150ms;
+        }
+     
+        .button:hover .fa-angle-left {
+           animation: test 700ms ease-out;
+           animation-iteration-count: infinite;
+        }
+     
+        @keyframes test {
+           to {
+              margin-right: 20px;
+           }
+        }
+     
+        .button .fa-angle-left {
+           font-size: 1.2em;
+           margin-right: 15px;
+        }
+     
+        img {
+           padding: 10px;
+        }
+     </style>
+     
+</head>
+<body style="background-image: url('/img/slider/9.jpg'); background-size: cover;">
+   <div class="wrapper">
+       <h1 class="oops">Oops</h1>
+       <p class="info">We couldn't find the clothing page you were looking for. Here's a stylish outfit instead!</p>
+       <br />
+       <a href="/admin/home" class="button"><i class="fa fa-angle-left"></i>Go Back</a>
+   </div>
+</body>
+
+</html>
