@@ -244,7 +244,7 @@
         </body>
         <!-- checkout-area start -->
 
-        <section>
+        <section id="reloadAreaAddress">
             <div class="page-content">
                 <div class="checkout">
                     <div class="container">
@@ -253,14 +253,14 @@
                                 <div class="col-lg-9">
                                     <p class="m-3">Select your preferable
                                         address</p>
-                                    <div class="row" id="reloadAreaAddress">
+                                    <div class="row" >
 
                                         <% if (addressData && addressData.address && addressData.address.length> 0) {
                                             addressData.address.forEach((address,
                                             index) => { %>
                                             <div class="col-lg-6" style="margin-bottom: 64px;">
                                                 <div class="card card-dashboard">
-                                                    <div class="card-body p-0 m-1">
+                                                    <div class="card-body p-0 m-1" >
                                                         <input type="radio" class="pl-4 ml-3 mr-1" name="address"
                                                             value='<%= JSON.stringify(address) %>' <%=index===0
                                                             ? 'checked' : '' %>
@@ -1010,7 +1010,7 @@
 
 
         function showEditAddressModal(fullname, mobile, email, houseName, city, state, pincode, addressId) {
-    console.log('Function called');  // Add this line
+    
     document.getElementById('fullnames').value = fullname;
     
     document.getElementById('emails').value = email;

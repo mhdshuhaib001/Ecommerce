@@ -7,8 +7,7 @@ const isLogin = async (req, res, next) => {
       if (blockedUser.is_blocked === false) {
         next()
       } else {
-        let regSuccess = false
-        res.render('login', { is_blocked: true, regSuccess })
+        res.render('/login')
       }
     } else {
       res.redirect('/')

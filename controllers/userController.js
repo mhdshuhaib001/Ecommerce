@@ -129,7 +129,8 @@ const insertUser = async (req, res) => {
                                 } else {
                                   const emailchek = await User.findOne({
                                     email: req.body.email,
-                                  })
+                                    is_verified: true, 
+                                  });
                                   if (emailchek) {
                                     res.json({ emailalready: true })
                                   } else {
@@ -158,7 +159,7 @@ const insertUser = async (req, res) => {
                                         req.session.password = spassword
                                         req.session.userName = req.body.name
                                         req.session.mobile = req.body.mobile
-
+console.log('otp',otp);
                                         sendVerifyMail({
                                           email: req.body.email,
                                           name: req.body.name,
@@ -317,8 +318,7 @@ const resendOtp = async (req, res) => {
 const loadLogin = async (req, res) => {
   try {
     const userId = req.session.user_id
-    let regSuccess = req.session.regSuccess
-    res.render('login', regSuccess)
+    res.render('login')
   } catch (error) {
     console.log(error.message)
     res.status(500).render('500')

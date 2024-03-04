@@ -106,13 +106,13 @@ const blockProduct = async (req, res) => {
         { _id: req.body.proId },
         { $set: { blocked: true } },
       )
-      res.json({ success: true })
+      res.json({ success: true, message:"Product Blocked"})
     } else {
       await Products.updateOne(
         { _id: req.body.proId },
         { $set: { blocked: false } },
       )
-      res.json({ success: true })
+      res.json({ success: true , message:"Product Unblocked"})
     }
   } catch (error) {
     console.log(error.message)
@@ -263,6 +263,7 @@ const loadProduct = async (req, res) => {
 const searchAndFilterProducts = async (req, res) => {
   try {
 
+    const userId = req.session.user_id
     const previousUrl = req.get('Referer');
     const currentUrl = req.originalUrl;
 
@@ -317,6 +318,7 @@ const searchAndFilterProducts = async (req, res) => {
       totalPages: Math.ceil(count / limit),
       limit,
       totalProducts: count,
+      user: userId,
     });
   } catch (error) {
     console.log(error.message);

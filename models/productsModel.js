@@ -35,6 +35,7 @@ const productSchema = mongoose.Schema({
   quantity: {
     type: Number,
     default: 0,
+    required: true,
   },
 
   blocked: {
@@ -44,6 +45,7 @@ const productSchema = mongoose.Schema({
   price: {
     type: Number,
     default: 0,
+    required: true,
   },
 })
 
