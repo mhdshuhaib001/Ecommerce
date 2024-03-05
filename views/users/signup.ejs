@@ -431,6 +431,7 @@
     </header>
 
     <body>
+       
         <div class="login">
             <img src="img/slider/12.jpg" alt="image" class="login__bg">
             <!-- autocomplete is of -->
@@ -457,7 +458,7 @@
                     font-size: 12px; "></div>
 
                     <div class="login__box">
-                        <input type="number" placeholder="Phone" name="mobile" id="mobile" class="login__input">
+                        <input type="tel" placeholder="Phone" name="mobile" id="mobile" class="login__input">
                     </div>
                     <div class="error-message" id="phone-error" style="  display: none;
                         color: rgb(161 17 17);
@@ -478,6 +479,8 @@
                         <input type="password" placeholder="Conform Password" id="confirmPassword" class="login__input">
                         <i class="ri-lock-2-fill"></i>
                     </div>
+                    <input type="hidden" name="referral" id="referralInput" value="">
+
                     <div class="error-message" id="confirm-error" style="  display: none;
                         color: rgb(161 17 17);
                         font-weight: bold;
@@ -797,7 +800,7 @@
         </section> -->
         <!-- startup popup end -->
 
-        <script>
+        <!-- <script>
 
             const inputs = document.querySelectorAll('input')
 
@@ -818,7 +821,7 @@
                 })
             })
 
-        </script>
+        </script> -->
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 

@@ -35,8 +35,7 @@ const loadHome = async (req, res) => {
     const cartData = await Cart.findOne({ user: user_id }).populate(
       'product.productId',
     )
-    const bannerData = await Banner.find({is_blocked:false})
-    console.log('banner',bannerData);
+    const bannerData = await Banner.find({ is_blocked: false })
     const userData = await User.findOne({ _id: user_id })
     const productData = await Product.find({}).populate('category')
     const categoryData = await Category.find({})
@@ -70,6 +69,29 @@ const insertUser = async (req, res) => {
       password = '',
       confirmPassword = '',
     } = req.body
+
+
+    const referralCode = req.body.referral;
+    if (referralCode) {
+      const ExistReferral = await User.findOne({ referralCode: referralCode });
+
+
+      if (ExistReferral) {
+        const data = {
+          amount: 201,
+          transactionDate: Date.now(),
+          direction: 'Credit',  
+        };
+        const existingreferral = await User.findOneAndUpdate({ referralCode: referralCode }, { $inc: { wallet: 101 }, $push: { walletHistory: data } });
+
+
+      } else {
+        const message = "Invalid link"
+        return res.render('signup', { message });
+      }
+    }
+
+
     if (name.trim() === '') {
       res.json({ name_require: true })
     } else {
@@ -85,7 +107,7 @@ const insertUser = async (req, res) => {
             if (email.startsWith(' ') || email.includes(' ')) {
               res.json({ email_space: true })
             } else {
-              const emailPattern = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/
+              const emailPattern = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
               if (!emailPattern.test(req.body.email)) {
                 res.json({ emailPatt: true })
               } else {
@@ -129,7 +151,7 @@ const insertUser = async (req, res) => {
                                 } else {
                                   const emailchek = await User.findOne({
                                     email: req.body.email,
-                                    is_verified: true, 
+                                    is_verified: true,
                                   });
                                   if (emailchek) {
                                     res.json({ emailalready: true })
@@ -138,18 +160,24 @@ const insertUser = async (req, res) => {
                                       const spassword = await securePassword(
                                         req.body.password,
                                       )
+
+                                      const refferalCode = randomString.generate({
+                                        length: 11,
+                                        charset: 'alphanumeric',
+                                      });
+
                                       const Data = new User({
                                         name: req.body.name,
                                         email: req.body.email,
                                         mobile: req.body.mobile,
                                         password: spassword,
+                                        referralCode: refferalCode,
                                         is_admin: 0,
                                       })
 
                                       const userData = await Data.save()
 
-                                      console.log(userData)
-
+                                
                                       if (userData) {
                                         let randomNumber =
                                           Math.floor(Math.random() * 9000) +
@@ -159,12 +187,13 @@ const insertUser = async (req, res) => {
                                         req.session.password = spassword
                                         req.session.userName = req.body.name
                                         req.session.mobile = req.body.mobile
-console.log('otp',otp);
+                                        console.log('otp', otp);
                                         sendVerifyMail({
                                           email: req.body.email,
                                           name: req.body.name,
                                           otp: randomNumber,
                                         })
+                                        console.log('otp',otp);
                                         setTimeout(() => {
                                           otp =
                                             Math.floor(Math.random() * 9000) +
@@ -175,6 +204,28 @@ console.log('otp',otp);
                                       } else {
                                         res.json({ notsaved: true })
                                       }
+
+                                      if (referralCode) {
+          
+                                        const existingreferral = await User.findOne({ referralCode: referralCode })
+                            
+                            
+                                        if (existingreferral) {
+                                          const data = {
+                                            amount: 201,
+                                            transactionDate: Date.now(),
+                                            direction: 'Credit',  
+                                          };
+                                                          
+                                            await User.updateOne(
+                                                { _id: userData._id },
+                                                { $inc: { wallet: 201 }, $push: { walletHistory: data } }
+                                            );
+                                        }
+                                    }
+
+
+
                                     } else {
                                       res.json({ wrongpass: true })
                                     }
@@ -233,7 +284,7 @@ const verifyOTP = async (req, res) => {
           req.session.regSuccess = true
           res.json({ success: true })
         } else {
-          req.json({ error: true })
+          res.json({ error: true })
         }
       } else {
         res.json({ wrong: true })
@@ -521,40 +572,46 @@ const loadForgetpage = async (req, res) => {
 //------------Reset Password------------
 const resetPassword = async (req, res) => {
   try {
-    const Password = req.body.password
-    const confirm = req.body.confirm
-
-    if (Password.trim() === '') {
-      res.json({ required: true })
+    const password = req.body.password;
+    const confirm = req.body.confirm;
+    console.log('chek k', password);
+    console.log('checj ', confirm);
+    if (password.trim() === '') {
+      res.json({ required: true });
     } else {
-      if (confirm.trim() == '') {
-        res.json({ required: true })
-      }
-    }
-    {
-      if (Password.startsWith(' ') || Password.includes(' ')) {
-        res.json({ password_space: true })
+      if (confirm.trim() === '') {
+        res.json({ confirm_require: true });
       } else {
-        if (Password.length < 4) {
-          res.json({ paslength: true })
+        const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        if (!passwordPattern.test(password)) {
+          res.json({ password_require: true });
         } else {
-          if (confirm.trim() === '') {
-            res.json({ confirm_space: true })
+          if (password.startsWith(' ') || password.includes(' ')) {
+            res.json({ password_space: true });
           } else {
-            if (Password !== confirm) {
-              res.json({ wrong: true })
+            if (password.length < 4) {
+              res.json({ paslength: true });
             } else {
-              const email = req.session.email
-              const secure_password = await securePassword(Password)
-              const updateData = await User.updateOne(
-                { email: email },
-                { $set: { password: secure_password, token: '' } },
-              )
-              if (updateData) {
-                req.session.email = false
-                res.json({ response: true })
+              if (confirm.trim() === '') {
+                res.json({ confirm_space: true });
               } else {
-                res.status(400)
+                if (password !== confirm) {
+                  res.json({ wrong: true });
+                } else {
+                  const email = req.session.email;
+                  const sPassword = await securePassword(password);
+                  const updateData = await User.updateOne(
+                    { email: email },
+                    { $set: { password: sPassword, token: '' } }
+                  );
+                  if (updateData) {
+                    console.log('uupdated', updateData);
+                    req.session.email = false;
+                    res.json({ response: true });
+                  } else {
+                    res.status(400);
+                  }
+                }
               }
             }
           }
@@ -562,10 +619,10 @@ const resetPassword = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error.message)
-    res.status(500).render('500')
+    console.log(error.message);
+    res.status(500).render('500');
   }
-}
+};
 
 //-------------Shop-------------------
 
@@ -662,24 +719,26 @@ const aboutLoad = async (req, res) => {
 
 const loadprofile = async (req, res) => {
   try {
-    const userId = req.session.user_id
-    const userData = await User.findOne({ _id: userId })
-    const addressData = await Address.findOne({ user: userId })
+    const userId = req.session.user_id;
+    const userData = await User.findOne({ _id: userId });
+    const addressData = await Address.findOne({ user: userId });
     const orderData = await Order.find({ userId: userId }).sort({
       purchaseDate: -1,
-    })
+    });
 
-    const walletData = await User.findOne({ _id: userId })
+    // Fetch user data with sorted walletHistory
+    const walletData = await User.findOne({ _id: userId }).lean();
     if (walletData && Array.isArray(walletData.walletHistory)) {
       walletData.walletHistory.sort(
-        (a, b) => new Date(b.transactionDate) - new Date(a.transactionDate),
-      )
+        (a, b) => new Date(b.transactionDate) - new Date(a.transactionDate)
+      );
     }
+    console.log('walletData', walletData);
 
-    const cart = await Cart.findOne({ userId: req.session.user_id })
-    let cartCount = 0
+    const cart = await Cart.findOne({ userId: req.session.user_id });
+    let cartCount = 0;
     if (cart) {
-      cartCount = cart.product.length
+      cartCount = cart.product.length;
     }
 
     res.render('userProfile', {
@@ -688,12 +747,13 @@ const loadprofile = async (req, res) => {
       orderData,
       cartCount,
       walletData,
-    })
+    });
   } catch (error) {
-    console.log(error.message)
-    res.status(500).render('500')
+    console.log(error.message);
+    res.status(500).render('500');
   }
-}
+};
+
 
 const changePassword = async (req, res) => {
   try {

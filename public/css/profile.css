@@ -126,7 +126,7 @@ span {
 }
 
 .tabShow::-webkit-scrollbar-thumb {
-  background-color: #7ed386; /* Scrollbar thumb color */
+  background-color: #0f173f; /* Scrollbar thumb color */
   border-radius: 5px;
 }
 
@@ -168,7 +168,7 @@ span {
 }
 
 .btns:hover {
-  background-color: #45a049;
+  background-color: #214d23;
 }
 
 /* Card css */
@@ -321,11 +321,79 @@ span {
 .custom-h4 {
   text-align: center;
   margin-bottom: 20px;
-  color: #3498db; /* Change the color to your preference */
+  color: #000000; 
 }
 
 .custom-h2 {
   margin-top: 15px;
 }
 
-/* Profile */
+
+
+
+.profile-di {
+    padding: 20px;
+    text-align: left;
+
+
+}
+.profile-container {
+    padding: 20px;
+
+}
+
+.profile-title {
+    text-align: center;
+    color: #0C7075;
+}
+
+.profile-info {
+    margin-top: 20px;
+}
+
+.profile-label {
+    margin-bottom: 5px;
+}
+
+.input {
+    width: 50%;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    margin-top: 3px;
+    box-sizing: border-box;
+}
+
+.btns {
+    background-color: #0C7075;
+    color: #fff;
+    padding: 3px 17px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 11px;
+}
+
+.profile-info.input-group.mb-1 {
+    margin-top: 10px;
+}
+
+.profile-info.input-group.mb-1 .profile-label {
+    margin-bottom: 2px;
+    font-size: 14px;
+}
+
+.profile-info.input-group.mb-1 .btns.small {
+    background-color: #0C7075;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.input-Refferel {
+    display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
+}
+

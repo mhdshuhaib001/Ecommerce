@@ -40,6 +40,9 @@ $(document).ready(function () {
     })
   })
 
+
+
+
   function getErrorMessage(response) {
     if (response.emailPatt) return 'Please enter a valid email address.'
     if (response.email_require)
@@ -51,18 +54,45 @@ $(document).ready(function () {
   }
 })
 
+
+
+
 document
   .getElementById('resetPassword')
   .addEventListener('click', function (e) {
     e.preventDefault()
-    console.log('checkk')
+  
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm').value;
+    const password_message = document.getElementById('password_error');
+    const confirm_message = document.getElementById('confirm_error');
+console.log('password',password);
+console.log('confirmPassword',confirmPassword);
+    // Reset error messages
+    password_message.style.display = 'none';
+    confirm_message.style.display = 'none';
 
-    const password = document.getElementById('password').value
-    const confirmPassword = document.getElementById('confirm').value
-    const password_message = document.getElementById('password_error')
-    const confirm_message = document.getElementById('confirm_error')
+    // Define password pattern with at least 8 characters, including letters and numbers
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
-    $.ajax({
+    if (password.trim() === '') {
+      console.log('jheabfdchd',);
+      password_message.style.display = 'block';
+      password_message.textContent = 'Password cannot be empty.';
+    } else if (!passwordPattern.test(password)) {
+      console.log('chek this 1',);
+      password_message.style.display = 'block';
+      password_message.textContent =
+        'Password must be at least 8 characters and include both letters and numbers.';
+    } else {
+      if (confirmPassword.trim() === '') {
+        confirm_message.style.display = 'block';
+        confirm_message.textContent = 'Please confirm your password.';
+      } else if (password !== confirmPassword) {
+        confirm_message.style.display = 'block';
+        confirm_message.textContent = 'Passwords do not match.';
+      } else {
+      $.ajax({
       url: '/resetPassword',
       data: {
         password: password,
@@ -101,4 +131,10 @@ document
         }
       },
     })
+  }
+  }
   })
+
+
+
+

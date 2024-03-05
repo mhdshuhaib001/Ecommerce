@@ -164,32 +164,32 @@ const loadDashboard = async (req, res) => {
       { $limit: 5 },
     ])
 
-    const bestSellingCategories = await Order.aggregate([
-      { $match: { 'orderProducts.status': 'Delivered' } },
-      { $unwind: '$orderProducts' },
-      {
-        $lookup: {
-          from: 'Products',
-          localField: 'orderProducts.productId',
-          foreignField: '_id',
-          as: 'productDetails',
-        },
-      },
-      { $unwind: '$productDetails' },
-      {
-        $group: {
-          _id: '$productDetails.category',
-          totalSold: { $sum: '$orderProducts.count' },
-          products: { $push: '$productDetails' },
-        },
-      },
-      { $sort: { totalSold: -1 } },
-      { $limit: 10 },
-    ])
+    // const bestSellingCategories = await Order.aggregate([
+    //   { $match: { 'orderProducts.status': 'Delivered' } },
+    //   { $unwind: '$orderProducts' },
+    //   {
+    //     $lookup: {
+    //       from: 'Products',
+    //       localField: 'orderProducts.productId',
+    //       foreignField: '_id',
+    //       as: 'productDetails',
+    //     },
+    //   },
+    //   { $unwind: '$productDetails' },
+    //   {
+    //     $group: {
+    //       _id: '$productDetails.category',
+    //       totalSold: { $sum: '$orderProducts.count' },
+    //       products: { $push: '$productDetails' },
+    //     },
+    //   },
+    //   { $sort: { totalSold: -1 } },
+    //   { $limit: 10 },
+    // ])
     const bestProduct = bestSellingProducts.map(
       (product) => product.productName,
     )
-
+console.log('yearlyLabels',yearlyLabels);
     res.render('dashboard', {
       bestSellingProducts,
       totalProduct,

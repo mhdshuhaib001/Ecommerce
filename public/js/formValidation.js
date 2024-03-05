@@ -7,6 +7,7 @@ document.getElementById('submit').addEventListener('click', function (e) {
   const mobile = document.getElementById('mobile').value
   const password = document.getElementById('password').value
   const confirmPassword = document.getElementById('confirmPassword').value
+  
 
   const name_message = document.getElementById('name-error')
   const email_message = document.getElementById('email-error')
@@ -14,7 +15,16 @@ document.getElementById('submit').addEventListener('click', function (e) {
   const password_message = document.getElementById('password-error')
   const confirm_message = document.getElementById('confirm-error')
   const err_message = document.getElementById('error-message')
-  console.log(email)
+  
+    // Clear existing error messages
+    name_message.style.display = 'none'
+    email_message.style.display = 'none'
+    phone_message.style.display = 'none'
+    password_message.style.display = 'none'
+    confirm_message.style.display = 'none'
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const referralCode = urlParams.get('referral');
   $.ajax({
     url: '/signup',
     data: {
@@ -23,6 +33,8 @@ document.getElementById('submit').addEventListener('click', function (e) {
       mobile: mobile,
       password: password,
       confirmPassword: confirmPassword,
+      referral: referralCode, 
+
     },
     method: 'post',
     success: (response) => {
@@ -58,6 +70,7 @@ document.getElementById('submit').addEventListener('click', function (e) {
         confirm_message.style.display = 'block'
         confirm_message.textContent = 'Confirm password cannot contain spaces.'
       } else if (response.emailPatt) {
+      
         email_message.style.display = 'block'
         email_message.textContent = 'Enter the valid email address.'
       } else if (response.mobile) {

@@ -84,7 +84,8 @@ document
         method: 'post',
         success: (response) => {
           if (response.success) {
-            window.location.reload()
+            $('#addressReload').load('/userProfile #addressReload');
+            $('#addAddressModal').modal('hide'); 
           } else {
             console.error('Failed to add address.')
           }

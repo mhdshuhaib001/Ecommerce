@@ -280,6 +280,9 @@ const OrderDetailsLoad = async (req, res) => {
     res.status(500).render('500')
   }
 }
+
+
+
 const orderCancel = async (req, res) => {
   try {
     const userId = req.session.user_id
@@ -293,21 +296,28 @@ const orderCancel = async (req, res) => {
 
     const prodcutTotalPrice = orderProduct.totalPrice
     if (orderData.paymentMethod !== 'COD') {
+
+      const TransactuonDate = new Date()
+
       const walletUpdate = await User.findOneAndUpdate(
         { _id: userId },
         {
           $inc: { wallet: prodcutTotalPrice },
           $push: {
             walletHistory: {
-              date: new Date(),
+              transactionDate: TransactuonDate,
               amount: prodcutTotalPrice,
               direction: 'Credited',
             },
           },
         },
         { new: true },
-      )
+      );
 
+
+
+      console.log('walletUpdate',walletUpdate);
+      
       if (walletUpdate) {
         const updateResult = await Order.findOneAndUpdate(
           { _id: orderId, 'orderProducts._id': productId },
@@ -479,24 +489,25 @@ const invoice = async (req, res) => {
 
 const loadOrderManagement = async (req, res) => {
   try {
-    const itemPage = 10
-    const page = +req.query.page || 1
-    const totalOrders = await Order.countDocuments()
-    const totalPages = Math.ceil(totalOrders / itemPage)
+    const itemPage = 10;
+    const page = +req.query.page || 1;
+    const totalOrders = await Order.countDocuments();
+    const totalPages = Math.ceil(totalOrders / itemPage);
 
     const orderData = await Order.find({
       'orderProducts.status': { $nin: ['pending'] },
     })
-      .sort({ purchaseTime: -1 })
+      .sort({ purchaseDate: -1 })
       .skip((page - 1) * itemPage)
-      .limit(itemPage)
+      .limit(itemPage);
 
-    res.render('ordermanagement', { orderData, totalPages, currentPage: page })
+    res.render('ordermanagement', { orderData, totalPages, currentPage: page });
   } catch (error) {
-    console.log('Error:', error.message)
-    res.status(500).render('500')
+    console.log('Error:', error.message);
+    res.status(500).render('500');
   }
-}
+};
+
 
 const updateOrder = async (req, res) => {
   try {
@@ -504,7 +515,6 @@ const updateOrder = async (req, res) => {
     const orderStatus = req.body.status
 
     const orderData = await Order.findOne({ 'orderProducts._id': orderId })
-    console.log('orderData', orderData)
     const orderProductIndex = orderData.orderProducts.findIndex(
       (product) => product._id.toString() === orderId,
     )

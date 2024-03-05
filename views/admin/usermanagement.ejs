@@ -19,6 +19,7 @@
                       <th>Contact</th>
                       <th>Status</th>
                       <th>Action.</th>
+                      <th>Orders</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -55,6 +56,11 @@
                                 </p>
                                 <% } %>
                           </td>
+                          <td>
+                            <a href="/admin/userOrders?userId=<%= user._id %>" class="btn btn-outline-primary delete-button" >
+                                Show
+                            </a>
+                        </td> 
                         </tr>
                         <% } %>
                           <% } else { %>
