@@ -220,12 +220,12 @@
                                                                 <%= order.totalAmount %>
                                                             </td>
                                                             <td>
-                                                                <span style="<%= order.status === 'Pending' ? 'font-size: smaller;' : '' %>">
+                                                                <span style=" <%= order.status === 'Pending' ? 'font-size: smaller;' : '' %>">
                                                                     <%= order.paymentMethod %>
                                                                     <% if (order.status === 'Pending') { %>
                                                                         <span style="color: red;">Payment Failed</span>
-                                                                      
                                                                     <% } %>
+                                                                    
                                                                 </span>
                                                             </td>
                                                             
