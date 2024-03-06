@@ -55,10 +55,10 @@ const orderSchema = new mongoose.Schema({
         required: true,
         default: 1,
       },
-      // productPrice: {
-      //   type: Number,
-      //   required: true,
-      // },
+      productPrice: {
+        type: Number,
+        required: true,
+      },
       image: {
         type: String,
         required: true,
@@ -77,6 +77,7 @@ const orderSchema = new mongoose.Schema({
       cancelReason: {
         type: String,
       },
+     
     },
   ],
   totalAmount: {
@@ -97,9 +98,6 @@ const orderSchema = new mongoose.Schema({
   },
   shippingMethod: {
     type: String,
-  },
-  shippingAmount: {
-    type: Number,
   },
   status: {
     type: String,

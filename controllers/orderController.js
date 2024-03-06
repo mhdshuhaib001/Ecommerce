@@ -3,6 +3,7 @@ const User = require('../models/userModel')
 const Address = require('../models/addressModel')
 const Cart = require('../models/cartModel')
 const Product = require('../models/productsModel')
+const Coupon = require('../models/couponModel');
 const Razorpay = require('razorpay')
 const crypto = require('crypto')
 const puppeteer = require('puppeteer')
@@ -17,6 +18,18 @@ var instance = new Razorpay({
   key_secret: process.env.KEY_SECRET,
 })
 
+  
+
+const decrementProductQuantities = async (products) => {
+  for (let i = 0; i < products.length; i++) {
+    let product = products[i].productId;
+    let count = products[i].count;
+    await Product.updateOne(
+      { _id: product },
+      { $inc: { quantity: -count } },
+    );
+  }
+};
 //-----------orderPlaced-----------------
 const placeOrder = async (req, res) => {
   try {
@@ -24,6 +37,7 @@ const placeOrder = async (req, res) => {
     const cartData = await Cart.findOne({ userId: user_id }).populate(
       'couponDiscount',
     )
+    console.log('cartdata',cartData);
     const paymentMethod = req.body.formData.payment
     const status = paymentMethod === 'COD' ? 'Placed' : 'Pending'
     const userData = await User.findById(user_id)
@@ -41,13 +55,23 @@ const placeOrder = async (req, res) => {
 
     let totalAmount = subtotalAmount
 
-    // Check if there is a coupon discount
     if (cartData.couponDiscount) {
       const couponDiscountPercentage = cartData.couponDiscount.discountAmount
       const discountAmount = Math.round(
         (couponDiscountPercentage / 100) * subtotalAmount,
       )
       totalAmount -= discountAmount
+    }
+
+    const couponDiscount = cartData.couponDiscount ? cartData.couponDiscount._id : null; 
+
+    if (couponDiscount != null) {
+      const couponId = couponDiscount._id;
+      const updatedCoupon = await Coupon.findByIdAndUpdate(
+        couponId,
+        { $inc: { userLimit: -1 } },
+        { new: true }
+      );
     }
 
     const productIds = cartData.product.map((product) => product.productId)
@@ -68,7 +92,6 @@ const placeOrder = async (req, res) => {
       }
     })
 
-    console.log(totalAmount, 'totalAmount')
     const purchaseDate = new Date()
     let shippingAmount = 0
     const shipingTotalAmount = 1300
@@ -98,33 +121,29 @@ const placeOrder = async (req, res) => {
     const orderId = orderData._id
 
     if (orderData.paymentMethod === 'COD') {
-      for (let i = 0; i < cartData.product.length; i++) {
-        let product = cartData.product[i].productId
-        let count = cartData.product[i].count
-        await Product.updateOne(
-          { _id: product },
-          { $inc: { quantity: -count } },
-        )
-      }
+      await decrementProductQuantities(cartData.product);
 
       await Cart.deleteOne({ userId: user_id })
       return res.json({ codsuccess: true, orderId })
     } else if (orderData.paymentMethod == 'onlinePayment') {
+      await decrementProductQuantities(cartData.product);
       var options = {
         amount: orderData.totalAmount * 100,
         currency: 'INR',
         receipt: '' + orderId,
       }
       instance.orders.create(options, async function (err, order) {
-        // Update the order status to 'placed'
+
         const update = await Order.findByIdAndUpdate(
           { _id: orderId },
-          { $set: { status: 'placed' } },
+          { $set: { status: status } },
         )
 
         return res.json({ razorpay: true, order })
       })
     } else if (orderData.paymentMethod === 'wallet') {
+
+      await decrementProductQuantities(cartData.product);
       const totalAmount = orderData.totalAmount
       const TransactuonDate = new Date()
 
@@ -242,7 +261,7 @@ const success = async (req, res) => {
   } catch (error) {
     console.log(error.message)
     res.render('shop')
-    res.status(500).render('500')
+    // res.status(500).render('500')
   }
 }
 
@@ -260,7 +279,7 @@ const OrderDetailsLoad = async (req, res) => {
     const deliveryDetails =
       order && order.deliveryDetails ? order.deliveryDetails : null
     const orderPrice = orderData.totalAmount
-    console.log(orderPrice)
+    // console.log(orderPrice)
     let shippingCharge = 0
     if (orderPrice < 1390) {
       shippingCharge = 90
@@ -282,23 +301,20 @@ const OrderDetailsLoad = async (req, res) => {
 }
 
 
-
 const orderCancel = async (req, res) => {
   try {
-    const userId = req.session.user_id
-    const productId = req.body.productId
-    const orderId = req.body.orderId
-    const cancelReason = req.body.cancelReason
-    const orderData = await Order.findOne({ _id: orderId })
+    const userId = req.session.user_id;
+    const productId = req.body.productId;
+    const orderId = req.body.orderId;
+    const cancelReason = req.body.cancelReason;
+    const orderData = await Order.findOne({ _id: orderId });
     const orderProduct = orderData.orderProducts.find((val) => {
-      return val._id.toString() === productId
-    })
+      return val._id.toString() === productId;
+    });
 
-    const prodcutTotalPrice = orderProduct.totalPrice
+    const prodcutTotalPrice = orderProduct.totalPrice;
     if (orderData.paymentMethod !== 'COD') {
-
-      const TransactuonDate = new Date()
-
+      const TransactuonDate = new Date();
       const walletUpdate = await User.findOneAndUpdate(
         { _id: userId },
         {
@@ -311,13 +327,8 @@ const orderCancel = async (req, res) => {
             },
           },
         },
-        { new: true },
+        { new: true }
       );
-
-
-
-      console.log('walletUpdate',walletUpdate);
-      
       if (walletUpdate) {
         const updateResult = await Order.findOneAndUpdate(
           { _id: orderId, 'orderProducts._id': productId },
@@ -326,13 +337,17 @@ const orderCancel = async (req, res) => {
               'orderProducts.$.status': 'Cancelled',
               'orderProducts.$.cancelReason': cancelReason,
             },
-          },
-        )
-        console.log(`Added ${prodcutTotalPrice} to the wallet.`)
+          }
+        );
+        // console.log(`Added ${prodcutTotalPrice} to the wallet.`);
+        const updateProduct = await Product.updateOne(
+          { _id: orderProduct.productId },
+          { $inc: { quantity: orderProduct.count } } 
+        );
         return res.json({
           success: true,
           message: 'Order cancelled successfully.',
-        })
+        });
       }
     } else if (orderData.paymentMethod === 'COD') {
       const updateResult = await Order.findOneAndUpdate(
@@ -342,27 +357,31 @@ const orderCancel = async (req, res) => {
             'orderProducts.$.status': 'Cancelled',
             'orderProducts.$.cancelReason': cancelReason,
           },
-        },
-      )
+        }
+      );
 
-      console.log(updateResult, 'updateResult')
       if (updateResult) {
+        const updateProduct = await Product.updateOne(
+          { _id: orderProduct.productId },
+          { $inc: { quantity: orderProduct.count } } 
+        );
         return res.json({
           success: true,
           message: 'Order cancelled successfully.',
-        })
+        });
       } else {
         return res.json({
           success: false,
           message: 'Order cancellation failed.',
-        })
+        });
       }
     }
   } catch (error) {
-    console.log(error.message)
-    res.status(500).json({ success: false, message: 'Internal server error.' })
+    console.log(error.message);
+    res.status(500).json({ success: false, message: 'Internal server error.' });
   }
-}
+};
+
 
 const returnRequest = async (req, res) => {
   try {
@@ -432,9 +451,6 @@ const returnOrder = async (req, res) => {
       },
       { new: true },
     )
-
-    console.log(updatedUser, 'hey the data inserted')
-
     const updatedOrderTotal = await Order.findByIdAndUpdate(
       orderId,
       { $set: { totalAmount: newTotalAmount } },
@@ -447,6 +463,8 @@ const returnOrder = async (req, res) => {
   }
 }
 
+
+
 const invoice = async (req, res) => {
   try {
     const orderId = req.query._id
@@ -456,7 +474,7 @@ const invoice = async (req, res) => {
     )
 
     const deliveredOrder = orderData.orderProducts.filter(
-      (product) => product.status === 'delivered',
+      (product) => product.status === 'Delivered',
     )
     if (deliveredOrder.length === 0) {
       return res

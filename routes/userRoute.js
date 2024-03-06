@@ -26,8 +26,8 @@ user_Rout.get('/', auth.isLogout, userController.loadHome)
 user_Rout.get('/home', auth.isLogin, userController.loadHome)
 
 //======================= Sign Up ===========================
-user_Rout.get('/signup', userController.loadSignup)
-user_Rout.post('/signup', userController.insertUser)
+user_Rout.get('/signup', auth.isLogout,userController.loadSignup)
+user_Rout.post('/signup', auth.isLogout,userController.insertUser)
 
 user_Rout.get('/userOtp', auth.isLogout, userController.loadUserOtp)
 user_Rout.post('/verifyOtp', auth.isLogout, userController.verifyOTP)

@@ -511,7 +511,7 @@
                                                         <tr>
                                                             <td>Shipping Fee:</td>
                                                             <td>
-                                                                <% if (totalamount <=1300) { %>
+                                                                <% if (cartTotal <=1301) { %>
                                                                     ₹<span id="shippingAmount">
                                                                         <%= `${shippingAmount}` %>
                                                                     </span>
@@ -630,7 +630,6 @@
                         location.reload();
                     } else if (response.placed == true) {
                         toastr.success('Order placed successfully!');
-                        console.log(response);
                         location.href = `/orderSuccess/${response.orderId}`;
                     } else if (response.walletFailed == true) {
                         toastr.error('Insufficient balance in your wallet');

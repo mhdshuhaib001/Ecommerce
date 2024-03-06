@@ -1,6 +1,6 @@
 <%- include('../layouts/admin/header.ejs') -%>
 
-    <div class="main-panel">
+    <div class="main-panel" >
         <div class="content-wrapper">
             <% if (typeof orderData !="undefined" ) { %>
                 <!-- Display Order Details -->
@@ -36,9 +36,9 @@
                         </div>
 
                         <!-- Display Products Table Section -->
-                        <div>
+                        <div  id="orderDetailsReload">
                             <h4>Products</h4>
-                            <div class="table-responsive"  id="orderDetailsRe">
+                            <div class="table-responsive"  >
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
@@ -227,37 +227,30 @@
                     }
                 });
             }
-
-            function updateOrder(id, status) {
+            
+function updateOrder(id, status) {
     const data = { orderId: id, status };
-    
+
     $.ajax({
         url: '/admin/updateOrder',
         data: JSON.stringify(data),
         contentType: 'application/json',
-        method: 'PUT',
+        method: 'POST',
         success: function (response) {
             if (response.success) {
-                $.ajax({
-                    url: `/admin/orderSummery?_id=${id}`,
-                    method: 'GET',
-                    success: function (data) {
-                        $('#orderDetailsRe').html($(data).find('#orderDetailsRe').html());
-                        
-                        Swal.mixin({
-                            toast: true,
-                            position: "top-end",
-                            showConfirmButton: false,
-                            timer: 1500,
-                        }).fire({
-                            icon: "success", 
-                            title: "Status changed",
-                        });
-                    },
-                    error: function () {
-                        swal("Something went wrong", "", "error");
-                    }
-                });
+                 $('#orderDetailsRe').load('/admin/orderSummery #orderDetailsRe');
+                 location.reload()
+
+                    Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    }).fire({
+                        icon: "success",
+                        title: "Status changed",
+                    });
+             
             } else {
                 swal("Something went wrong", "", "error");
             }

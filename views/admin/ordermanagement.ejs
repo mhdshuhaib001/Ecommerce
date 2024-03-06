@@ -24,7 +24,7 @@
                             <% order.orderProducts.forEach((product) => { %>
                                 <tr>
                                     <td><%= index + 1 %></td>
-                                    <td><%= product.orderId %></td>
+                                    <td><%= order.orderId %></td>
                                     <td><%= order.purchaseDate.toISOString().split('T')[0] %></td>
                                     <td><span>₹</span><i class="fa-solid fa-indian-rupee-sign"></i><%= order.totalAmount %></td>
                                     <td>
@@ -81,25 +81,25 @@
   <script>
 
    // Your frontend script
-function updateOrder(productId, status) {
-    const data = { productId, status };
-    $.ajax({
-    method: 'POST',
-    url: '/admin/updateOrder',
-    data: JSON.stringify(data),
-    contentType: 'application/json',
-    success: function (response) {
-        console.log(response,'gggg');
-        if (response.success === true) { 
-            $('#reloadArea').load('/admin/order #reloadArea');
-            // location.reload()
-        } else {
-            swal("Something error", "", "error")
-            $('#reloadArea').load('/cart #reloadArea');
-        }
-    }
-});
-}
+// function updateOrder(productId, status) {
+//     const data = { productId, status };
+//     $.ajax({
+//     method: 'POST',
+//     url: '/admin/updateOrder',
+//     data: JSON.stringify(data),
+//     contentType: 'application/json',
+//     success: function (response) {
+//         console.log(response,'gggg');
+//         if (response.success === true) { 
+//             $('#reloadArea').load('/admin/order #reloadArea');
+//             // location.reload()
+//         } else {
+//             swal("Something error", "", "error")
+//             $('#reloadArea').load('/cart #reloadArea');
+//         }
+//     }
+// });
+// }
 
   </script>
   

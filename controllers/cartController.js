@@ -11,7 +11,6 @@ const loadCart = async (req, res) => {
     const cartData = await Cart.findOne({ userId: userId }).populate(
       'product.productId',
     )
-    console.log('cartData', cartData)
 
     if (cartData && cartData.product.length > 0) {
       const products = cartData.product
@@ -20,7 +19,6 @@ const loadCart = async (req, res) => {
       for (let i = 0; i < products.length; i++) {
         const productId = products[i].productId
         const product = await Products.findById(productId).select('price')
-        console.log(product, 'product')
         const count = products[i].count
         const productPrice = product.price || 0
         const totalPrice = productPrice * count

@@ -47,7 +47,7 @@
                             <p style="font-size: 18px; color: #0C7075; font-weight: bold; margin-bottom: 10px;">🎉 Share the joy! Invite friends using your referral code and earn exciting rewards! 🎁</p>
                             <p style="font-size: 16px; color: #28a745; font-weight: bold; margin-bottom: 5px;">Earn 201 cash</p>
                             <div class="input-group">
-                                <input type="text" class="input profile-phone reffrelcodevalue" style="background-color: aliceblue;" value="http://localhost:8000/signup?referral=<%= user.referralCode %>" readonly id="referralCodeInput">
+                                <input type="text" class="input profile-phone reffrelcodevalue" style="background-color: aliceblue;" value="https://loomfashion.online/signup?referral=<%= user.referralCode %>" readonly id="referralCodeInput">
                                 <div class="input-group-append">
                                     <button class="btn" onclick="copyReferralCode()">
                                         <i class="fas fa-copy"></i>
@@ -220,8 +220,15 @@
                                                                 <%= order.totalAmount %>
                                                             </td>
                                                             <td>
-                                                                <%= order.paymentMethod %>
+                                                                <span style="<%= order.status === 'Pending' ? 'font-size: smaller;' : '' %>">
+                                                                    <%= order.paymentMethod %>
+                                                                    <% if (order.status === 'Pending') { %>
+                                                                        <span style="color: red;">Payment Failed</span>
+                                                                      
+                                                                    <% } %>
+                                                                </span>
                                                             </td>
+                                                            
                             
                                                             <td>
                                                                 <a href="/orderDetails?_id=<%= order._id %>" style="color: rgb(8, 8, 85); ">Details</a>

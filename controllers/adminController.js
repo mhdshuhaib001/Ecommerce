@@ -189,7 +189,6 @@ const loadDashboard = async (req, res) => {
     const bestProduct = bestSellingProducts.map(
       (product) => product.productName,
     )
-console.log('yearlyLabels',yearlyLabels);
     res.render('dashboard', {
       bestSellingProducts,
       totalProduct,
@@ -254,6 +253,23 @@ const userBlocked = async (req, res) => {
   } catch (error) {
     console.log(error.message)
     res.status(500).render('500')
+  }
+}
+
+
+const userOrdes = async (req,res)=>{
+  try {
+const userId = req.query.userId;
+console.log('userId',userId);
+const userData = await User.findOne({_id:userId})
+const OrderData = await Order.find({userId:userId})    
+console.log('userDa',userData);
+console.log('useror',OrderData);
+res.render("userOrders",{OrderData,userData});
+  } catch (error) {
+    console.log(error.message);
+    res.render("500");
+    
   }
 }
 
@@ -666,6 +682,7 @@ module.exports = {
   adminVerify,
   loadDashboard,
   usermanagementload,
+  userOrdes,
   userBlocked,
   logout,
   loadcategory,

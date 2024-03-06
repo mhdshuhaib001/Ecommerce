@@ -49,11 +49,13 @@ const blockAndunblock = async (req, res) => {
 
         const bannerData = await Banner.findById({bannerId});
 
- 
+ console.log('haloo',bannerData);
         if (bannerData.is_blocked === true) {
             await Banner.findOneAndUpdate({ _id: bannerId }, { $set: { is_blocked: false } });
+            console.log('xjsbxjd',);
             res.json({ block: true, message: 'Banner successfully unblocked.' });
         } else {
+            console.log('hallooo',);
             await Banner.findOneAndUpdate({ _id: bannerId }, { $set: { is_blocked: true } });
             res.json({ block: true, message: 'Banner successfully blocked.' });
         }

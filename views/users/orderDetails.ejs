@@ -474,30 +474,33 @@
                                                     <%= product.status %>
                                                 </td>
                                                 <td>
-                                                    <% if(product.status !=="Cancelled" && product.status !=="Delivered"
-                                                        && product.status !=="request" && product.status !=="Accepted" )
-                                                        { %>
-                                                        <button type="button"
-                                                            onclick="cancelProduct('<%= product._id %>', '<%= orderData._id %>')"
-                                                            class="btn"
-                                                            style="color: rgb(249, 249, 249); background-color:  #ce3f3f;" >Cancel</button>
-                                                        <% } else if (product.status=="Delivered" ) { %>
-                                                            <button type="button" class="btn " id="requestStatus"
-                                                                onclick="returnRequest('<%= product._id %>','<%= orderData._id%>')"
-                                                                style=" background-color: #B6410F; color: rgb(239, 190, 167)">Return</button>
-
-                                                            <% } else if (product.status=="Accepted" ) { %>
-                                                                <label style="color: red;">OrderReturned</label>
-                                                                <% } else if (product.status=="request" ) { %>
-                                                                    <label
-                                                                        style="color: rgb(221, 221, 27);">Requested</label>
-                                                                    <% } else if(product.status=="Cancelled" ) {%>
-                                                                        <label
-                                                                            style="color: rgb(221, 27, 27);">Cancelled</label>
-                                                                        <% } else {%>
-                                                                            <label style="color: red;">Requested</label>
-                                                                            <% } %>
+                                
+                                                
+                                                    <% if (product.status !== "Cancelled" && product.status !== "Delivered"
+                                                        && product.status !== "request" && product.status !== "Accepted" && product.status !=="Pending") { %>
+                                                        <button type="button" onclick="cancelProduct('<%= product._id %>', '<%= orderData._id %>')"
+                                                            class="btn" style="color: rgb(249, 249, 249); background-color:  #ce3f3f;">Cancel</button>
+                                                    <% } else if (product.status == "Delivered") { %>
+                                                        <button type="button" class="btn " id="requestStatus"
+                                                            onclick="returnRequest('<%= product._id %>','<%= orderData._id %>')"
+                                                            style="background-color: #e66a35; color: rgb(239, 190, 167)">Return</button>
+                                                    <% } else if (product.status == "Accepted") { %>
+                                                        <label style="color: red;">OrderReturned</label>
+                                                    <% } else if (product.status == "request") { %>
+                                                        <label style="color: rgb(221, 221, 27);">Requested</label>
+                                                    <% } else if (product.status == "Cancelled") { %>
+                                                        <label style="color: rgb(221, 27, 27);">Cancelled</label>
+                                                    <% } else if (product.status == "Pending") { %>
+                                                        <label style="color: red;">Failed</label>
+                                                        <!-- Add a link or button to retry the payment -->
+                                                        <a href="/product?id=<%= product._id %>">Check</a>
+                                                        <!-- or -->
+                                                                                                 <% } else { %>
+                                                        <label style="color: red;">Requested</label>
+                                                    <% } %>
                                                 </td>
+                                                
+                                                
                                             </tr>
                                             <% }) %>
                                     </tbody>

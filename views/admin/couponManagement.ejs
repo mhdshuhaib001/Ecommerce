@@ -54,7 +54,7 @@
                             <%= coupon.expiryDate %>
                           </td>
                           <td>
-                            <%= coupon.usedUser.length %>/<%= coupon.usersLimit %>
+                            <%= coupon.usedUser.length %>/<%= coupon.userLimit %>
                           </td>
                           <% if(!coupon.is_blocked){ %>
                             <td onclick="couponBlock('<%= coupon._id %>')">
