@@ -690,15 +690,7 @@
                 success: (response) => {
                     console.log(response, "response")
                     if (response.placed == true) {
-                        console.log(response, 'thie is the place for ordering');
                         window.location.href = `/orderSuccess/${orderId}`;
-                        swal.fire({
-                            positon: "center",
-                            icon: "error",
-                            title: "Payment failed",
-                            showConfirmButton: false,
-                            timer: 1500,
-                        });
                     }
                 },
             });
