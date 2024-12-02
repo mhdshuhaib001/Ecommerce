@@ -74,7 +74,7 @@
                                                                     src="/products/crops/<%= product.productId.images.image1 %>"
                                                                     width="80"
                                                                     loading="lazy"
-                                                                    alt="<%=product.name%>" >
+                                                                    alt="<%=product.name%>">
                                                             </div>
                                                         </td>
                                                         <td>
@@ -168,17 +168,21 @@
                                                 <th>Delivery fee</th>
                                                 <td>
                                                     <!-- <h6>Delevery</h6> -->
-                                                     <!-- <p>Shipping options will be updated
+                                                    <!-- <p>Shipping options will be updated
                                                                 during checkout.</p> -->
-                                                                <% if(shippingCharge!==0){ %>
+                                                    <% if(shippingCharge!==0){
+                                                    %>
                                                     <a href="javascript:void(0)"
                                                         class="price-calculate">
-                                                        Shipping Fee : ₹ &nbsp;<%=shippingCharge %></a>
-                                                        <% } else{ %>
-                                                            <a href="javascript:void(0)"
+                                                        Shipping Fee : ₹
+                                                        &nbsp;<%=shippingCharge
+                                                        %></a>
+                                                    <% } else{ %>
+                                                    <a href="javascript:void(0)"
                                                         class="price-calculate">Free
-                                                        shipping : ₹ &nbsp;00.0</a>
-                                                        <% } %>
+                                                        shipping : ₹
+                                                        &nbsp;00.0</a>
+                                                    <% } %>
 
                                                 </td>
                                             </tr>
@@ -187,7 +191,8 @@
                                                 <td>
                                                     <span>₹</span>&nbsp;<strong>
                                                         <%=grandTotal%>
-                                                    </strong></td>
+                                                    </strong>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -207,9 +212,10 @@
                         <div class="container"
                             style="text-align: center; padding: 50px;">
                             <h1 class="error-title"
-                                style="font-size: 3em; color: #333; margin-bottom: 20px;">Empty
+                                style="font-size: 3em; color: #333; margin-bottom: 20px;">
+                                Empty
                                 Cart</h1>
-                           
+
                             <a href="/shop"
                                 class="btn btn-outline-primary-2 btn-minwidth-lg"
                                 style="text-decoration: none; background-color:#1B1A55;   padding: 15px 30px; border-radius: 8px; font-size: 1.2em;">
@@ -223,12 +229,12 @@
                 </div>
             </div>
         </div>
-        </section>
+    </section>
 
-        <!-- shop body section end -->
+    <!-- shop body section end -->
 
-        <!-- JS here -->
-        <script>
+    <!-- JS here -->
+    <script>
 
 
             function removeItem(proId) {
@@ -271,10 +277,6 @@
 
 
             function changeQuantity(userId, proId, count) {
-                console.log("changeQuantity triggered");
-                console.log("userId:", userId);
-                console.log("proId:", proId);
-                console.log("count:", count);
                 $.ajax({
                     url: "/quantityUpdate",
                     data: {
@@ -284,8 +286,6 @@
                     },
                     method: "post",
                     success: (response) => {
-                        console.log(response, 'responce check 0--------------');
-
                         if (response.success) {
                             $("#reloadDiv").load("/cart #reloadDiv");
                         } else if (response.check) {
@@ -312,4 +312,4 @@
 
         </script>
 
-        <%- include('../layouts/user/footer.ejs') -%>
+    <%- include('../layouts/user/footer.ejs') -%>

@@ -149,51 +149,42 @@ const loadEditProduct = async (req, res) => {
 
 const editedProduct = async (req, res) => {
   try {
-    let details = req.body
-    let imagesFiles = req.files
-    let currentData = await Products.findOne({ _id: req.query.id })
+    let details = req.body;
+    let imagesFiles = req.files;
+    let currentData = await Products.findOne({ _id: req.query.id });
 
-    const oldImg = Object.values(currentData.images)
+    console.log('Request Details:', details);
+    console.log('Request Files:', imagesFiles);
+    console.log('Current Data:', currentData);
+
+    const oldImg = Object.values(currentData.images);
     const img = Object.values(imagesFiles).map(
       (file) => file[0]?.filename || currentData.images[file.fieldname],
-    )
+    );
+
+    console.log('Old Images:', oldImg);
+    console.log('New Images:', img);
 
     for (let k = 0; k < oldImg.length; k++) {
       if (oldImg[k] && !img.includes(oldImg[k])) {
-        let imagePath = path.resolve('public/products/images', oldImg[k])
-        let cropPath = path.resolve('public/products/crops', oldImg[k])
+        // Delete old images not present in the updated request
+        let imagePath = path.resolve(__dirname, 'public/products/images', oldImg[k]);
+        let cropPath = path.resolve(__dirname, 'public/products/crops', oldImg[k]);
 
-        // Delay before deleting the file (1-second delay)
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-
-        // Check if the file exists before attempting to delete
-        if (fs.existsSync(imagePath)) {
-          try {
-            fs.unlinkSync(imagePath)
-          } catch (unlinkError) {
-            console.error(`Error deleting file: ${imagePath}`, unlinkError)
-          }
-        } else {
-          console.warn(`File not found: ${imagePath}`)
+        console.log(`Deleting old image: ${imagePath}`);
+        try {
+          fs.unlinkSync(imagePath);
+        } catch (unlinkError) {
+          console.error(`Error deleting file: ${imagePath}`, unlinkError);
         }
 
-        // Check if the file exists before attempting to delete
-        if (fs.existsSync(cropPath)) {
-          try {
-            fs.unlinkSync(cropPath)
-          } catch (unlinkError) {
-            console.error(`Error deleting file: ${cropPath}`, unlinkError)
-          }
-        } else {
-          console.warn(`File not found: ${cropPath}`)
+        console.log(`Deleting crop image: ${cropPath}`);
+        try {
+          fs.unlinkSync(cropPath);
+        } catch (unlinkError) {
+          console.error(`Error deleting file: ${cropPath}`, unlinkError);
         }
       }
-    }
-
-    for (let i = 0; i < img.length; i++) {
-      await sharp('public/products/images/' + img[i])
-        .resize(500, 500)
-        .toFile('public/products/crops/' + img[i])
     }
 
     let updateData = {
@@ -202,23 +193,28 @@ const editedProduct = async (req, res) => {
       quantity: details.quantity,
       category: details.category,
       description: details.description,
-      'images.image1': img[0],
-      'images.image2': img[1],
-      'images.image3': img[2],
-      'images.image4': img[3],
+    };
+
+    for (let i = 0; i < img.length; i++) {
+      updateData[`images.image${i + 1}`] = img[i];
+      await sharp(path.resolve(__dirname, 'public/products/images', img[i]))
+        .resize(500, 500)
+        .toFile(path.resolve(__dirname, 'public/products/crops', img[i]));
     }
 
     let update = await Products.updateOne(
       { _id: req.query.id },
       { $set: updateData },
-    )
+    );
 
-    res.redirect('/admin/productmanagement')
+    res.redirect('/admin/productmanagement');
   } catch (error) {
-    console.error(error.message)
-    res.status(500).render('500')
+    console.error(error.message);
+    res.status(500).render('500');
   }
-}
+};
+
+
 
 // product
 const loadProduct = async (req, res) => {

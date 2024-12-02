@@ -35,20 +35,13 @@ admin_Rout.get('/home', auth.isLogin, adminController.loadDashboard)
 admin_Rout.get('/logout', auth.isLogin, adminController.logout)
 
 //=====================================USER-MANAGEMENT==================================
-admin_Rout.get(
-  '/usermanagement',
-  auth.isLogin,
-  adminController.usermanagementload,
-)
+admin_Rout.get('/usermanagement',auth.isLogin,adminController.usermanagementload,)
 admin_Rout.post('/userBlocked', auth.isLogin, adminController.userBlocked)
+admin_Rout.get("/userOrders",auth.isLogin,adminController.userOrdes)
 
 //=====================CATEGORY-MANAGEMENT=====================================
 admin_Rout.get('/categorymanagement', adminController.loadcategory)
-admin_Rout.get(
-  '/loadaddcategory',
-  auth.isLogin,
-  adminController.loadAddCategory,
-)
+admin_Rout.get('/loadaddcategory',auth.isLogin,adminController.loadAddCategory,)
 admin_Rout.post('/addcategory', auth.isLogin, adminController.addCategory)
 admin_Rout.post('/block-category', auth.isLogin, adminController.blockCategory)
 admin_Rout.get('/edit-category', auth.isLogin, adminController.loadeditCategory)
@@ -107,7 +100,7 @@ admin_Rout.delete('/couponDelet', auth.isLogin, couponController.deletCouopon)
 admin_Rout.get("/bannermanagement", auth.isLogin, bannerController.bannerLoad);
 admin_Rout.get("/addBanner",auth.isLogin,bannerController.loadaddBanner);
 admin_Rout.post('/addBanner', bannerUpload, bannerController.addBanner);
-admin_Rout.patch("/blockBanner",auth.isLogin,bannerController.blockAndunblock);
+admin_Rout.put("/blockBanner",auth.isLogin,bannerController.blockAndunblock);
 admin_Rout.post("/deleteBanner",auth.isLogin,bannerController.deleteBanner);
 admin_Rout.get("/editBanner",auth.isLogin,bannerController.editBannerload)
 admin_Rout.post('/editBanner', bannerUpload, bannerController.editBanner);

@@ -678,7 +678,6 @@
 
 
         function verifyPayment(payment, order) {
-            console.log('edasasaaaaaaaaaaaa');
 
             const orderId = order.id;
             $.ajax({
@@ -689,9 +688,7 @@
                     order: order,
                 },
                 success: (response) => {
-                    console.log(response, "response")
                     if (response.placed == true) {
-                        console.log(response, 'thie is the place for ordering');
                         window.location.href = `/orderSuccess/${orderId}`;
                         swal.fire({
                             positon: "center",

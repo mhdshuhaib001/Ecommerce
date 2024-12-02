@@ -1,0 +1,66 @@
+<%- include('../layouts/admin/header.ejs') -%>
+<body>
+
+ 
+<body>
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title" style="text-align: center; font-size: 29px;">User Name</h4>
+              <div class="table-responsive">
+                <table class="table table-hover" id="reloadArea">
+                  <h3><%= OrderData.orderId%></h3>
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Order ID</th>
+                      <th>Order Date</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th>View</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                    <% if (OrderData.length > 0) { %>
+                      <% OrderData.forEach((order, index) => { %>
+                        <tr>
+                          <td><%= index + 1 %></td>
+                          <td><%= order.orderId %></td>
+                          <td><%= order.purchaseDate.toDateString() %></td>
+                          <td><%= order.totalAmount %></td>
+                          <td><%= order.status %></td>
+                          <td><a href="/admin/orderSummery?_id=<%= order._id %>">View</a></td>
+                        </tr>
+                      <% }); %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="6" style="text-align: center;">No orders</td>
+                      </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
+  <script>
+    // Dummy function for demonstration, replace with actual functionality
+    function updateOrder(orderId, status, user_id) {
+      console.log(user_id);
+      const data = { orderId: orderId, status: status };
+      console.log(data);
+      // Dummy AJAX call as a placeholder, adjust as needed
+      console.log("AJAX call would be here");
+    }
+  </script>
+
+<%- include('../layouts/admin/footer.ejs') -%>
+

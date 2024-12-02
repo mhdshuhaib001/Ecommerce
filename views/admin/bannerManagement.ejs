@@ -71,7 +71,7 @@
         const data = {_id:bannerId}
 console.log('hakko',);
         $.ajax({
-            method:'PATCH',
+            method:'PUT',
             url:'/admin/blockBanner',
             data:JSON.stringify(data),
             contentType:'application/json',

@@ -68,107 +68,109 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
-    document.getElementById("addCoupon").addEventListener("click", function (e) {
-        e.preventDefault();
+   document.getElementById("addCoupon").addEventListener("click", function (e) {
+    e.preventDefault();
 
-        const name = document.getElementById("couponName").value;
-        const code = document.getElementById("couponCode").value;
-        const discount = document.getElementById("discountAmount").value;
-        const activeDate = document.getElementById("activationDate").value;
-        const expiryDate = document.getElementById("expiryDate").value;
-        const criteriaAmount = document.getElementById("criteriaAmount").value;
-        const userLimit = document.getElementById("usersLimit").value;
-        console.log(userLimit,'chekk ');
+    const name = document.getElementById("couponName").value;
+    const code = document.getElementById("couponCode").value;
+    const discount = document.getElementById("discountAmount").value;
+    const activeDate = document.getElementById("activationDate").value;
+    const expiryDate = document.getElementById("expiryDate").value;
+    const criteriaAmount = document.getElementById("criteriaAmount").value;
+    const userLimit = document.getElementById("usersLimit").value;
 
-        const nameLengthError = document.getElementById("nameLengthError");
-        const codeLengthError = document.getElementById("codeLengthError");
-        const discountError = document.getElementById("discountError");
-        const activationDateError = document.getElementById("activError");
-        const expireDateError = document.getElementById("expireError");
-        const criteriaError = document.getElementById("criteriaError");
-        const userLimitError = document.getElementById("limitError");
+    const nameLengthError = document.getElementById("nameLengthError");
+    const codeLengthError = document.getElementById("codeLengthError");
+    const discountError = document.getElementById("discountError");
+    const activationDateError = document.getElementById("activError");
+    const expireDateError = document.getElementById("expireError");
+    const criteriaError = document.getElementById("criteriaError");
+    const userLimitError = document.getElementById("limitError");
 
-        // Reset error messages
-        nameLengthError.textContent = "";
-        codeLengthError.textContent = "";
-        discountError.textContent = "";
-        activationDateError.textContent = "";
-        expireDateError.textContent = "";
-        criteriaError.textContent = "";
-        userLimitError.textContent = "";
+    // Reset error messages
+    nameLengthError.textContent = "";
+    codeLengthError.textContent = "";
+    discountError.textContent = "";
+    activationDateError.textContent = "";
+    expireDateError.textContent = "";
+    criteriaError.textContent = "";
+    userLimitError.textContent = "";
 
-        if (name === "") {
-            nameLengthError.textContent = "Coupon name is required.";
-        } else if (name.length < 4) {
-            nameLengthError.textContent = "Coupon name must be at least 4 characters.";
-        } else if (code === "") {
-            codeLengthError.textContent = "Coupon code is required.";
-        } else if (discount === "") {
-            discountError.textContent = "Discount is required";
-        } else if (discount < 0) {
-            discountError.textContent = "Discount must be positive";
-        } else if (criteriaAmount === "") {
-            criteriaError.textContent = "Criteria must be required";
-        } else if (criteriaAmount < 0) {
-            criteriaError.textContent = "Criteria must be positive ";
-        } else if (userLimit === "") {
-            userLimitError.textContent = "User limit must be required";
-        } else if (userLimit < 0) {
-            userLimitError.textContent = "User limit must be positive";
-        } else if (activeDate === "") {
-            activationDateError.textContent = "Activation Date is required";
-        } else if (expiryDate === "") {
-            expireDateError.textContent = "Expiry Date is required";
-        } else if (expiryDate <= activeDate) {
-            expireDateError.textContent = "Expiry date must be after activation date.";
-        } else if (code.length < 6) {
-            codeLengthError.textContent = "Coupon code must be at least 6 characters.";
-        } else if (criteriaAmount > discount) {
-            criteriaError.textContent =  "Criteria amount should be greater than discount amount.";
-        } else {
-            $.ajax({
-    url: "/admin/addCoupon",
-    data: {
-        name,
-        code,
-        discount,
-        activeDate,
-        expiryDate,
-        criteriaAmount,
-        userLimit,
-    },
-    method: "POST",
-    success: (response) => {
-        if (response.exist) {
-            codeLengthError.textContent = "Coupon code already exists.";
-        } else if (response.success) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 4000,
-            });
+    // Assuming discount is a percentage
+    const discountPercentage = parseInt(discount);
 
-            Toast.fire({
-                icon: "success",
-                title: "Coupon Added.",
-            });
-            setTimeout(() => {
-                window.location.href = "/admin/coupon";
-            }, 3000);
-        } else {
-            console.error("Unexpected response:", response);
-            alert("Unexpected response. Please try again later.");
-        }
-    },
-    error: (error) => {
-        console.error("AJAX request failed:", error);
-        alert("Failed to add Coupon. Please try again later.");
-    },
+    if (name === "") {
+        nameLengthError.textContent = "Coupon name is required.";
+    } else if (name.length < 4) {
+        nameLengthError.textContent = "Coupon name must be at least 4 characters.";
+    } else if (code === "") {
+        codeLengthError.textContent = "Coupon code is required.";
+    } else if (discount === "") {
+        discountError.textContent = "Discount is required";
+    } else if (discountPercentage < 0 || discountPercentage > 100) {
+        discountError.textContent = "Discount must be between 0 and 100";
+    } else if (criteriaAmount === "") {
+        criteriaError.textContent = "Criteria must be required";
+    } else if (criteriaAmount < 0) {
+        criteriaError.textContent = "Criteria must be positive";
+    } else if (userLimit === "") {
+        userLimitError.textContent = "User limit must be required";
+    } else if (userLimit < 0) {
+        userLimitError.textContent = "User limit must be positive";
+    } else if (activeDate === "") {
+        activationDateError.textContent = "Activation Date is required";
+    } else if (expiryDate === "") {
+        expireDateError.textContent = "Expiry Date is required";
+    } else if (expiryDate <= activeDate) {
+        expireDateError.textContent = "Expiry date must be after activation date.";
+    } else if (code.length < 6) {
+        codeLengthError.textContent = "Coupon code must be at least 6 characters.";
+    } else if (criteriaAmount > 0 && criteriaAmount >= discountPercentage) {
+        criteriaError.textContent = "Criteria amount should be less than the discount percentage.";
+    } else {
+        $.ajax({
+            url: "/admin/addCoupon",
+            data: {
+                name,
+                code,
+                discount,
+                activeDate,
+                expiryDate,
+                criteriaAmount,
+                userLimit,
+            },
+            method: "POST",
+            success: (response) => {
+                if (response.exist) {
+                    codeLengthError.textContent = "Coupon code already exists.";
+                } else if (response.success) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 4000,
+                    });
+
+                    Toast.fire({
+                        icon: "success",
+                        title: "Coupon Added.",
+                    });
+                    setTimeout(() => {
+                        window.location.href = "/admin/coupon";
+                    }, 3000);
+                } else {
+                    console.error("Unexpected response:", response);
+                    alert("Unexpected response. Please try again later.");
+                }
+            },
+            error: (error) => {
+                console.error("AJAX request failed:", error);
+                alert("Failed to add Coupon. Please try again later.");
+            },
+        });
+    }
 });
 
-        }
-    });
 </script>
 
 <%- include("../layouts/admin/footer.ejs") %>

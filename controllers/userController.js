@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs');
 const User = require('../models/userModel')
 const Product = require('../models/productsModel')
 const Cart = require('../models/cartModel')
@@ -187,6 +187,9 @@ const insertUser = async (req, res) => {
                                         req.session.password = spassword
                                         req.session.userName = req.body.name
                                         req.session.mobile = req.body.mobile
+
+                                        req.session.otp = otp;
+
                                         console.log('otp', otp);
                                         sendVerifyMail({
                                           email: req.body.email,
@@ -204,12 +207,10 @@ const insertUser = async (req, res) => {
                                       } else {
                                         res.json({ notsaved: true })
                                       }
-
                                       if (referralCode) {
           
                                         const existingreferral = await User.findOne({ referralCode: referralCode })
-                            
-                            
+
                                         if (existingreferral) {
                                           const data = {
                                             amount: 201,
@@ -223,9 +224,6 @@ const insertUser = async (req, res) => {
                                             );
                                         }
                                     }
-
-
-
                                     } else {
                                       res.json({ wrongpass: true })
                                     }
@@ -264,43 +262,59 @@ const loadUserOtp = async (req, res) => {
   }
 }
 
-//-------- OTP ----------
+
+
+// -------- OTP ----------
 const verifyOTP = async (req, res) => {
   try {
-    req.session.verifyErr = false
-    req.session.otpsent = false
-    const otpInput = req.body.otp
-    const email = req.session.email
-    if (req.body.otp.trim() === '') {
-      res.json({ fill: true })
+    req.session.verifyErr = false;
+    req.session.otpsent = false;
+    const otpInput = req.body.otp;
+
+    const email = req.session.email;
+    const storedOTP = req.session.otp;
+
+    const userData = await User.findOne({ email: email });
+
+    if (otpInput.trim() === '') {
+      res.json({ fill: true });
     } else {
-      if (otpInput == otp) {
+      if (otpInput === storedOTP.toString()) {
         const verified = await User.findOneAndUpdate(
           { email: email },
           { $set: { is_verified: true } },
-          { new: true },
-        )
+          { new: true }
+        );
+
         if (verified) {
-          req.session.regSuccess = true
-          res.json({ success: true })
+          if (userData) {
+            req.session.user_id = userData._id;
+          }
+          req.session.regSuccess = true;
+          res.json({ success: true });
         } else {
-          res.json({ error: true })
+          res.json({ error: true });
         }
       } else {
-        res.json({ wrong: true })
+        console.log('Invalid OTP');
+        res.json({ wrong: true });
       }
     }
   } catch (error) {
-    console.log(error.message)
-    res.status(500).render('500')
+    console.log(error.message);
+    res.status(500).json({ error: true });
   }
-}
+};
+
 
 let otp
 
 // -------SEND-OTP-FOR-SIGNUP------
 const sendVerifyMail = async ({ name, email, otp }) => {
   try {
+    console.log('Admin Email:', process.env.ADMIN_EMAIL);
+console.log('Admin Pass:', process.env.ADMIN_PASS);
+
     // Nodemailer
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
@@ -338,32 +352,35 @@ const sendVerifyMail = async ({ name, email, otp }) => {
   }
 }
 
-//----------To resend Otp-----------
+// ----------To resend Otp-----------
 const resendOtp = async (req, res) => {
   try {
-    console.log('Resend OTP route hit')
-    let otpsend = req.session.otpsend
-    let verifyErr = req.session.verifyErr
-    let email = req.session.email
-    let name = req.session.name || 'User'
-    let randomNumber = Math.floor(Math.random() * 9000) + 1000
+    let otpsend = req.session.otpsend;
+    let verifyErr = req.session.verifyErr;
+    let email = req.session.email;
+    let name = req.session.name || 'User';
+
+    let randomNumber = Math.floor(Math.random() * 9000) + 1000;
+    req.session.otp = randomNumber;
+
 
     setTimeout(() => {
-      otp = Math.floor(Math.random() * 9000) + 1000
-    }, 60000)
-    console.log(otp)
+      req.session.otpsend = false;
+    }, 60000);
+    await sendVerifyMail({ name, email, otp: req.session.otp });
 
-    sendVerifyMail({ name, email, randomNumber })
     res.render('userOtp', {
       verifyErr,
       otpsend,
       resend: 'Resend the otp to your email address.',
-    })
+    });
   } catch (error) {
-    console.log(error.message)
-    res.status(500).render('500')
+    console.log(error.message);
+    res.status(500).render('500');
   }
-}
+};
+
+
 
 //======= Login =========
 const loadLogin = async (req, res) => {

@@ -55,10 +55,10 @@ const orderSchema = new mongoose.Schema({
         required: true,
         default: 1,
       },
-      // productPrice: {
-      //   type: Number,
-      //   required: true,
-      // },
+      productPrice: {
+        type: Number,
+        required: true,
+      },
       image: {
         type: String,
         required: true,
@@ -98,8 +98,10 @@ const orderSchema = new mongoose.Schema({
   shippingMethod: {
     type: String,
   },
-  shippingAmount: {
-    type: Number,
+  couponUsed: {
+    type: mongoose.Types.ObjectId,
+    ref: 'coupons',
+    default: null,
   },
   status: {
     type: String,

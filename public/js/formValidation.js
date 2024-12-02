@@ -16,7 +16,6 @@ document.getElementById('submit').addEventListener('click', function (e) {
   const confirm_message = document.getElementById('confirm-error')
   const err_message = document.getElementById('error-message')
   
-    // Clear existing error messages
     name_message.style.display = 'none'
     email_message.style.display = 'none'
     phone_message.style.display = 'none'
