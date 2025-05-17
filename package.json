@@ -1,16 +1,11 @@
 {
   "name": "firstproject",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon  app.js",
+    "start": "node app.js",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,html,css,scss,md}\""
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
@@ -40,6 +35,9 @@
   "devDependencies": {
     "nodemon": "^3.0.2",
     "prettier": "3.2.5"
+  },
+  "engines": {
+    "node": "18.x"
   },
   "prettier": {
     "semi": false,
